@@ -1,0 +1,588 @@
+﻿<link href="~/Content/assets/css/components.css" rel="stylesheet" />
+<link href="~/Content/assets/css/core.css" rel="stylesheet" />
+<link href="~/Content/assets/css/colors.css" rel="stylesheet" />
+<link href="~/Content/download/pnotify.custom.min.css" rel="stylesheet" />
+<link href="~/Content/assets/css/icons/icomoon/styles.css" rel="stylesheet" />
+
+<script src="~/Content/download/plugins/jQuery/jquery.min.js"></script>
+<script src="~/Content/assets/js/plugins/loaders/pace.min.js"></script>
+<script src="~/Content/assets/js/plugins/loaders/blockui.min.js"></script>
+<script src="~/Content/assets/js/plugins/visualization/d3/d3.min.js"></script>
+<script src="~/Content/assets/js/plugins/visualization/d3/d3_tooltip.js"></script>
+<script src="~/Content/assets/js/plugins/forms/styling/switchery.min.js"></script>
+<script src="~/Content/assets/js/plugins/forms/styling/uniform.min.js"></script>
+<script src="~/Content/assets/js/plugins/forms/selects/bootstrap_multiselect.js"></script>
+<script src="~/Content/assets/js/plugins/ui/moment/moment.min.js"></script>
+<script src="~/Content/assets/js/plugins/pickers/datepicker.js"></script>
+<script src="~/Content/assets/js/plugins/pickers/daterangepicker.js"></script>
+<script src="~/Content/assets/js/plugins/notifications/pnotify.min.js"></script>
+<script src="~/Content/Scripts/angularjs/angular.js"></script>
+<script src="~/Content/Scripts/angularjs/angular-route.min.js"></script>
+<script src="~/Content/Scripts/angularjs/dirPagination.js"></script>
+@*<script src="~/Content/Scripts/angularjs/app.js"></script>*@
+<script src="~/Content/Scripts/daterangepicker.js"></script>
+<script src="~/Content/Scripts/moment.min.js"></script>
+<script src="~/Content/download/date_directive.js"></script>
+<script src="~/Content/download/bootstrap-datetimepicker.js"></script>
+<script type="text/javascript" src="~/Content/assets/js/plugins/forms/selects/bootstrap_select.min.js"></script>
+<script type="text/javascript" src="~/Content/assets/js/pages/form_bootstrap_select.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-debounce/0.1.7/angular-debounce.js"></script>
+<script src="~/Content/Scripts/angularjs/controller/StoreExportController.js"></script>
+<div class="content" ng-app="myApp" ng-controller="StoreExportController">
+    <!-- Dashboard content -->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-white">
+                <div class="panel-heading color-heading">
+                    <h6 class="panel-title">Xuất kho</h6>
+                </div>
+
+                <div class="panel-body">
+                    <form class="form-horizontal" style="margin-left: 10px;">
+                        <div class="form-group">
+                            <label class="control-label col-lg-2" style="font-weight:bold; font-size:16px">Phiếu xuất kho</label>
+                            <div class="col-lg-3">
+                                <select name="select" class="form-control" ng-model="StoreType" ng-change="ChangeType()">
+                                    <option value="1">1. Bán hàng</option>
+                                    <option value="2">2. Sản xuất</option>
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="col-md-8">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h6 class="panel-title">Thông tin chung<a class="heading-elements-toggle"><i class="icon-more"></i></a></h6>
+                            </div>
+                            <div class="panel-body">
+                                <form class="form-horizontal">
+                                    <div class="form-group" ng-if="StoreType==1">
+                                        <label class="control-label col-lg-3">Khách hàng</label>
+                                        <div class="col-lg-5">
+                                            <div class="has-feedback showtableselect" ng-click="ShowKhachHang()">
+                                                <input type="text" ng-model="GeneralInfo.KhachHang" class="form-control showtableselect" ng-change="SearchKH(GeneralInfo.KhachHang)">
+                                                <div class="form-control-feedback">
+                                                    <i class="icon-arrow-down5"></i>
+                                                </div>
+                                            </div>
+                                            <div class="tableselect" id="KhachHang" style="display:none;min-width: 450px;">
+                                                <table class="table-hover ">
+                                                    <thead>
+                                                        <tr>
+                                                            <th style="width:20%">Mã khách hàng</th>
+                                                            <th style="width:20%">Tên khách hàng</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr ng-repeat="item in KhachHang.KhachHang | filter:GeneralInfo.KhachHang" ng-click="SelectKhachHang(item)">
+                                                            <td>{{item.MA_KHACH_HANG}}</td>
+                                                            <td>{{item.TEN_CONG_TY}}</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <label id="basic-error" class="validation-error-label" ng-if="ValidateGeneral.KhachHang == false" for="basic">Trường này không được để trống</label>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <input type="text" readonly class="form-control" ng-model="GeneralInfo.TenDoiTuong">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-lg-3">Người nhận</label>
+                                        <div class="col-lg-9" ng-if="StoreType==1">
+                                            <input type="text" ng-model="GeneralInfo.NguoiNhan" class="form-control">
+                                        </div>
+                                        <div class="col-lg-5" ng-if="StoreType==2">
+                                            <div class="has-feedback" ng-click="ShowDoiTuong()">
+                                                <input type="text" ng-model="GeneralInfo.NguoiNhan" class="form-control showtableselect">
+                                                <div class="form-control-feedback">
+                                                    <i class="icon-arrow-down5"></i>
+                                                </div>
+                                            </div>
+                                            <div class="tableselect" id="DoiTuong" style="display:none;min-width: 450px;">
+                                                <table class="table-hover ">
+                                                    <thead>
+                                                        <tr>
+                                                            <th style="width:20%">Mã đối tượng</th>
+                                                            <th style="width:20%">Tên đối tượng</th>
+                                                            <th style="width:20%">Phòng ban</th>
+                                                            <th style="width:20%">Mã số thuế</th>
+                                                            <th style="width:20%">Điện thoại</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr ng-repeat="item in NhanVien| filter:GeneralInfo.NguoiNhan" ng-click="SelectDoiTuong(item)">
+                                                            <td>{{item.USERNAME}}</td>
+                                                            <td>{{item.HO_VA_TEN}}</td>
+                                                            <td>{{item.TEN_PHONG_BAN}}</td>
+                                                            <td>{{item.EMAIL}}</td>
+                                                            <td>{{item.SDT}}</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <label id="basic-error" class="validation-error-label" ng-if="ValidateGeneral.NguoiGiaoHang == false" for="basic">Trường này không được để trống</label>
+                                        </div>
+                                        <div class="col-lg-4" ng-if="StoreType==2">
+                                            <input type="text" ng-model="GeneralInfo.TenDoiTuong" class="form-control showtableselect">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-lg-3">Địa chỉ</label>
+                                        <div class="col-lg-9">
+                                            <input type="text" ng-model="GeneralInfo.DiaChi" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-lg-3">Lý do xuất</label>
+                                        <div class="col-lg-9">
+                                            <input type="text" ng-model="GeneralInfo.DienGiai" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="form-group" ng-if="StoreType==1">
+                                        <label class="control-label col-lg-3">Nhân viên bán hàng</label>
+                                        <div class="col-lg-3">
+                                            <div class="has-feedback showtableselect" ng-click="ShowDataNhanVien()">
+                                                <input type="text" ng-model="GeneralInfo.NhanVienBanHang" class="form-control showtableselect">
+                                                <div class="form-control-feedback">
+                                                    <i class="icon-arrow-down5"></i>
+                                                </div>
+                                            </div>
+                                            <div class="tableselect" id="DataNhanVien" style="display:none;min-width: 450px;">
+                                                <table class="table-hover ">
+                                                    <thead>
+                                                        <tr>
+                                                            <th style="width:30%">Mã nhân viên</th>
+                                                            <th style="width:30%">Tên nhân viên</th>
+                                                            <th style="width:20%">Phòng ban</th>
+                                                            <th style="width:20%">Điện thoại</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr ng-repeat="item in NhanVien| filter:GeneralInfo.NhanVienBanHang" ng-click="SelectDataNhanVien(item)">
+                                                            <td>{{item.USERNAME}}</td>
+                                                            <td>{{item.HO_VA_TEN}}</td>
+                                                            <td>{{item.PHONG_BAN}}</td>
+                                                            <td>{{item.SDT}}</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <label id="basic-error" class="validation-error-label" ng-if="ValidateGeneral.NhanVienBanHang == false" for="basic">Trường này không được để trống</label>
+                                        </div>
+                                        <label class="control-label col-lg-2">Kèm theo</label>
+                                        <div class="col-lg-2">
+                                            <input type="text" class="form-control">
+                                        </div>
+                                        <label class="control-label col-lg-2">chứng từ gốc</label>
+                                    </div>
+                                    <div class="form-group" ng-if="StoreType==2">
+                                        <label class="control-label col-lg-3">Kèm theo</label>
+                                        <div class="col-lg-4">
+                                            <input type="text" class="form-control">
+                                        </div>
+                                        <label class="control-label col-lg-2">chứng từ gốc</label>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-lg-3">Tham chiếu</label>
+                                        <div class="col-lg-8">
+                                            <input type="hidden" value="@Session["USERNAME"]" id="username" />
+                                            <input type="hidden" value="@Session["MA_CONG_TY"]" id="macongty" />
+                                            <div class="bootstrap-tagsinput"><span class="tag label label-info" ng-repeat="item in ThamChieu.ListSelect">{{item.SO_CHUNG_TU}}<span data-role="remove" ng-click="RemoveThamChieu($index)"></span></span> <input style="border: none !important" type="text" placeholder=""></div>
+                                        </div>
+                                        <div class="col-lg-1">
+                                            <a data-toggle="modal" data-target="#modal_theme_primary"><i class="icon-search4"></i></a>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h6 class="panel-title">Chứng từ<a class="heading-elements-toggle"><i class="icon-more"></i></a></h6>
+                            </div>
+                            <div class="panel-body">
+                                <form class="form-horizontal">
+                                    <div class="form-group">
+                                        <label class="control-label col-lg-4">Ngày hạch toán</label>
+                                        <div class="col-lg-8">
+                                            <div class="form-group has-feedback">
+                                                <input type="text" id="GeneralInfo_NgayHachToan" class="form-control datetimepickerKT">
+                                                <div class="form-control-feedback">
+                                                    <i class="icon-calendar"></i>
+                                                </div>
+                                            </div>
+                                            <label id="basic-error" class="validation-error-label" ng-if="ValidateGeneral.NgayHachToan == false" for="basic">Trường này không được để trống</label>
+                                            <label id="basic-error" class="validation-error-label" ng-if="ValidateGeneral.NgayHachToanLess == false" for="basic">Ngày hạch toán phải lớn hơn hoặc bằng ngày chứng từ</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-lg-4">Ngày chứng từ</label>
+                                        <div class="col-lg-8">
+                                            <div class="form-group has-feedback">
+                                                <input type="text" id="GeneralInfo_NgayChungTu" class="form-control datetimepickerKT">
+                                                <div class="form-control-feedback">
+                                                    <i class="icon-calendar"></i>
+                                                </div>
+                                            </div>
+                                            <label id="basic-error" class="validation-error-label" ng-if="ValidateGeneral.NgayChungTu == false" for="basic">Trường này không được để trống</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-lg-4">Số chứng từ</label>
+                                        <div class="col-lg-8">
+                                            <input type="text" ng-model="GeneralInfo.SoChungTu" class="form-control" readonly>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 content-group" style="">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped table-hover">
+                                <thead>
+                                    <tr class="bg-primary-300">
+                                        <th style="width:15%" class="text-center">Mã chuẩn</th>
+                                        <th style="width:10%" class="text-center">Mã điều chỉnh</th>
+                                        <th style="width:10%" class="text-center">Tên hàng</th>
+                                        <th style="width:10%" class="text-center">Tên kho</th>
+                                        <th style="width:5%" class="text-center">TK Kho</th>
+                                        <th style="width:5%" class="text-center">TK nợ</th>
+                                        <th style="width:5%" class="text-center">TK có</th>
+                                        <th style="width:5%" class="text-center">ĐVT</th>
+                                        <th style="width:5%" class="text-center">Số lượng</th>
+                                        <th style="width:10%" class="text-center">Đơn giá</th>
+                                        <th style="width:10%" class="text-center">Thành tiền</th>
+                                        <th style="width:10%" class="text-center">Đơn giá vốn</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    
+                                    <tr ng-repeat="(index,item) in Detail.ListAdd">
+                                        <td>
+                                            <div class="has-feedback showtableselect" ng-click="ShowHangHoa(index)">
+                                                <input type="text" ng-model="item.MA_CHUAN" class="input showtableselect" ng-change="SearchHH(item.MA_CHUAN)">
+                                             
+                                                <div class="form-control-feedback">
+                                                    <i class="icon-arrow-down5"></i>
+                                                </div>
+                                            </div>
+                                            <div class="tableselect" id="DataHangHoa{{index}}" style="display: none; max-width: 750px; padding-left: 0px; margin-left: -9px;">
+                                                <table class="table-hover ">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Mã hàng</th>
+                                                            <th>Tên hàng</th>
+                                                            <th>Mã nhóm hàng</th>
+                                                            <th>Xuất xứ</th>
+                                                            <th>DVT</th>
+                                                            <th>Tên Kho</th>
+                                                            <th>Số lượng tồn</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr ng-repeat="(hindex,itemHangHoa) in Detail.ListHangHoa" ng-click="SelectHangHoa(index,item,itemHangHoa)">
+                                                            <td>{{itemHangHoa.MA_CHUAN}}</td>
+                                                            <td>{{itemHangHoa.TEN_HANG}}</td>
+                                                            <td>{{itemHangHoa.MA_NHOM_HANG}}</td>
+                                                            <td>{{itemHangHoa.XUAT_XU}}</td>
+                                                            <td>{{itemHangHoa.DVT}}</td>
+                                                            <td>{{itemHangHoa.TEN_KHO}}</td>
+                                                            <td class="text-center">{{itemHangHoa.SO_LUONG}}</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <input type="text" ng-model="item.MA_DIEU_CHINH" class="input">
+                                        </td>
+                                        <td>
+                                            <input type="text" ng-model="item.TEN_HANG" class="input">
+                                        </td>
+                                        <td>
+                                            <input type="text" ng-model="item.MA_KHO_CON" class="input">
+                                        </td>
+                                        <td>
+                                            <input type="text" ng-model="item.TK_KHO" class="input">
+                                        </td>
+                                        <td>
+                                            <input type="text" ng-model="item.TK_NO" class="input">
+                                        </td>
+                                        <td>
+                                            <input type="text" ng-model="item.TK_CO" class="input">
+                                        </td>
+                                        @*<td>
+                                            <div class="has-feedback" ng-click="ShowKho(index)">
+                                                <input type="text" ng-model="item.MA_KHO" class="input showtableselect">
+                                                <div class="form-control-feedback">
+                                                </div>
+                                            </div>
+                                            <div class="tableselect" id="DataKho{{index}}" style="display:none;max-width: 200px;top:90px;">
+                                                <table class="table-hover ">
+                                                    <thead>
+                                                        <tr>
+                                                            <th style="width:50%">Mã kho</th>
+                                                            <th style="width:50%">Tên kho</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr ng-repeat="(hindex,itemKho) in Detail.ListKho| filter:item.MA_KHO" ng-click="SelectKho(index,item,itemKho)">
+                                                            <td>{{itemKho.MA_KHO}}</td>
+                                                            <td>{{itemKho.TEN_KHO}}</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="has-feedback" ng-click="ShowTaiKhoanKho(index)">
+                                                <input type="text" ng-model="item.TK_KHO" class="input showtableselect">
+                                                <div class="form-control-feedback">
+                                                    <i class="icon-arrow-down5"></i>
+                                                </div>
+                                            </div>
+                                            <div class="tableselect" id="DataTaiKhoanKho{{index}}" style="display:none;max-width: 300px;top: 90px;">
+                                                <table class="table-hover ">
+                                                    <thead>
+                                                        <tr>
+                                                            <th style="width:50%">Số tài khoản</th>
+                                                            <th style="width:50%">Tên tài khoản</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr ng-repeat="(tkindex,itemTK) in Detail.ListTaiKhoan| filter:item.TK_KHO" ng-click="SelectTKKho(index,item,itemTK )">
+                                                            <td>{{itemTK.SO_TK}}</td>
+                                                            <td>{{itemTK.TEN_TK}}</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="has-feedback" ng-click="ShowTaiKhoanNo(index)">
+                                                <input type="text" ng-model="item.TK_NO" class="input showtableselect">
+                                                <div class="form-control-feedback">
+                                                    <i class="icon-arrow-down5"></i>
+                                                </div>
+                                            </div>
+                                            <div class="tableselect" id="DataTaiKhoanNo{{index}}" style="display:none;max-width: 300px;top: 90px;">
+                                                <table class="table-hover ">
+                                                    <thead>
+                                                        <tr>
+                                                            <th style="width:50%">Số tài khoản</th>
+                                                            <th style="width:50%">Tên tài khoản</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr ng-repeat="(tkindex,itemTK) in Detail.ListTaiKhoan| filter:item.TK_NO" ng-click="SelectTKNo(index,item,itemTK)">
+                                                            <td>{{itemTK.SO_TK}}</td>
+                                                            <td>{{itemTK.TEN_TK}}</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="has-feedback" ng-click="ShowTaiKhoanCo(index)">
+                                                <input type="text" ng-model="item.TK_CO" class="input showtableselect">
+                                                <div class="form-control-feedback">
+                                                    <i class="icon-arrow-down5"></i>
+                                                </div>
+                                            </div>
+                                            <div class="tableselect" id="DataTaiKhoanCo{{index}}" style="display:none;max-width: 300px;top: 90px;">
+                                                <table class="table-hover ">
+                                                    <thead>
+                                                        <tr>
+                                                            <th style="width:50%">Số tài khoản</th>
+                                                            <th style="width:50%">Tên tài khoản</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr ng-repeat="(tkindex,itemTK) in Detail.ListTaiKhoan| filter:item.TK_CO" ng-click="SelectTKCo(index,item,itemTK)">
+                                                            <td>{{itemTK.SO_TK}}</td>
+                                                            <td>{{itemTK.TEN_TK}}</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </td>*@
+                                        <td>
+                                            <input type="text" ng-model="item.DVT" class="input">
+                                        </td>
+                                        <td>
+                                            <input type="number" ng-model="item.SO_LUONG" class="input">
+                                        </td>
+                                        <td>
+                                            <input type="text" ng-model="item.DON_GIA" format="number" class="input">
+                                        </td>
+                                        <td style="text-align: right;">
+                                            {{item.DON_GIA * item.SO_LUONG | currency:""}}
+                                        </td>
+                                        <td>
+                                            <input type="text" ng-model="item.DON_GIA_VON" format="number" class="input">
+                                        </td>
+                                        <td class="text-center"><button ng-click="RemoveRow($index)" style="background: none !important; border: none !important;"><span class="glyphicon glyphicon-remove" style="color:red;"></span></button></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="13" style="text-align:center; cursor:pointer" ng-click="AddNew()">Bấm vào đây để thêm mới</td>
+
+                                    </tr>
+                                    
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-md-12 text-center">
+                        <button type="button" class="btn btn-primary" ng-click="SaveXuatKho()"><i class="icon-floppy-disk"></i> Lưu</button>
+                        <a href="/" class="btn bg-orange-400"><i class="icon-blocked"></i> Bỏ qua</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="modal_theme_primary" class="modal fade" style="display: none;" data-backdrop="static">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-primary-300">
+                    <h5 class="modal-title" style="font-weight:700">Chọn chứng từ tham chiếu</h5>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label class="control-label col-lg-2">Tìm theo</label>
+                            <div class="col-lg-3">
+                                <select name="select" class="form-control" ng-change="ChangeLoaiChungTu()" ng-model="LoaiChungTu">
+                                    <option value="1">Loại chứng từ</option>
+                                    <option value="2">Đối tượng</option>
+                                    <option value="3">Số hóa đơn/chứng từ</option>
+                                </select>
+                                <label id="basic-error" class="validation-error-label" ng-if="Validate.LoaiChungTu == false" for="basic">Trường này không được để trống</label>
+                            </div>
+                            <label class="control-label col-lg-2">Giá trị</label>
+                            <div class="col-lg-5" style="position:relative;z-index:100">
+                                <div class="has-feedback" id="Input_DataGiaTriChungTu" style="display:none" ng-click="ShowDataGiaTriChungTu()">
+                                    <input type="text" ng-model="GiaTriChungTu.Search" class="form-control showtableselect" ng-change="DoiTuongFind()">
+                                    <div class="form-control-feedback">
+                                        <i class="icon-arrow-down5"></i>
+                                    </div>
+                                </div>
+                                <select name="select" class="form-control" id="Select_DataGiaTriChungTu" ng-model="GiaTriLoaiChungTu">
+                                    <option ng-repeat="item in GiaTriThamChieu" value="{{item.value}}">{{item.show}}</option>
+                                </select>
+
+                                <table class="table-hover tableselect" id="DataGiaTriChungTu" style="display:none">
+                                    <thead>
+                                        <tr>
+                                            <th style="width:35%">Mã đối tượng</th>
+                                            <th style="width:35%">Tên đối tượng</th>
+                                            <th style="width:30%">Địa chỉ</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="item in GiaTriThamChieu | filter:GiaTriChungTu.Search" ng-click="SelectDataGiaTriChungTu(item)">
+                                            <td>{{item.madoituong}}</td>
+                                            <td>{{item.tendoituong}}</td>
+                                            <td>{{item.diachi}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="has-feedback" id="Input_MaChungTu" style="display:none">
+                                    <input type="text" ng-model="MaChungTu.Search" class="form-control showtableselect">
+                                </div>
+                            </div>
+                            <label id="basic-error" class="validation-error-label" ng-if="Validate.GiaTriChungTu == false" for="basic">Trường này không được để trống</label>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-lg-2">Từ ngày</label>
+                            <div class="col-lg-3">
+                                <div class="form-group has-feedback">
+                                    <input type="text" ng-model="ThamChieu.From" id="ThamChieuFrom" class="form-control datetimepicker">
+                                    <div class="form-control-feedback">
+                                        <i class="icon-calendar"></i>
+                                    </div>
+                                    <label id="basic-error" class="validation-error-label" ng-if="Validate.FromDateThamChieu == false" for="basic">Trường này không được để trống</label>
+                                </div>
+                            </div>
+                            <label class="control-label col-lg-2">Đến ngày</label>
+                            <div class="col-lg-3">
+                                <div class="form-group has-feedback">
+                                    <input type="text" ng-model="ThamChieu.To" id="ThamChieuTo" class="form-control datetimepicker">
+                                    <div class="form-control-feedback">
+                                        <i class="icon-calendar"></i>
+                                    </div>
+                                    <label id="basic-error" class="validation-error-label" ng-if="Validate.ToDateThamChieu == false" for="basic">Trường này không được để trống</label>
+                                    <label id="basic-error" class="validation-error-label" ng-if="Validate.ToDateThamChieuLess == false" for="basic">Ngày kết thúc phải lớn hơn ngày bắt đầu</label>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 text-right">
+                                <button class="btn bg-primary-300" type="button" ng-disabled="CheckSearchThamChieu()" ng-click="SearchThamChieu()">Lấy dữ liệu</button>
+                            </div>
+                        </div>
+                        <div class="col-md-12 content-group" style="">
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-striped table-hover ">
+                                    <thead>
+                                        <tr class="bg-primary-300">
+                                            <th style="width:10px;"></th>
+                                            <th>Ngày hạch toán</th>
+                                            <th>Ngày chứng từ</th>
+                                            <th>Số chứng từ</th>
+                                            <th>Diễn giải</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-cloak dir-paginate="item in ThamChieu.ListResult | itemsPerPage: numPerPage"
+                                            pagination-id="ThamChieu" current-page="currentPage">
+                                            <td><div class="checker border-primary-600 text-primary-800" ng-click="SelectThamChieu(item,$index)"><span ng-class="item.Action?'checked':''"><input type="checkbox" class="control-primary" checked="checked"></span></div></td>
+                                            <td>
+                                                {{item.NGAY_HACH_TOAN}}
+                                            </td>
+                                            <td>{{item.NGAY_CHUNG_TU}}</td>
+                                            <td>{{item.SO_CHUNG_TU}}</td>
+                                            <td>{{item.DIEN_GIAI}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <dir-pagination-controls pagination-id="ThamChieu"
+                                                         class="pull-right"></dir-pagination-controls>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer text-center">
+                    <button type="button" class="btn btn-primary" ng-click="SetThamChieu()"><i class="icon-checkbox-checked"></i> Đồng ý</button>
+                    <button type="button" class="btn bg-orange-400" data-dismiss="modal"><i class="icon-blocked"></i> Bỏ qua</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /dashboard content -->
+</div>
+<style>
+    .input {
+        display: block;
+        width: 100%;
+        height: 34px;
+        padding: 0px 5px;
+        font-size: 14px;
+        line-height: 1.42857143;
+        color: #555;
+        background-color: transparent;
+        background-image: none;
+        
+    }
+bordered>tfoot>tr>td {
+    border: 1px solid #eeeeee !important;
+}
+</style>
+
+
+
+
+
+

@@ -1,0 +1,111 @@
+﻿<link href="~/Content/assets/css/colors.css" rel="stylesheet" />
+<link href="~/Content/assets/css/components.css" rel="stylesheet" />
+<link href="~/Content/assets/css/core.css" rel="stylesheet" />
+<script src="~/Content/self-writing/js/BusinessServices/AjaxServices.js"></script>
+<script src="~/Content/self-writing/js/BusinessServices/DataServices.js"></script>
+<script src="~/Content/download/jquery.blockUI/jquery.blockUI.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-animate.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-route.js"></script>
+<script src="~/Content/self-writing/js/Controllers/NganhangCtrl/PhieuChiNganHang/ctrlDanhSach.js"></script>
+<script src="~/Content/self-writing/js/date_directive.js"></script>
+
+<div class="container" id="container">
+    <div ng-controller="ctrlDanhSach">
+        <div class="phieuthu padding10 borderRadius3 border">
+            <div class="head clearfix paddingTB10">
+                <div class="pull-left marginR45">
+                    <h1 class="margin0 font20 bold text-blue marginT5">PHIẾU CHI</h1>
+                </div>
+                <div class="pull-left marginR30">
+                    <div class="pull-left marginR15 marginT5">TK ngân hàng</div>
+                    <div class="pull-left width200">
+                        <div class="input-group">
+                            <input type="text" class="form-control" ng-model="so_tai_khoan" ng-value="so_tai_khoan">
+                            <div class="input-group-btn">
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ng-click="getTaiKhoanNganHang()">
+                                    <span class="caret"></span>
+                                </button>
+                                <div class="dropdown-menu dropdown-menu-center borderRadius0 padding0">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped table-condensed table-hover" st-table="listTknhCollection" st-safe-src="listTknh">
+                                            <thead class="bg-blue text-white">
+                                                <tr>
+                                                    <th>Số tài khoản</th>
+                                                    <th>Tên ngân hàng</th>
+                                                    <th>Chi nhánh</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody ng-repeat="tknh in listTknhCollection">
+                                                <tr style="cursor:pointer" ng-click="selectTaiKhoanNganHang(tknh)">
+                                                    <td>{{tknh.SO_TAI_KHOAN}}</td>
+                                                    <td>{{tknh.TEN_NGAN_HANG}}</td>
+                                                    <td>{{tknh.CHI_NHANH}}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="pull-left marginR30">
+                    <div class="pull-left marginR15 marginT5">Từ ngày</div>
+                    <div class="pull-left width100 relative">
+                        <input type="text" datepicker ng-model="from_day" class="form-control datetimepickerKT">
+                    </div>
+                </div>
+                <div class="pull-left marginR30">
+                    <div class="pull-left marginR15 marginT5">Đến ngày</div>
+                    <div class="pull-left width100 relative">
+                        <input type="text" datepicker ng-model="to_day" class="form-control datetimepickerKT">
+                    </div>
+                </div>
+                <div class="pull-left">
+                    <button class="btn btn-primary" ng-click="getDanhSachPhieuChiNganHang()">Lấy dữ liệu</button>
+                </div>
+            </div>
+            <br>
+            <div class="table-responsive">
+                <table class="table table-striped table-hover table-bordered" st-table="listPhieuChiCollection" st-pipe="getDanhSachPhieuChiNganHang">
+                    <thead class="bg-blue text-white">
+                        <tr>
+                            <th>Ngày hạch toán</th>
+                            <th>Ngày chứng từ</th>
+                            <th>Số chứng từ</th>
+                            <th>Nội dung thanh toán</th>
+                            <th>Diễn giải</th>
+                            <th>Tổng tiền</th>
+                            <th>Đối tượng</th>
+                        </tr>
+                    </thead>
+                    <tbody ng-repeat="phieu_thu in listPhieuChiCollection">
+                        <tr>
+                            <td>{{phieu_thu.NGAY_HACH_TOAN}}</td>
+                            <td>{{phieu_thu.NGAY_CHUNG_TU}}</td>
+                            <td>{{phieu_thu.SO_CHUNG_TU}}</td>
+                            <td>{{phieu_thu.NOI_DUNG_THANH_TOAN}}</td>
+                            <td>{{phieu_thu.DIEN_GIAI_NOI_DUNG_THANH_TOAN}}</td>
+                            <td>{{phieu_thu.TONG_TIEN}}</td>
+                            <td>{{phieu_thu.MA_DOI_TUONG}}</td>
+
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="7" class="text-center">
+                                <div st-pagination="" st-items-by-page="itemsByPage"></div>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>
+<style>
+    .bg-blue {
+        background-color: #5BC0DE !important;
+    }
+</style>

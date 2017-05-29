@@ -1,0 +1,182 @@
+﻿@model ERP.Web.Models.Database.BH_DON_HANG_DU_KIEN
+
+@{
+    ViewBag.Title = "Create";
+}
+<script src="~/Content/self-writing/js/Controllers/DonDuKienCtrl.js"></script>
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+    <div ng-app="myApp" ng-controller="DonDuKienCtrl">
+        <input type="hidden" id="salehienthoi" name="salehienthoi" value="@Session["USERNAME"]" />
+        <div class="content">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h6 class="panel-title">Tạo mới đơn dự kiến<a class="heading-elements-toggle"><i class="icon-more"></i></a></h6>
+                </div>
+                <div class="panel-body">
+                    <div class="form-horizontal">
+
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <div class="form-group">
+                            <div class="control-label col-md-2">
+                                Mã dự kiến
+                            </div>
+
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.MA_DU_KIEN, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.MA_DU_KIEN, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="control-label col-md-2">
+                                Ngày tạo
+                            </div>
+                            <div class="col-md-10">
+
+                                <input type="text" id="NGAY_TAO" name="NGAY_TAO" datepicker class="form-control datetimepickerKT" ng-model="KhoGiuHang.ngayGiu">
+                                @Html.ValidationMessageFor(model => model.NGAY_TAO, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="control-label col-md-2">
+                                Khách hàng
+                            </div>
+                            <div class="control-label col-md-4">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" ng-model="arrayKhachHang.ma_khach_hang" ng-change="onKhachHangFind()" ng-focus="showtable_ma_khach_hang = true" id="MA_KHACH_HANG" name="MA_KHACH_HANG" >
+                                    <div class="input-group-btn">
+                                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ng-click="showtable_ma_khach_hang = !showtable_ma_khach_hang">
+                                            <span class="caret"></span>
+                                        </button>
+                                        <div class="dropdown-menu dropdown-menu-center borderRadius0 padding0" ng-show="showtable_ma_khach_hang">
+                                            <div class="table-responsive">
+                                                <table class="table table-striped table-hover" st-table="khCollection" st-safe-src="arrayKHFinded">
+                                                    <thead class="bg-blue text-white">
+                                                        <tr>
+                                                            <th>Mã Khách Hàng</th>
+                                                            <th>Tên Khách Hàng</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr style="cursor:pointer" ng-click="showInfoKH(kh)" ng-repeat="kh in khCollection">
+                                                            <td>{{kh.MA_KHACH_HANG}}</td>
+                                                            <td>{{kh.TEN_CONG_TY}}</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <input type="text" readonly class="form-control" ng-model="arrayKhachHang.ten_cong_ty">
+                               
+                            </div>
+                        </div>
+
+
+                        <!--liên hệ-->
+                        <div class="form-group">
+                            <div class="control-label col-md-2">
+                                Liên hệ
+                            </div>
+                            <div class="control-label col-md-4">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" ng-model="arrayLienHe.id_lien_he" ng-change="onLienHeFind()" ng-focus="showtable_id_lien_he = true" id="ID_LIEN_HE" name="ID_LIEN_HE">
+                                    <div class="input-group-btn">
+                                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ng-click="showtable_id_lien_he = !showtable_id_lien_he; GetLHKH(arrayKhachHang.ma_khach_hang)">
+                                            <span class="caret"></span>
+                                        </button>
+                                        <div class="dropdown-menu dropdown-menu-center borderRadius0 padding0" ng-show="showtable_id_lien_he">
+                                            <div class="table-responsive">
+                                                <table class="table table-striped table-hover" st-table="LhCollection" st-safe-src="arrayLHFinded">
+                                                    <thead class="bg-blue text-white">
+                                                        <tr>
+                                                            <th>Id liên hệ</th>
+                                                            <th>Người lên hệ</th>
+                                                            <th>Email cá nhân</th>
+                                                            <th>SĐT1</th>
+                                                            <th>Email công ty</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr style="cursor:pointer" ng-click="showInfoLH(Lh)" ng-repeat="Lh in LhCollection">
+                                                            <td>{{Lh.ID_LIEN_HE}}</td>
+                                                            <td>{{Lh.NGUOI_LIEN_HE}}</td>
+                                                            <td>{{Lh.EMAIL_CA_NHAN}}</td>
+                                                            <td>{{Lh.SDT1}}</td>
+                                                            <td>{{Lh.EMAIL_CONG_TY}}</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <input type="text" readonly class="form-control" ng-model="arrayLienHe.nguoi_lien_he">
+
+                            </div>
+                        </div>
+                        <!--End liên hệ-->
+
+                        <div class="form-group">
+                            <div class="control-label col-md-2">
+                                Trạng thái đơn
+                            </div>
+                            <div class="control-label col-md-2">
+                                Thành công
+                            </div>
+                            <div class="col-md-2">
+                                <div class="checkbox">
+                                    @Html.EditorFor(model => model.THANH_CONG)
+                                    @Html.ValidationMessageFor(model => model.THANH_CONG, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="control-label col-md-2">
+                                Thất bại
+                            </div>
+                            <div class="col-md-2">
+                                <div class="checkbox">
+                                    @Html.EditorFor(model => model.THAT_BAI)
+                                    @Html.ValidationMessageFor(model => model.THAT_BAI, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <div class="control-label col-md-2">
+                                Lý do thất bại
+                            </div>
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.LY_DO_THAT_BAI, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.LY_DO_THAT_BAI, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-10">
+                                <input type="submit" value="Create" class="btn btn-default" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+}
+
+
+
+
+
+
+

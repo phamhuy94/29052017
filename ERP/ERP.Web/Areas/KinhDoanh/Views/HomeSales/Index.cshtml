@@ -1,0 +1,74 @@
+﻿<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+<link href="~/Content/download/pnotify.custom.min.css" rel="stylesheet" />
+<link href="~/Content/self-writing/css/Feedback.css" rel="stylesheet" />
+<script src="~/Content/Scripts/moment.min.js"></script>
+<script src="~/Content/assets/js/plugins/notifications/pnotify.min.js"></script>
+<link href="~/Content/self-writing/css/MetroUI.css" rel="stylesheet" />
+<script src="~/Content/self-writing/js/Metro UI.js"></script>
+<script src="~/Content/self-writing/js/Controllers/FeedBack/FeedBackCtrl.js"></script>
+
+<div class="container dynamicTile" ng-app="myApp" ng-controller="chitietbaivietCtrl">
+    <style>
+        .AUTONICS {
+            background-color: red !important;
+        }
+    </style>
+    <div class="row ">
+        <div class="col-sm-2 col-xs-4" ng-repeat="item in list_baiviet" style="margin-bottom: 0px !important;">
+            <div id="tile1" class="tile">
+
+                <div class="carousel slide" data-ride="carousel">
+                    <!-- Wrapper for slides -->
+                    <div class="carousel-inner">
+                        <div class="item active" style="height: 269px !important">
+                            <a href="/Home/Details/{{item.MA_BAI_VIET}}"><img ng-src="~/Content/Images/BaiViet/{{item.ANH_BAI_VIET}}" /></a>
+                        </div>
+                        <div class="item" id="{{item.TIEU_DE_BAI_VIET}}" style="height: 269px !important">
+                            <span style="color: white; float: left; margin-top: 35px; margin-left: 10px;margin-right:80px; ">{{item.TIEU_DE_BAI_VIET}} </span>
+                            <span style="color: white; float: left; margin-top: 35px; margin-left: 10px;margin-right:80px">Ngày cập nhật: {{item.NGAY_CAP_NHAT | date: 'dd/MM/yyyy'}}</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+@* Phản hồi Sale *@
+<div id="feedback-main"  ng-app="myApp" ng-controller="FeedBackCtrl">
+    <div id="feedback-div">
+        <form  class="form" id="feedback-form1" name="form1" enctype="multipart/form-data">
+            <input type="hidden" id="nhanvienphanhoi" value="@Session["USERNAME"]" />
+            <input type="hidden" id="nguoiduyet" value="@Session["IS_AMIN"]" />
+            <input type="hidden" id="usernamenguoiduyet" value="@Session["USERNAME"]" />
+            <p class="text">
+                <textarea id="noidungphanhoi" name="noidungphanhoi" type="text" placeholder="Nội dung phản hồi"></textarea>
+            </p>
+            <script>
+                CKEDITOR.replace('noidungphanhoi', {
+                    height: 250,
+                });
+            </script>
+
+            <div class="feedback-submit">
+                <input type="button" value="SEND" id="feedback-button-blue" ng-click="Save()"/>
+                <div class="feedback-ease"></div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<button id="popup" class="feedback-button" onclick="toggle_visibility()">Feedback</button>
+
+
+<script>
+    function toggle_visibility() {
+        var e = document.getElementById('feedback-main');
+        if (e.style.display == 'block')
+            e.style.display = 'none';
+        else
+            e.style.display = 'block';
+    }
+</script>
+

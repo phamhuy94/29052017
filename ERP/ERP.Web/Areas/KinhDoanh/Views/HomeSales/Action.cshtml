@@ -1,0 +1,49 @@
+﻿
+@{
+    ViewBag.Title = "Action";
+}
+
+<div ng-app="myApp">
+    <ul>
+        <li class="btn btn-primary" data-toggle="collapse" href="#collapseExample"  onclick="move()" aria-expanded="false" aria-controls="collapseExample">
+            Báo giá
+        </li>
+        <li class="btn btn-primary" data-toggle="collapse" href="#donPO" aria-expanded="false" onclick="move2()" aria-controls="collapseExample">
+            Đơn PO
+        </li>
+    </ul>
+    <div class="collapse" id="collapseExample">
+        <ul>
+            <li>List báo giá</li>
+            <li>List báo giá đã hủy</li>
+            <li>List báo giá thành công</li>
+            <li>List báo giá thất bại</li>
+            <li>List báo giá đang chờ phản hồi</li>
+            <li>List báo giá đã lên PO</li>
+        </ul>
+    </div>
+    <div class="collapse" id="donPO">
+        <ul>
+            <li>List PO</li>
+            <li>List PO đã duyệt</li>
+            <li>List PO đã hủy</li>
+            <li>List PO đang chờ duyệt</li>
+            <li>List PO đang duyệt</li>
+            <li>List PO đã lên đơn bán hàng</li>
+            <li>List PO cần bán ngay</li>
+            <li>List PO đang xuất dở</li>
+        </ul>
+    </div>
+    <script>
+        function move() {
+            $('#donPO').removeClass("in");
+        }
+        move();
+        function move2() {
+            $('#collapseExample').removeClass("in");
+        }
+        move();
+    </script>
+</div>
+
+

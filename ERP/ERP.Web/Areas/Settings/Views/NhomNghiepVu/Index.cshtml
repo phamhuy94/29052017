@@ -1,0 +1,177 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Settings/Views/Shared/Layout.cshtml";
+}
+<style>
+    li{
+        list-style-type: none;
+    }
+    #myDetails ul{
+        overflow: auto;
+    }
+    .hienthi{
+        display: block !important
+    }
+    .nothienthi{
+        display: none !important;
+    }
+</style>
+<div ng-app="myApp" ng-controller="nhomnghiepvuCtrl" class="container" style="padding-top: 30px;">
+    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal" style="margin-bottom: 30px;">Thêm nhóm nghiệp vụ</button>
+
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+                <div class="modal-body">
+                    <form class="form-horizontal" name="myForm" novalidate>
+                        <fieldset>
+                            <!-- Form Name -->
+                            <legend>Add New Nhóm nghiệp vụ</legend>
+                            <!-- Text input-->
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="name">Tên nhóm nghiệp vụ: </label>
+                                <div class="col-md-4">
+                                    <input id="tennhom" name="makho" type="text" placeholder="Tên nhóm" class="form-control input-md" ng-model="tennhom">
+                                </div>
+                            </div>
+                            <!-- Text input-->
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="name">Diễn giải: </label>
+                                <div class="col-md-4">
+                                    <input id="diengiai" name="tenkho" type="text" placeholder="Diễn giải" class="form-control input-md" ng-model="diengiai">
+                                </div>
+                            </div>
+                            <!-- Button (Double) -->
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="anmelden"></label>
+                                <div class="col-md-8">
+                                    <button id="addnew" name="addnew" class="btn btn-success" ng-click="add()" data-dismiss="modal">Add New</button>
+                                    <button id="exit" name="exit" class="btn btn-danger" data-dismiss="modal">Exit</button>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--end modal-->
+    <!-- Modal Update -->
+    <div class="modal fade" id="myEdit" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+                <div class="modal-body">
+                    <form class="form-horizontal" name="myForm" novalidate>
+                        <fieldset>
+                            <!-- Form Name -->
+                            <legend>Update Nhóm nghiệp vụ</legend>
+                            <!-- Text input-->
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="name">Tên nhóm nghiệp vụ: </label>
+                                <div class="col-md-4">
+                                    <input id="makho" name="makho" type="text" placeholder="Inventory Code" class="form-control input-md" ng-model="item.TEN_NHOM" ng-disabled="true">
+                                </div>
+                            </div>
+                            <!-- Text input-->
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="name">Diễn giải: </label>
+                                <div class="col-md-4">
+                                    <input id="tenkho" name="tenkho" type="text" placeholder="Inventory Name" class="form-control input-md" ng-model="item.DIEN_GIAI">
+                                </div>
+                            </div>
+                            <!-- Button (Double) -->
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="anmelden"></label>
+                                <div class="col-md-8">
+                                    <button id="addnew" name="addnew" class="btn btn-success" ng-click="save(item.TEN_NHOM)" data-dismiss="modal">Save</button>
+                                    <button id="exit" name="exit" class="btn btn-danger" data-dismiss="modal">Exit</button>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+    <!--end modal-->
+    <!-- Modal delete -->
+    <div class="modal fade" id="delete_item" role="dialog">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+
+                <div class="modal-body">
+                    <form class="form-horizontal" name="myForm" novalidate>
+                        <fieldset>
+                            <!-- Form Name -->
+                            <legend>Delete Nhóm nghiệp vụ</legend>
+                            <center>Are you sure you want to delete <b>{{item.TEN_NHOM}}</b></center>
+                            <p></p>
+
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="delete"></label>
+                                <div class="col-md-8">
+                                    <button id="delete" name="delete" class="btn btn-danger" ng-click="delete(item.TEN_NHOM)" data-dismiss="modal">Delete</button>
+                                    <button id="exit" name="exit" class="btn btn-success" data-dismiss="modal">Exit</button>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="myDetails" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <select size="10" name="decision2" style="height: 300px;width: 400px;" class="col-md-6">
+                        <option ng-repeat="hovaten in list_hovaten" style="height:30px;margin-left: 15px;margin-bottom: 15px;vertical-align:middle;padding-top: 5px;" ng-click="transfer(hovaten)">{{hovaten.HO_VA_TEN}}</option>
+                    </select>
+                    <ul class="col-md-6">
+                        <li style="height: 300px;overflow: auto">
+                            <div ng-repeat="tenchitiet in list_mota" style="margin-bottom: 5px;">
+                                {{tenchitiet.MO_TA}}
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn col-md-2" ng-class="checkthis()" ng-click="insert()" style="display:none">Thêm mới</button>
+                    <button class="btn" data-dismiss="modal">Exit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <table class="table"  >
+        <thead>
+            <tr>
+                <th>TÊN NHÓM</th>
+                <th>DIỄN GIẢI</th>
+                <th>EDIT</th>
+                <th>DELETE</th>
+                <th>ACTION</th>
+            </tr>                       
+        </thead>
+        <tbody>
+            <tr ng-repeat="item in list_nhomnghiepvu"  >
+                <td  data-target="#myDetails" class="dbclick" ng-dblclick="open(item.TEN_NHOM)">{{item.TEN_NHOM}}</td>
+                <td  data-target="#myDetails" ng-dblclick="open(item.TEN_NHOM)">{{item.DIEN_GIAI}}</td>
+
+                <td>
+                    <button class="btn btn-success btn-circle" ng-click="edit(item)" type="button" data-toggle="modal" data-target="#myEdit"><i class="glyphicon glyphicon-edit"></i></button>
+                </td>
+                <td>
+                    <button class="btn btn-warning btn-circle" ng-click="edit(item)" type="button" data-toggle="modal" data-target="#delete_item"><i class="glyphicon glyphicon-remove"></i></button>
+                </td>
+                <td><a href="/Settings/NhomNghiepVu/Details/{{item.TEN_NHOM}}">Chi tiết nhóm nghiệp vụ</a></td>
+                <td><a href="/Settings/NhomNghiepVu/Create/{{item.TEN_NHOM}}">Thêm người dùng nhóm nghiệp vụ</a></td>
+            </tr>
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,330 @@
+﻿@{Layout = null; }
+
+
+    <script src="~/Content/self-writing/js/Services/DonHangPOService.js"></script>
+    <script src="~/Content/self-writing/js/Controllers/DonHangPOCtrl.js"></script>
+
+
+    <div ng-app="myApp" ng-controller="DonHangPOCtrl"> 
+        <fieldset>
+            <legend>Đơn đặt hàng</legend>
+            <input type="hidden" value="@Session["USERNAME"]" id="username" />
+            <input type="hidden" value="@Session["IS_AMIN"]" id="isadmin" />
+            <input type="hidden" id="macongty" name="macongty" value="@Session["MA_CONG_TY"]" />
+            <center>
+                <table border="1" cellpadding="2" cellspacing="0" style="width:80%; padding:5px;">
+                    <tbody>
+                        <tr height="34">
+                            <td colspan="7" height="34" style="height:34px;width:100%; text-align: center; font-size: 20px">
+                                <b>Chi tiết đơn hàng</b>
+                            </td>
+                        </tr>
+                        <tr height="21">
+                            <td colspan="7" height="21" style="height:21px;width:452px;"></td>
+                        </tr>
+                        <!------------------------------------------>
+                        <tr height="21">
+                            <td colspan="7">
+                                <table border="0" cellpadding="5" cellspacing="0" style="width:100%; font-weight: bold;">
+
+                                    <tr height="28">
+                                        <td height="28" style="height:28px;width:100px;">
+                                            Bên mua:
+                                        </td>
+                                        <td colspan="4" height="28" style="height:28px;">
+                                            <input type="text" ng-model="ten_cong_ty" ng-change="onKH_BaoGiaFind()" ng-focus="showtable_KH_BaoGia = true" ng-blur="showtable_KH_BaoGia = false" style="height:100%;width:100%;">
+                                            <input type="text" class="form-control" ng-model="ma_khach_hang" style="display:none">
+                                            <div class="input-group-btn">
+                                                <div class="dropdown-menu dropdown-menu-center borderRadius0 padding0" style="display: block;height: 400px;overflow:auto;" ng-show="showtable_KH_BaoGia">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-striped table-hover" st-table="KhachHangBGCollection" st-safe-src="arrayNewKH_BaoGiaFinded">
+                                                            <thead class="bg-blue text-white">
+                                                                <tr>
+                                                                    <th>Mã khách hàng</th>
+                                                                    <th>Tên công ty</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr style="cursor:pointer" ng-mousedown="showInfoKH_BaoGia(Lh)" ng-repeat="Lh in KhachHangBGCollection">
+                                                                    <td>{{Lh.MA_KHACH_HANG}}</td>
+                                                                    <td>{{Lh.TEN_CONG_TY}}</td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td height="28" style="height:28px;width:100px;">
+                                            Ngày:
+                                        </td>
+                                        <td colspan="2" height="28" style="height:28px;">
+                                            <input type="text" style="height:100%;width:100%;" value="@DateTime.Today.Date.ToString("dd/MM/yyyy")">
+                                        </td>
+                                    </tr>
+                                    <tr height="28">
+                                        <td height="28" style="height:28px;width:100px;">
+                                            Người liên hệ:
+                                        </td>
+                                        <td colspan="4" height="28" style="height:28px;">
+                                            <input type="text" ng-model="nguoi_lien_he" ng-change="onLienHeFind()" ng-focus="showtable_id_lien_he = true" ng-blur="showtable_id_lien_he = false" style="height:100%;width:100%;">
+                                            <input type="text" class="form-control" ng-model="id_lien_he" ng-change="onLienHeFind()" style="display:none">
+                                            <div class="input-group-btn">
+                                                <div class="dropdown-menu dropdown-menu-center borderRadius0 padding0" style="display: block" ng-show="showtable_id_lien_he">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-striped table-hover" st-table="LhCollection" st-safe-src="arrayLHFinded">
+                                                            <thead class="bg-blue text-white">
+                                                                <tr>
+                                                                    <th>Id liên hệ</th>
+                                                                    <th>Người lên hệ</th>
+                                                                    <th>Email cá nhân</th>
+                                                                    <th>SĐT1</th>
+                                                                    <th>Email công ty</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr style="cursor:pointer" ng-mousedown="showInfoLH(Lh)" ng-repeat="Lh in LhCollection">
+                                                                    <td>{{Lh.ID_LIEN_HE}}</td>
+                                                                    <td>{{Lh.NGUOI_LIEN_HE}}</td>
+                                                                    <td>{{Lh.EMAIL_CA_NHAN}}</td>
+                                                                    <td>{{Lh.SDT1}}</td>
+                                                                    <td>{{Lh.EMAIL_CONG_TY}}</td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td height="28" style="height:28px;width:100px;">
+                                            Người liên hệ:
+                                        </td>
+                                        <td colspan="2" height="28" style="height:28px;">
+                                            <input type="text" style="height:100%;width:100%;" value="@Session["HO_VA_TEN"]">
+                                        </td>
+                                    </tr>
+                                    <tr height="28">
+                                        <td height="28" style="height:28px;width:100px;">
+                                            Địa chỉ:
+                                        </td>
+                                        <td colspan="4" height="28" style="height:28px;">
+                                            <input type="text" style="height:100%;width:100%;" ng-model="dia_chi_xuat_hoa_don">
+                                        </td>
+                                        <td height="28" style="height:28px;width:100px;">
+                                            Email:
+                                        </td>
+                                        <td colspan="2" height="28" style="height:28px;">
+                                            <input type="text" style="height:100%;width:100%;" value="@Session["EMAIL"]">
+                                        </td>
+                                    </tr>
+                                    <tr height="28">
+                                        <td height="28" style="height:28px;width:100px;">
+                                            Email:
+                                        </td>
+                                        <td colspan="4" height="28" style="height:28px;">
+                                            <input type="text" style="height:100%;width:100%;" ng-model="email_cong_ty">
+                                        </td>
+                                        <td height="28" style="height:28px;width:100px;">
+                                            SĐT:
+                                        </td>
+                                        <td colspan="2" height="28" style="height:28px;">
+                                            <input type="text" style="height:100%;width:100%;" value="@Session["SDT"]">
+                                        </td>
+                                    </tr>
+                                    <tr height="28">
+                                        <td height="28" style="height:28px;width:100px;">
+                                            Tel:
+                                        </td>
+                                        <td height="28" style="height:28px;">
+                                            <input type="text" style="height:100%;width:100%;" ng-model="hotline">
+                                        </td>
+                                        <td height="28" style="height:28px;">
+                                            Fax:
+                                        </td>
+                                        <td colspan="2" height="28" style="height:28px;">
+                                            <input type="text" style="height:100%;width:100%;" ng-model="fax">
+                                        </td>
+                                        <td colspan="3" height="28" style="height:28px;"></td>
+                                    </tr>
+
+                                </table>
+                            </td>
+                        </tr>
+
+                        <tr height="21">
+                            <td colspan="4" height="38" rowspan="2" style="height:38px;width:520px;">
+                                <b>Danh sách đặt hàng:</b>
+                            </td>
+                            <td colspan="3" rowspan="2" style="width:353px;">
+                                <b>Ngày giao hàng(tháng/ngày/năm):</b> <input type="date" style="height:21px;width:60%;" value="12/05/2016" ng-model="ngay_giao_hang">
+                            </td>
+                        </tr>
+                        <tr height="17"></tr>
+                        <tr height="34">
+                            <td height="34" style="height:34px;width:39px;">
+                                <b>STT</b>
+                            </td>
+                            <td style="width:296px;">
+                                <b>Mã hàng</b>
+                            </td>
+                            <td style="width:117px;text-align:center">
+                                <b>Hãng sx</b>
+                            </td>
+                            <td style="width:68px;text-align:center">
+                                <b>SL</b>
+                            </td>
+                            <td style="width:53px;text-align:center">
+                                <b>ĐVT</b>
+                            </td>
+                            <td style="width:133px;text-align:center">
+                                <b>Đơn giá</b><br />
+                                <i>chưa VAT (VNĐ)</i>
+                            </td>
+                            <td style="width:167px;text-align:center">
+                                <b>Thành tiền</b><br />
+                                <i>chưa VAT (VNĐ)</i>
+                            </td>
+                        </tr>
+                        <tr height="43" ng-repeat="(index,detail) in Detail.ListNew">
+                            <td height="43" style="height:43px;width:39px;">
+                                {{$index + 1}}
+                            </td>
+                            <td align="left">
+                                <input type="text" class="form-control" ng-model="detail.ma_chuan" ng-change="onHHFind(detail.ma_chuan)" placeholder="Nhập mã hàng" ng-focus="detail.showtable_hanghoa = true" ng-blur="detail.showtable_hanghoa = false" style="height:21px;width:100%; margin-bottom:5px">
+                                <input type="text" class="form-control" ng-model="detail.ma_hang" style="display:none">
+                                <div class="input-group-btn" style="display:inline-block">
+                                    <div class="dropdown-menu dropdown-menu-center borderRadius0 padding0 menuhh" style="display: block" ng-show="detail.showtable_hanghoa">
+                                        <div class="table-responsive">
+                                            <table class="table table-striped table-hover" st-table="HHCollection" st-safe-src="arrayHHFinded">
+                                                <thead class="bg-blue text-white">
+                                                    <tr>
+                                                        <th>Mã hàng</th>
+                                                        <th>Tên hàng</th>
+                                                        <th>Mã nhóm hàng</th>
+                                                        <th>Đơn vị tính</th>
+                                                        <th>Giá list</th>
+                                                        <th>Mã kho còn</th>
+                                                        <th>Số lượng</th>
+                                                        <th>Tên kho</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr style="cursor:pointer" ng-mousedown="inputstaff(kh,index,detail)" ng-repeat="kh in HHCollection">
+                                                        <td>{{kh.MA_CHUAN}}</td>
+                                                        <td>{{kh.TEN_HANG}}</td>
+                                                        <td>{{kh.MA_NHOM_HANG}}</td>
+                                                        <td>{{kh.DVT}}</td>
+                                                        <td>{{kh.GIA_LIST | currency : '' : 0}}</td>
+                                                        <td>{{kh.MA_KHO_CON}}</td>
+                                                        <td>{{kh.SO_LUONG}}</td>
+                                                        <td>{{kh.TEN_KHO}}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <input type="text" style="height:21px;width:100%;" ng-model="detail.ten_hang">
+                            </td>
+                            <td style="width:117px;">
+                                <input type="text" style="height:21px;width:100%; margin-bottom:5px" ng-model="detail.hang"><br />
+                            </td>
+                            <td>
+                                <input type="number" style="height:35px;width:95%;" ng-model="detail.so_luong" ng-change="test(detail)">
+                            </td>
+                            <td>
+                                <p ng-model="detail.dvt">{{detail.dvt}}</p>
+                            </td>
+                            <td align="right"> <input type="text" style="height:21px;width:95%;text-align:right" format="number" ng-model="detail.gia_list" ng-change="test(detail)"></td>
+                            <td align="right">
+                                {{detail.thanh_tien | currency : '' : 0}}
+                                <input type="number" ng-model="detail.thanh_tien" readonly style="display:none" />
+                            </td>
+                        </tr>
+                        <tr>
+                            
+                            <td colspan="7">
+                                <button class="fa fa-plus button_themdong" ng-click="addnewproduct()">Thêm một dòng</button>
+                            </td>
+                        </tr>
+                        <tr height="31">
+                            <td height="31" style="height:31px;">
+                                &nbsp;
+                            </td>
+                            <td>
+                                &nbsp;
+                            </td>
+                            <td colspan="4">
+                                <b>Tổng cộng</b>
+                            </td>
+                            <td align="right"> <b ng-model="tongtien">{{tongtien | number:0}}</b></td>
+                        </tr>
+                        <tr height="31">
+                            <td height="31" style="height:31px;">
+                                &nbsp;
+                            </td>
+                            <td>
+                                &nbsp;
+                            </td>
+                            <td colspan="4">
+                                <b>Tiền thuế VAT (10%)</b>
+                            </td>
+                            <td align="right"><b ng-model="thuegtgt">{{thuegtgt | number : 0}}</b></td>
+                        </tr>
+                        <tr height="31">
+                            <td height="31" style="height:31px;">
+                                &nbsp;
+                            </td>
+                            <td>
+                                &nbsp;
+                            </td>
+                            <td colspan="4">
+                                <b>TỔNG GIÁ TRỊ ĐƠN HÀNG (Đã bao gồm VAT)</b>
+                            </td>
+                            <td align="right"><b ng-model="tongtienthanhtoan">{{tongtienthanhtoan | number:0}}</b></td>
+                        </tr>
+                        <tr height="25">
+                            <td height="25" style="height:25px;"></td>
+                            <td align="right"><b>Bằng chữ:</b></td>
+                            <td colspan="5"><b ng-model="sotienvietbangchu">{{sotienvietbangchu}} đồng</b></td>
+                        </tr>
+                        <tr height="17">
+                            <td colspan="7" height="17" style="height:17px;">
+                                &nbsp;
+                            </td>
+                        </tr>
+                        <tr height="21">
+                            <td colspan="7" height="21" style="height:21px;width:873px;"><b>Các điều khoản thương mại:</b></td>
+                        </tr>
+                        <tr height="21">
+                            <td colspan="2" height="21" style="height:21px;">
+                                1/ Địa điểm giao hàng:
+                            </td>
+                            <td colspan="5" height="21" style="height:21px;">
+                                <input type="text" style="height:21px;width:100%;" ng-model="dia_diem_giao_hang">
+                            </td>
+                        </tr>
+                        <tr height="21">
+                            <td colspan="2" height="21" style="height:21px;">
+                                2/ Hình thức thanh toán:
+                            </td>
+                            <td colspan="5" height="21" style="height:21px;">
+                                <select class="select" ng-model="hinh_thuc_thanh_toan" id="adddieukhoanthanhtoan" style="height:21px;width:50%;"
+                                        data-ng-options="item as item for item in hinhthuctt"></select>
+                            </td>
+                        </tr>
+                        <tr height="21">
+                            <td colspan="2" height="21" style="height:21px;">
+                                Cần xuất ngay : <input type="checkbox" ng-model="can_xuat_ngay" />
+                            </td>
+                            <td colspan="5" height="21" style="height:21px;">
+                                Cần lấy hóa đơn: <input type="checkbox" ng-model="can_lay_hoa_don" />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </center>
+            <center><button class="btn fa fa-check-circle-o" style="margin-top: 15px" ng-click="TaoPOMoi()">Hoàn thành</button></center>
+        </fieldset>
+    </div>
+

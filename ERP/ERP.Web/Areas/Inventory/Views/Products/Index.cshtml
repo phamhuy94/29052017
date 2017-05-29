@@ -1,0 +1,651 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Inventory/Views/Shared/Layout.cshtml";
+}
+
+
+
+
+
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+<link href="~/Content/self-writing/css/HangHoaHL.css" rel="stylesheet" />
+<script src="http://malsup.github.com/jquery.form.js"></script>
+
+<div class="panel-heading">Bạn đang xem danh mục hàng hóa</div>
+<br />
+<div ng-app="myApp" ng-controller="hanghoaCtrl">
+    <div id="quick-access">
+        <form class="form-inline quick-search-form" role="form" action="#">
+            <div class="form-group" style="width: 90%">
+                <input type="text" style="width: 60%" class="form-control" placeholder="Type System Code You Want To Search Here" ng-model="search_text">
+            </div>
+        </form>
+    </div>
+
+
+    <div class="content">      
+        <div class="modal fade" id="chitiethanghoa" role="dialog" tabindex="-1">
+            <div class="modal-dialog modal-lg" style="width:80%;">
+                <div class="modal-content" style="height: 600px;">
+
+                    <div class="modal-body">
+                        <div class="col-md-3">
+                            <img ng-src="~/Content/Images/HangHoa/{{item.HINH_ANH}}" style="width: 90%;height: 250px;" />
+                        </div>
+                        <div class="col-md-9">
+                            <div style="margin-bottom: 5%;" class="col-md-12">
+                                <h1>{{item.TEN_HANG | uppercase}}</h1>
+                                <div class="col-md-3 detail">Mã hàng: {{item.MA_HANG}}</div>
+                                <div class="col-md-2 detail">Hãng: {{item.MA_NHOM_HANG}}</div>
+                                <div class="col-md-2 detail">Xuất xứ: {{item.XUAT_XU}}</div>
+                            </div>
+                            <div>
+                                <ul class="nav nav-tabs">
+                                    <li class="active"><a data-toggle="tab" href="#chitiet">Product Details</a></li>
+                                    <li><a data-toggle="tab" href="#thongsokythuat">Thông số kỹ thuật</a></li>
+                                    <li><a data-toggle="tab" href="#slton">Số lượng tồn</a></li>
+                                </ul>
+                                <div class="tab-content">
+                                    <!--Tab chi tiết hàng hóa-->
+                                    <div id="chitiet" class="tab-pane fade in active">
+                                        <div class="col-md-12" style="box-shadow: 3px 3px 3px #ddd">
+                                            <div class="col-md-6">
+                                                <table class="table noborder">
+                                                    <tr>
+                                                        <td>Unit</td>
+                                                        <td>{{item.DON_VI_TINH}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Khối lượng:</td>
+                                                        <td></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Giá bán:</td>
+                                                        <td></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Properties</td>
+                                                        <td></td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <table class="table noborder">
+                                                    <tr>
+                                                        <td>Quy cách đóng gói</td>
+                                                        <td ng-bind-html="item.QUY_CACH_DONG_GOI | unsafe"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Sale Account</td>
+                                                        <td></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>COGS Account</td>
+                                                        <td></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Note</td>
+                                                        <td></td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div id="slton" class="tab-pane fade">
+                                        <div class="col-md-12">
+                                            <table class="table noborder table-fill">
+                                                <tr>
+                                                    <td ng-repeat="tonkho in danhsachtonkho">{{tonkho.MA_KHO}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td ng-repeat="tonkho in danhsachtonkho">{{tonkho.SL_TON}}</td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div id="thongsokythuat" class="tab-pane fade" style="box-shadow: 3px 3px 3px #ddd">
+                                        <div ng-bind-html="item.THONG_SO_KY_THUAT | unsafe"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+        <input type="hidden" ng-model="userquantam" id="userquantam" value="@Session["USERNAME"]" />
+
+
+        <div class="col-md-12" style="margin-top: 2.4%">
+            <ul class="nav nav-tabs list_tab">
+                <li class="active"><a data-toggle="tab" href="#AUTONICS"><img src="~/Content/Images/HangHoa/AUTONICS.png" height="30" /></a></li>
+                <li>
+                    <a data-toggle="tab" href="#SCHNEIDER">
+                        <img src="~/Content/Images/HangHoa/SCHNEIDER.png" height="30" />
+                    </a>
+                </li>
+                <li>
+                    <a data-toggle="tab" href="#OMRON">
+                        <img src="~/Content/Images/HangHoa/OMRON.png" height="30" />
+                    </a>
+                </li>
+                <li>
+                    <a data-toggle="tab" href="#IDEC">
+                        <img src="~/Content/Images/HangHoa/IDEC.png" height="30" />
+                    </a>
+                </li>
+                <li>
+                    <a data-toggle="tab" href="#MITSUBISHI">
+                        <img src="~/Content/Images/HangHoa/MITSUBISHI.png" height="30" />
+                    </a>
+                </li>
+                <li>
+                    <a data-toggle="tab" href="#LS">
+                        <img src="~/Content/Images/HangHoa/LS.png" height="30" />
+                    </a>
+                </li>
+                <li>
+                    <a data-toggle="tab" href="#FUJI">
+                        <img src="~/Content/Images/HangHoa/FUJI.png" height="30" />
+                    </a>
+                </li>
+                <li>
+                    <a data-toggle="tab" href="#CKD">
+                        <img src="~/Content/Images/HangHoa/CKD.png" height="30" />
+                    </a>
+                </li>
+                <li>
+                    <a data-toggle="tab" href="#DECA">
+                        <img src="~/Content/Images/HangHoa/DECA.png" height="30" />
+                    </a>
+                </li>
+                <li>
+                    <a data-toggle="tab" href="#HANYOUNG">
+                        <img src="~/Content/Images/HangHoa/HANYOUNG.png" height="30" />
+                    </a>
+                </li>
+                <li>
+                    <a data-toggle="tab" href="#HITACHI">
+                        <img src="~/Content/Images/HangHoa/HITACHI.png" height="30" />
+                    </a>
+                </li>
+                <li>
+                    <a data-toggle="tab" href="#MAX">
+                        <img src="~/Content/Images/HangHoa/MAX.png" height="30" />
+                    </a>
+                </li>
+                <li>
+                    <a data-toggle="tab" href="#PROFACE">
+                        <img src="~/Content/Images/HangHoa/PROFACE.png" height="30" />
+                    </a>
+                </li>
+                <li>
+                    <a data-toggle="tab" href="#RITTAL">
+                        <img src="~/Content/Images/HangHoa/RITTAL.png" height="30" />
+                    </a>
+                </li>
+                <li>
+                    <a data-toggle="tab" href="#SIEMENS">
+                        <img src="~/Content/Images/HangHoa/SIEMENS.png" height="30" />
+                    </a>
+                </li>
+                <li>
+                    <a data-toggle="tab" href="#SMC">
+                        <img src="~/Content/Images/HangHoa/SMC.png" height="30" />
+                    </a>
+                </li>
+                <li>
+                    <a data-toggle="tab" href="#TEND">
+                        <img src="~/Content/Images/HangHoa/TEND.png" height="30" />
+                    </a>
+                </li>
+                <li>
+                    <a data-toggle="tab" href="#TOSHIBA">
+                        <img src="~/Content/Images/HangHoa/TOSHIBA.png" height="30" />
+                    </a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div id="AUTONICS" class="tab-pane fade in active">
+                    <div class="col-md-12">
+                        <div dir-paginate="item in filtered = (danhsachhanghoa | filter: {MA_NHOM_HANG: 'AUTONICS'}) | filter: {MA_HANG:search_text} | itemsPerPage: 15 " ng-click="edit(item);get_tonkho(item.MA_HANG)" class="hover col-md-2" style="margin: 20px;padding:5px;height: 150px; border: 1px solid #DCF5FC;box-shadow:3px 3px 3px #DCF5FC;color: #00BFFF" pagination-id="autonics">
+                            <div class="col-md-6">
+                                <img ng-src="~/Content/Images/HangHoa/{{item.HINH_ANH}}" style="width: 100%;height: 40%;" data-toggle="modal" data-target="#chitiethanghoa" />
+                            </div>
+                            <div class="col-md-6">
+                                <p data-toggle="modal" data-target="#chitiethanghoa" class="text-center">{{item.MA_HANG}}</p>
+                                <br />
+                                <br />
+                                <br />
+                                <a href="/Inventory/HangHoa/Details/{{item.MA_HANG}}" class="btn btn-default">Xem chi tiết</a>
+                            </div>
+                        </div>
+                    </div>                   
+                    <div >
+                        <dir-pagination-controls pagination-id="autonics" max-size="12" style="float:left;"
+                                                 direction-links="true"
+                                                 boundary-links="true">
+                        </dir-pagination-controls>
+                    </div>                 
+                </div>
+                <div id="SCHNEIDER" class="tab-pane fade">
+                    <div class="col-md-12">
+                        <div dir-paginate="item in filtered = (danhsachhanghoa | filter: {MA_NHOM_HANG: 'SCHNEIDER'}) | filter: {MA_HANG:search_text} | itemsPerPage: 15 " ng-click="edit(item);get_tonkho(item.MA_HANG)" class="hover col-md-2" style="margin: 20px;padding:5px;height: 150px;border: 1px solid #DCF5FC;box-shadow:3px 3px 3px #DCF5FC;color: #00BFFF" pagination-id="schneider">
+                            <div class="col-md-6">
+                                <img ng-src="~/Content/Images/HangHoa/{{item.HINH_ANH}}" style="width: 100%;height: 40%;" data-toggle="modal" data-target="#chitiethanghoa" />
+                            </div>
+                            <div class="col-md-6">
+                                <p data-toggle="modal" data-target="#chitiethanghoa" class="text-center">{{item.MA_HANG}}</p>
+                                <br />
+                                <br />
+                                <br />
+                                <a href="/Inventory/HangHoa/Details/{{item.MA_HANG}}" class="btn btn-default">Xem chi tiết</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <dir-pagination-controls pagination-id="schneider" max-size="12" style="float:left;"
+                                                 direction-links="true"
+                                                 boundary-links="true">
+                        </dir-pagination-controls>
+                    </div>
+                </div>
+                <div id="OMRON" class="tab-pane fade">
+                    <div class="col-md-12">
+                        <div dir-paginate="item in filtered = (danhsachhanghoa | filter: {MA_NHOM_HANG: 'OMRON'}) | filter: {MA_HANG:search_text} | itemsPerPage: 15 " ng-click="edit(item);get_tonkho(item.MA_HANG)" class="hover col-md-2" style="margin: 20px;padding:5px;height: 150px;border: 1px solid #DCF5FC;box-shadow:3px 3px 3px #DCF5FC;color: #00BFFF" pagination-id="omron">
+                            <div class="col-md-6">
+                                <img ng-src="~/Content/Images/HangHoa/{{item.HINH_ANH}}" style="width: 100%;height: 40%;" data-toggle="modal" data-target="#chitiethanghoa" />
+                            </div>
+                            <div class="col-md-6">
+                                <p data-toggle="modal" data-target="#chitiethanghoa" class="text-center">{{item.MA_HANG}}</p>
+                                <br />
+                                <br />
+                                <br />
+                                <a href="/Inventory/HangHoa/Details/{{item.MA_HANG}}" class="btn btn-default">Xem chi tiết</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <dir-pagination-controls pagination-id="omron" max-size="12" style="float:left;"
+                                                 direction-links="true"
+                                                 boundary-links="true">
+                        </dir-pagination-controls>
+                    </div>
+                </div>
+                <div id="IDEC" class="tab-pane fade">
+                    <div class="col-md-12">
+                        <div dir-paginate="item in filtered = (danhsachhanghoa | filter: {MA_NHOM_HANG: 'IDEC'}) | filter: {MA_HANG:search_text} | itemsPerPage: 15 " ng-click="edit(item);get_tonkho(item.MA_HANG)" class="hover col-md-2" style="margin: 20px;padding:5px;height: 150px;border: 1px solid #DCF5FC;box-shadow:3px 3px 3px #DCF5FC;color: #00BFFF" pagination-id="idec">
+                            <div class="col-md-6">
+                                <img ng-src="~/Content/Images/HangHoa/{{item.HINH_ANH}}" style="width: 100%;height: 40%;" data-toggle="modal" data-target="#chitiethanghoa" />
+                            </div>
+                            <div class="col-md-6">
+                                <p data-toggle="modal" data-target="#chitiethanghoa" class="text-center">{{item.MA_HANG}}</p>
+                                <br />
+                                <br />
+                                <br />
+                                <a href="/Inventory/HangHoa/Details/{{item.MA_HANG}}" class="btn btn-default">Xem chi tiết</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <dir-pagination-controls pagination-id="idec" max-size="12" style="float:left;"
+                                                 direction-links="true"
+                                                 boundary-links="true">
+                        </dir-pagination-controls>
+                    </div>
+                </div>
+                <div id="MITSUBISHI" class="tab-pane fade">
+                    <div class="col-md-12">
+                        <div dir-paginate="item in filtered = (danhsachhanghoa | filter: {MA_NHOM_HANG: 'MITSUBISHI'}) | filter: {MA_HANG:search_text} | itemsPerPage: 15 " ng-click="edit(item);get_tonkho(item.MA_HANG)" class="hover col-md-2" style="margin: 20px;padding:5px;height: 150px;border: 1px solid #DCF5FC;box-shadow:3px 3px 3px #DCF5FC;color: #00BFFF" pagination-id="mitsubishi">
+                            <div class="col-md-6">
+                                <img ng-src="~/Content/Images/HangHoa/{{item.HINH_ANH}}" style="width: 100%;height: 40%;" data-toggle="modal" data-target="#chitiethanghoa" />
+                            </div>
+                            <div class="col-md-6">
+                                <p data-toggle="modal" data-target="#chitiethanghoa" class="text-center">{{item.MA_HANG}}</p>
+                                <br />
+                                <br />
+                                <br />
+                                <a href="/Inventory/HangHoa/Details/{{item.MA_HANG}}" class="btn btn-default">Xem chi tiết</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <dir-pagination-controls pagination-id="mitsubishi" max-size="12" style="float:left;"
+                                                 direction-links="true"
+                                                 boundary-links="true">
+                        </dir-pagination-controls>
+                    </div>
+                </div>
+                <div id="LS" class="tab-pane fade">
+                    <div class="col-md-12">
+                        <div dir-paginate="item in filtered = (danhsachhanghoa | filter: {MA_NHOM_HANG: 'LS'}) | filter: {MA_HANG:search_text} | itemsPerPage: 15 " ng-click="edit(item);get_tonkho(item.MA_HANG)" class="hover col-md-2" style="margin: 20px;padding:5px;height: 150px;border: 1px solid #DCF5FC;box-shadow:3px 3px 3px #DCF5FC;color: #00BFFF" pagination-id="ls">
+                            <div class="col-md-6">
+                                <img ng-src="~/Content/Images/HangHoa/{{item.HINH_ANH}}" style="width: 100%;height: 40%;" data-toggle="modal" data-target="#chitiethanghoa" />
+                            </div>
+                            <div class="col-md-6">
+                                <p data-toggle="modal" data-target="#chitiethanghoa" class="text-center">{{item.MA_HANG}}</p>
+                                <br />
+                                <br />
+                                <br />
+                                <a href="/Inventory/HangHoa/Details/{{item.MA_HANG}}" class="btn btn-default">Xem chi tiết</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <dir-pagination-controls pagination-id="ls" max-size="12" style="float:left;"
+                                                 direction-links="true"
+                                                 boundary-links="true">
+                        </dir-pagination-controls>
+                    </div>
+                </div>
+                <div id="FUJI" class="tab-pane fade">
+                    <div class="col-md-12">
+                        <div dir-paginate="item in filtered = (danhsachhanghoa | filter: {MA_NHOM_HANG: 'FUJI'}) | filter: {MA_HANG:search_text} | itemsPerPage: 15 " ng-click="edit(item);get_tonkho(item.MA_HANG)" class="hover col-md-2" style="margin: 20px;padding:5px;height: 150px;border: 1px solid #DCF5FC;box-shadow:3px 3px 3px #DCF5FC;color: #00BFFF" pagination-id="fuji">
+                            <div class="col-md-6">
+                                <img ng-src="~/Content/Images/HangHoa/{{item.HINH_ANH}}" style="width: 100%;height: 40%;" data-toggle="modal" data-target="#chitiethanghoa"/>
+                            </div>
+                            <div class="col-md-6">
+                                <p data-toggle="modal" data-target="#chitiethanghoa" class="text-center">{{item.MA_HANG}}</p>
+                                <br />
+                                <br />
+                                <br />
+                                <a href="/Inventory/HangHoa/Details/{{item.MA_HANG}}" class="btn btn-default">Xem chi tiết</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <dir-pagination-controls pagination-id="fuji" max-size="12" style="float:left;"
+                                                 direction-links="true"
+                                                 boundary-links="true">
+                        </dir-pagination-controls>
+                    </div>
+                </div>
+                <div id="CKD" class="tab-pane fade">
+                    <div class="col-md-12">
+                        <div dir-paginate="item in filtered = (danhsachhanghoa | filter: {MA_NHOM_HANG: 'CKD'}) | filter: {MA_HANG:search_text} | itemsPerPage: 15 " ng-click="edit(item);get_tonkho(item.MA_HANG)" class="hover col-md-2" style="margin: 20px;padding:5px;height: 150px;border: 1px solid #DCF5FC;box-shadow:3px 3px 3px #DCF5FC;color: #00BFFF" pagination-id="ckd">
+                            <div class="col-md-6">
+                                <img ng-src="~/Content/Images/HangHoa/{{item.HINH_ANH}}" style="width: 100%;height: 40%;" data-toggle="modal" data-target="#chitiethanghoa" />
+                            </div>
+                            <div class="col-md-6">
+                                <p data-toggle="modal" data-target="#chitiethanghoa" class="text-center">{{item.MA_HANG}}</p>
+                                <br />
+                                <br />
+                                <br />
+                                <a href="/Inventory/HangHoa/Details/{{item.MA_HANG}}" class="btn btn-default">Xem chi tiết</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <dir-pagination-controls pagination-id="ckd" max-size="12" style="float:left;"
+                                                 direction-links="true"
+                                                 boundary-links="true">
+                        </dir-pagination-controls>
+                    </div>
+                </div>
+                <div id="DECA" class="tab-pane fade">
+                    <div class="col-md-12">
+                        <div dir-paginate="item in filtered = (danhsachhanghoa | filter: {MA_NHOM_HANG: 'DECA'}) | filter: {MA_HANG:search_text} | itemsPerPage: 15 " ng-click="edit(item);get_tonkho(item.MA_HANG)" class="hover col-md-2" style="margin: 20px;padding:5px;height: 150px;border: 1px solid #DCF5FC;box-shadow:3px 3px 3px #DCF5FC;color: #00BFFF" pagination-id="deca">
+                            <div class="col-md-6">
+                                <img ng-src="~/Content/Images/HangHoa/{{item.HINH_ANH}}" style="width: 100%;height: 40%;" data-toggle="modal" data-target="#chitiethanghoa" />
+                            </div>
+                            <div class="col-md-6">
+                                <p data-toggle="modal" data-target="#chitiethanghoa" class="text-center">{{item.MA_HANG}}</p>
+                                <br />
+                                <br />
+                                <br />
+                                <a href="/Inventory/HangHoa/Details/{{item.MA_HANG}}" class="btn btn-default">Xem chi tiết</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <dir-pagination-controls pagination-id="deca" max-size="12" style="float:left;"
+                                                 direction-links="true"
+                                                 boundary-links="true">
+                        </dir-pagination-controls>
+                    </div>
+                </div>
+                <div id="HANYOUNG" class="tab-pane fade">
+                    <div class="col-md-12">
+                        <div dir-paginate="item in filtered = (danhsachhanghoa | filter: {MA_NHOM_HANG: 'HANYOUNG'}) | filter: {MA_HANG:search_text} | itemsPerPage: 15 " ng-click="edit(item);get_tonkho(item.MA_HANG)" class="hover col-md-2" style="margin: 20px;padding:5px;height: 150px;border: 1px solid #DCF5FC;box-shadow:3px 3px 3px #DCF5FC;color: #00BFFF" pagination-id="hanyoung">
+                            <div class="col-md-6">
+                                <img ng-src="~/Content/Images/HangHoa/{{item.HINH_ANH}}" style="width: 100%;height: 40%;" data-toggle="modal" data-target="#chitiethanghoa" />
+                            </div>
+                            <div class="col-md-6">
+                                <p data-toggle="modal" data-target="#chitiethanghoa" class="text-center">{{item.MA_HANG}}</p>
+                                <br />
+                                <br />
+                                <br />
+                                <a href="/Inventory/HangHoa/Details/{{item.MA_HANG}}" class="btn btn-default">Xem chi tiết</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <dir-pagination-controls pagination-id="hanyoung" max-size="12" style="float:left;"
+                                                 direction-links="true"
+                                                 boundary-links="true">
+                        </dir-pagination-controls>
+                    </div>
+                </div>
+                <div id="HITACHI" class="tab-pane fade">
+                    <div class="col-md-12">
+                        <div dir-paginate="item in filtered = (danhsachhanghoa | filter: {MA_NHOM_HANG: 'HITACHI'}) | filter: {MA_HANG:search_text} | itemsPerPage: 15 " ng-click="edit(item);get_tonkho(item.MA_HANG)" class="hover col-md-2" style="margin: 20px;padding:5px;height: 150px;border: 1px solid #DCF5FC;box-shadow:3px 3px 3px #DCF5FC;color: #00BFFF" pagination-id="hitachi">
+                            <div class="col-md-6">
+                                <img ng-src="~/Content/Images/HangHoa/{{item.HINH_ANH}}" style="width: 100%;height: 40%;" data-toggle="modal" data-target="#chitiethanghoa" />
+                            </div>
+                            <div class="col-md-6">
+                                <p data-toggle="modal" data-target="#chitiethanghoa" class="text-center">{{item.MA_HANG}}</p>
+                                <br />
+                                <br />
+                                <br />
+                                <a href="/Inventory/HangHoa/Details/{{item.MA_HANG}}" class="btn btn-default">Xem chi tiết</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <dir-pagination-controls pagination-id="hitachi" max-size="12" style="float:left;"
+                                                 direction-links="true"
+                                                 boundary-links="true">
+                        </dir-pagination-controls>
+                    </div>
+                </div>
+                <div id="MAX" class="tab-pane fade">
+                    <div class="col-md-12">
+                        <div dir-paginate="item in filtered = (danhsachhanghoa | filter: {MA_NHOM_HANG: 'MAX'}) | filter: {MA_HANG:search_text} | itemsPerPage: 15 " ng-click="edit(item);get_tonkho(item.MA_HANG)" class="hover col-md-2" style="margin: 20px;padding:5px;height: 150px;border: 1px solid #DCF5FC;box-shadow:3px 3px 3px #DCF5FC;color: #00BFFF" pagination-id="max">
+                            <div class="col-md-6">
+                                <img ng-src="~/Content/Images/HangHoa/{{item.HINH_ANH}}" style="width: 100%;height: 40%;" data-toggle="modal" data-target="#chitiethanghoa" />
+                            </div>
+                            <div class="col-md-6">
+                                <p data-toggle="modal" data-target="#chitiethanghoa" class="text-center">{{item.MA_HANG}}</p>
+                                <br />
+                                <br />
+                                <br />
+                                <a href="/Inventory/HangHoa/Details/{{item.MA_HANG}}" class="btn btn-default">Xem chi tiết</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <dir-pagination-controls pagination-id="max" max-size="12" style="float:left;"
+                                                 direction-links="true"
+                                                 boundary-links="true">
+                        </dir-pagination-controls>
+                    </div>
+                </div>
+                <div id="PROFACE" class="tab-pane fade">
+                    <div class="col-md-12">
+                        <div dir-paginate="item in filtered = (danhsachhanghoa | filter: {MA_NHOM_HANG: 'PROFACE'}) | filter: {MA_HANG:search_text} | itemsPerPage: 15 " ng-click="edit(item);get_tonkho(item.MA_HANG)" class="hover col-md-2" style="margin: 20px;padding:5px;height: 150px;border: 1px solid #DCF5FC;box-shadow:3px 3px 3px #DCF5FC;color: #00BFFF" pagination-id="proface">
+                            <div class="col-md-6">
+                                <img ng-src="~/Content/Images/HangHoa/{{item.HINH_ANH}}" style="width: 100%;height: 40%;" data-toggle="modal" data-target="#chitiethanghoa" />
+                            </div>
+                            <div class="col-md-6">
+                                <p data-toggle="modal" data-target="#chitiethanghoa" class="text-center">{{item.MA_HANG}}</p>
+                                <br />
+                                <br />
+                                <br />
+                                <a href="/Inventory/HangHoa/Details/{{item.MA_HANG}}" class="btn btn-default">Xem chi tiết</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <dir-pagination-controls pagination-id="proface" max-size="12" style="float:left;"
+                                                 direction-links="true"
+                                                 boundary-links="true">
+                        </dir-pagination-controls>
+                    </div>
+                </div>
+                <div id="RITTAL" class="tab-pane fade">
+                    <div class="col-md-12">
+                        <div dir-paginate="item in filtered = (danhsachhanghoa | filter: {MA_NHOM_HANG: 'RITTAL'}) | filter: {MA_HANG:search_text} | itemsPerPage: 15 " ng-click="edit(item);get_tonkho(item.MA_HANG)" class="hover col-md-2" style="margin: 20px;padding:5px;height: 150px;border: 1px solid #DCF5FC;box-shadow:3px 3px 3px #DCF5FC;color: #00BFFF" pagination-id="rittal">
+                            <div class="col-md-6">
+                                <img ng-src="~/Content/Images/HangHoa/{{item.HINH_ANH}}" style="width: 100%;height: 40%;" data-toggle="modal" data-target="#chitiethanghoa" />
+                            </div>
+                            <div class="col-md-6">
+                                <p data-toggle="modal" data-target="#chitiethanghoa" class="text-center">{{item.MA_HANG}}</p>
+                                <br />
+                                <br />
+                                <br />
+                                <a href="/Inventory/HangHoa/Details/{{item.MA_HANG}}" class="btn btn-default">Xem chi tiết</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <dir-pagination-controls pagination-id="rittal" max-size="12" style="float:left;"
+                                                 direction-links="true"
+                                                 boundary-links="true">
+                        </dir-pagination-controls>
+                    </div>
+                </div>
+                <div id="SIEMENS" class="tab-pane fade">
+                    <div class="col-md-12">
+                        <div dir-paginate="item in filtered = (danhsachhanghoa | filter: {MA_NHOM_HANG: 'SIEMENS'}) | filter: {MA_HANG:search_text} | itemsPerPage: 15 " ng-click="edit(item);get_tonkho(item.MA_HANG)" class="hover col-md-2" style="margin: 20px;padding:5px;height: 150px;border: 1px solid #DCF5FC;box-shadow:3px 3px 3px #DCF5FC;color: #00BFFF" pagination-id="siemens">
+                            <div class="col-md-6">
+                                <img ng-src="~/Content/Images/HangHoa/{{item.HINH_ANH}}" style="width: 100%;height: 40%;" data-toggle="modal" data-target="#chitiethanghoa" />
+                            </div>
+                            <div class="col-md-6">
+                                <p data-toggle="modal" data-target="#chitiethanghoa" class="text-center">{{item.MA_HANG}}</p>
+                                <br />
+                                <br />
+                                <br />
+                                <a href="/Inventory/HangHoa/Details/{{item.MA_HANG}}" class="btn btn-default">Xem chi tiết</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <dir-pagination-controls pagination-id="siemens" max-size="12" style="float:left;"
+                                                 direction-links="true"
+                                                 boundary-links="true">
+                        </dir-pagination-controls>
+                    </div>
+                </div>
+                <div id="SMC" class="tab-pane fade">
+                    <div class="col-md-12">
+                        <div dir-paginate="item in filtered = (danhsachhanghoa | filter: {MA_NHOM_HANG: 'SMC'}) | filter: {MA_HANG:search_text} | itemsPerPage: 15 " ng-click="edit(item);get_tonkho(item.MA_HANG)" class="hover col-md-2" style="margin: 20px;padding:5px;height: 150px;border: 1px solid #DCF5FC;box-shadow:3px 3px 3px #DCF5FC;color: #00BFFF" pagination-id="smc">
+                            <div class="col-md-6">
+                                <img ng-src="~/Content/Images/HangHoa/{{item.HINH_ANH}}" style="width: 100%;height: 40%;" data-toggle="modal" data-target="#chitiethanghoa" />
+                            </div>
+                            <div class="col-md-6">
+                                <p data-toggle="modal" data-target="#chitiethanghoa" class="text-center">{{item.MA_HANG}}</p>
+                                <br />
+                                <br />
+                                <br />
+                                <a href="/Inventory/HangHoa/Details/{{item.MA_HANG}}" class="btn btn-default">Xem chi tiết</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <dir-pagination-controls pagination-id="smc" max-size="12" style="float:left;"
+                                                 direction-links="true"
+                                                 boundary-links="true">
+                        </dir-pagination-controls>
+                    </div>
+                </div>
+                <div id="TEND" class="tab-pane fade">
+                    <div class="col-md-12">
+                        <div dir-paginate="item in filtered = (danhsachhanghoa | filter: {MA_NHOM_HANG: 'TEND'}) | filter: {MA_HANG:search_text} | itemsPerPage: 15 " ng-click="edit(item);get_tonkho(item.MA_HANG)" class="hover col-md-2" style="margin: 20px;padding:5px;height: 150px;border: 1px solid #DCF5FC;box-shadow:3px 3px 3px #DCF5FC;color: #00BFFF" pagination-id="tend">
+                            <div class="col-md-6">
+                                <img ng-src="~/Content/Images/HangHoa/{{item.HINH_ANH}}" style="width: 100%;height: 40%;" data-toggle="modal" data-target="#chitiethanghoa" />
+                            </div>
+                            <div class="col-md-6">
+                                <p data-toggle="modal" data-target="#chitiethanghoa" class="text-center">{{item.MA_HANG}}</p>
+                                <br />
+                                <br />
+                                <br />
+                                <a href="/Inventory/HangHoa/Details/{{item.MA_HANG}}" class="btn btn-default">Xem chi tiết</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <dir-pagination-controls pagination-id="tend" max-size="12" style="float:left;"
+                                                 direction-links="true"
+                                                 boundary-links="true">
+                        </dir-pagination-controls>
+                    </div>
+                </div>
+                <div id="TOSHIBA" class="tab-pane fade">
+                    <div class="col-md-12">
+                        <div dir-paginate="item in filtered = (danhsachhanghoa | filter: {MA_NHOM_HANG: 'TOSHIBA'}) | filter: {MA_HANG:search_text} | itemsPerPage: 15 " ng-click="edit(item);get_tonkho(item.MA_HANG)" class="hover col-md-2" style="margin: 20px;padding:5px;height: 150px;border: 1px solid #DCF5FC;box-shadow:3px 3px 3px #DCF5FC;color: #00BFFF" pagination-id="toshiba">
+                            <div class="col-md-6">
+                                <img ng-src="~/Content/Images/HangHoa/{{item.HINH_ANH}}" style="width: 100%;height: 40%;" data-toggle="modal" data-target="#chitiethanghoa" />
+                            </div>
+                            <div class="col-md-6">
+                                <p data-toggle="modal" data-target="#chitiethanghoa" class="text-center">{{item.MA_HANG}}</p>
+                                <br />
+                                <br />
+                                <br />
+                                <a href="/Inventory/HangHoa/Details/{{item.MA_HANG}}" class="btn btn-default">Xem chi tiết</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <dir-pagination-controls pagination-id="toshiba" max-size="12" style="float:left;"
+                                                 direction-links="true"
+                                                 boundary-links="true">
+                        </dir-pagination-controls>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+    </div>
+    <script>
+    (function () {
+
+        var bar = $('.progress-bar');
+        var percent = $('.progress-bar');
+        var status = $('#status');
+
+        $('form').ajaxForm({
+            beforeSend: function () {
+                status.empty();
+                var percentVal = '0%';
+                bar.width(percentVal)
+                percent.html(percentVal);
+            },
+            uploadProgress: function (event, position, total, percentComplete) {
+                var percentVal = percentComplete + '%';
+                bar.width(percentVal)
+                percent.html(percentVal);
+            },
+            success: function () {
+                var percentVal = '100%';
+                bar.width(percentVal)
+                percent.html(percentVal);
+            },
+            complete: function (xhr) {
+                status.html(xhr.responseText);
+            }
+        });
+
+    })();
+    </script>
+</div>
+
+<script src="~/Content/download/angularjs/angular-ui-router.js"></script>
+

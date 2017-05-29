@@ -1,0 +1,635 @@
+﻿
+<script src="~/Content/self-writing/js/Controllers/BaoGiaCtrl/PrintBaoGiaCtrl.js"></script>
+
+<div ng-controller="PrintBaoGiaCtrl">
+    <div id="printSectionId">
+        <center>
+            <table border="0" cellpadding="0" cellspacing="0" style="width:100%;">
+
+                <tbody>
+                    <tr height="17">
+                        <td colspan="2" rowspan="5" align="center" style="width:209px;">
+                            <img alt="logo" height="100" src="~/logo_hoplong.png" width="130" />
+                            <table cellpadding="0" cellspacing="0">
+                                <tbody>
+                                    <tr>
+                                        <td height="17" style="height:17px;">
+                                            &nbsp;
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                        <td align="left" colspan="9">
+                            <b style="font-size:20px">CÔNG TY CỔ PHẦN CÔNG NGHỆ HỢP LONG</b>
+                        </td>
+
+                    </tr>
+                    <tr height="19">
+
+                        <td align="left" colspan="7">
+                            <i><b>Head Office:</b> 412 Trần Khát Trân- Hai Bà Trưng- Hà Nội - Tel: 043.661.7545 -  Fax: 043.661.7560</i>
+                        </td>
+
+                    </tr>
+                    <tr height="17">
+
+                        <td align="left" colspan="7">
+                            <i><b>HCM Office:</b> 68 Nguyễn Huệ - Quận 1-  TP.Hồ Chí Minh</i>
+                        </td>
+
+                    </tr>
+                    <tr height="17">
+
+                        <td align="left" colspan="7">
+                            <i><b>ĐN Office:</b> 178 Trường Sơn - Quận Cẩm Lệ - TP.Đà Nẵng</i>
+                        </td>
+
+                    </tr>
+                    <tr height="17">
+
+                        <td align="left" colspan="7">
+                            <i><b>Email:</b>info@hoplongtech.com.vn  -  Website: https://hoplongtech.com</i>
+                        </td>
+
+                    </tr>
+
+
+                    <tr height="20">
+                        <td colspan="9" height="20" style="height:20px; ">
+                            &nbsp;
+                        </td>
+                    </tr>
+                    <tr height="32">
+                        <td colspan="9" height="32" style="height:32px;font-size:20px; text-align:center; font-weight: bold">
+                            QUOTATION
+                        </td>
+                    </tr>
+                    <tr height="20">
+                        <td colspan="9" height="20" style="height:20px; ">
+                            &nbsp;
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="9" style="border:1px solid #F0F0F0">
+                            <table border="0" cellpadding="0" cellspacing="0" style="padding: 3.5px; width:100%">
+                                <tbody>
+                                    <tr height="18">
+                                        <td width="90px" style="border-right:none; vertical-align:text-top">Khách hàng :</td>
+                                        <td colspan="5" style="border-left:none">{{thongtinchung.TEN_CONG_TY}}</td>
+                                        <td align="left" colspan="3" style="vertical-align:text-top">{{thongtinchung.SO_BAO_GIA}}</td>
+                                        <td align="center" width="80px" style="vertical-align:text-top">{{thongtinchung.NGAY_BAO_GIA| date:'dd/MM/yyyy'}}</td>
+
+                                    </tr>
+                                    <tr height="18">
+                                        <td colspan="6">Người liên hệ: {{thongtinchung.NGUOI_LIEN_HE}}({{thongtinchung.SDT1}})</td>
+                                        <td align="left" colspan="4">{{thongtinchung.TEN_SALE_QUAN_LY}}</td>
+
+                                    </tr>
+                                    <tr height="18">
+                                        <td colspan="6">Địa chỉ: {{thongtinchung.DIA_CHI_XUAT_HOA_DON}}</td>
+                                        <td align="left" colspan="4">Số điện thoại:{{thongtinchung.SDT_SALE_QUAN_LY}}</td>
+
+                                    </tr>
+                                    <tr height="18">
+                                        <td colspan="6">MST: {{thongtinchung.MST}} &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;Tel: {{thongtinchung.HOTLINE}} &nbsp; &nbsp;&nbsp;&nbsp;&nbsp; Fax: {{thongtinchung.FAX}}</td>
+                                        <td align="left" width="135px"></td>
+                                        <td colspan="3"></td>
+
+                                    </tr>
+                                    <tr height="18">
+                                        <td align="left" colspan="6" height="18">Email:{{thongtinchung.EMAIL_CONG_TY}}</td>
+                                        <td colspan="4"></td>
+
+                                    </tr>
+
+                                    <tr height="18">
+                                        <td height="18" colspan=10 style="height:18px;"></td>
+
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td colspan=9>
+                            <table border="1" cellpadding="5" cellspacing="0" style="width:100%">
+                                <tbody>
+                                    <tr height="23">
+                                        <td colspan="9" height="23" style="height:23px;">
+                                            We are the leading supplier for industrial products. Here by we would like to quote for your inquiry as follow:
+                                        </td>
+                                    </tr>
+                                    <tr height="17">
+                                        <td colspan="9" height="17" style="height:17px;">
+                                            No.:{{thongtinchung.SO_BAO_GIA}}
+                                        </td>
+                                    </tr>
+                                    <tr height="45">
+                                        <th height="52" style="height:45px;">
+                                            No.
+                                        </th>
+                                        <td colspan="2">
+                                            <b>Description of goods</b><span style="font-size:13px">(Mô tả chi tiết hàng hóa)</span><br />
+                                            <b>Model</b><span style="font-size: 13px">(Mã hàng)</span>
+                                        </td>
+                                        <th style="width:84px;">
+                                            Maker/<br />
+                                            Original
+                                        </th>
+                                        <td style="width:65px;text-align: center;">
+                                            <b>Q'ty</b><br />
+                                            <span style="font-size: 13px">(Số lượng)</span>
+                                        </td>
+                                        <td style="width:47px;text-align: center;">
+                                            <b>UOM</b><br />
+                                            <span style="font-size: 13px">(Đơn vị)</span>
+                                        </td>
+                                        <td style="width:79px;text-align: center;">
+                                            <b>U.price</b><br />
+                                            <span style="font-size: 13px">(VNĐ)</span>
+                                        </td>
+                                        <td style="width:110px; text-align: center;">
+                                            <b>Total Amount</b><br />
+                                            <span style="font-size: 13px">(VNĐ)</span>
+                                        </td>
+                                        <th style="width:71px;">
+                                            Delivery Time
+                                        </th>
+                                    </tr>
+                                    <tr height="30" ng-repeat="item in thongtinchitiet">
+                                        <td height="30" style="height:30px; text-align: center">{{$index+1}}</td>
+                                        <td align="left" colspan="2" style="padding:3.5px">
+                                            {{item.TEN_HANG}}
+                                            <br />
+                                            <b>{{item.MA_DIEU_CHINH}} </b>
+                                        </td>
+                                        <td style="font-size: 13.5px">
+                                            <span style="color:blue">{{item.HANG_SP}}</span>
+                                            <br /> <center><i>{{item.XUAT_XU}}</i></center>
+                                        </td>
+                                        <td style="width:57px; text-align:center">{{item.SO_LUONG}}</td>
+                                        <td style="width:47px; text-align:center"> {{item.DVT}}</td>
+                                        <td align="right">{{item.DON_GIA_BAO_DI_NET | currency:""}}</td>
+                                        <td style="width:87px; text-align:right">{{item.THANH_TIEN_NET | currency:""}}</td>
+                                        <td style="width:71px;">{{item.THOI_GIAN_GIAO_HANG}}</td>
+                                    </tr>
+                                    <tr height="30">
+                                        <td height="30" colspan="9" style="height:30px;">
+                                            &nbsp;
+                                        </td>
+                                    </tr>
+
+                                    <tr height="30">
+                                        <td align="left" colspan="4" height="30" style="height:30px; border-right: none; font-weight:bold">
+                                            Total
+                                        </td>
+
+                                        <td align="left" colspan="3" style="border-left: none;font-weight:bold">
+                                            Tổng tiền hàng
+                                        </td>
+                                        <td style="width:87px; text-align:right;  border-right: none;font-weight:bold">
+                                            {{thongtinchung.TONG_GIA_TRI_DON_HANG_THUC_TE |number:0}}
+                                        </td>
+                                        <td style="border-left: none"></td>
+                                    </tr>
+                                    <tr height="30">
+                                        <td align="left" colspan="4" height="30" style="height:30px;  border-right: none;font-weight:bold">
+                                            VAT 10%
+                                        </td>
+
+                                        <td align="left" colspan="3" style="border-left:none;font-weight:bold">
+                                            Thuế VAT 10%
+                                        </td>
+                                        <td style="width:87px; text-align:right;  border-right: none;font-weight:bold">
+                                            {{(thongtinchung.TONG_GIA_TRI_DON_HANG_THUC_TE*thongtinchung.THUE_SUAT_GTGT)/100 | number:0}}
+                                        </td>
+                                        <td style="border-left:none"></td>
+                                    </tr>
+
+                                    <tr height="30">
+                                        <td align="left" colspan="4" height="30" style="height:30px;  border-right: none;font-weight:bold">
+                                            Grand Total
+                                        </td>
+
+                                        <td align="left" colspan="3" style="border-left: none;font-weight:bold">
+                                            Tổng cộng
+                                        </td>
+                                        <td style="width:87px;text-align:right;  border-right: none;font-weight:bold">
+                                            {{thongtinchung.TONG_GIA_TRI_DON_HANG_THUC_TE + (thongtinchung.TONG_GIA_TRI_DON_HANG_THUC_TE*thongtinchung.THUE_SUAT_GTGT)/100 |  number:0}}
+                                        </td>
+                                        <td style="border-left: none"></td>
+                                    </tr>
+
+
+                                    <tr height="17">
+                                        <td height="17" colspan="9" style="height:17px;">
+                                            &nbsp;
+                                        </td>
+
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td colspan=9>
+                            <table style="width:100%">
+                                <tbody>
+
+                                    <tr height="17">
+                                        <td height="17" colspan="9" style="height:17px;font-weight:bold; font-style: italic; text-decoration: underline">TERM & CONDITION:</td>
+
+                                    </tr>
+
+                                    <tr height="20">
+                                        <td height="20" style="height:20px;">
+                                            &nbsp;
+                                        </td>
+                                        <td>
+                                            * Delivery time: ( note)
+                                        </td>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                    </tr>
+                                    <tr height="20">
+                                        <td height="20" style="height:20px;">
+                                            &nbsp;
+                                        </td>
+                                        <td align="left">
+                                            * Delivery place:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        </td>
+                                        <td align="left" colspan="2">
+                                            [&nbsp; ] At customer&#39;s office&nbsp;
+                                        </td>
+                                        <td align="left" colspan="3">
+                                            <i>Giao tại văn phòng bên mua</i>
+                                        </td>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                    </tr>
+                                    <tr height="20">
+                                        <td height="20" style="height:20px;">
+                                            &nbsp;
+                                        </td>
+                                        <td>
+                                            <i>Địa điểm giao hàng</i>
+                                        </td>
+                                        <td colspan="2">
+                                            [&nbsp; ] At customer&#39;s warehouse
+                                        </td>
+                                        <td align="left" colspan="3">
+                                            <i>Giao tại kho bên mua</i>
+                                        </td>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                    </tr>
+                                    <tr height="20">
+                                        <td height="20" style="height:20px;">
+                                            &nbsp;
+                                        </td>
+                                        <td align="left">
+                                            * Payment method:&nbsp;
+                                        </td>
+                                        <td>
+                                            [&nbsp; ] Cash in advance
+                                        </td>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                        <td align="left" colspan="3">
+                                            <i>Thanh toán tiền mặt</i>
+                                        </td>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                    </tr>
+                                    <tr height="20">
+                                        <td height="20" style="height:20px;">
+                                            &nbsp;
+                                        </td>
+                                        <td align="left">
+                                            <i>Phương thức thanh toán</i>
+                                        </td>
+                                        <td colspan="2">
+                                            [&nbsp; ] 100% Payment after deliver
+                                        </td>
+                                        <td align="left" colspan="5">
+                                            <i>Thanh toán sau khi nhận hàng	</i>
+                                        </td>
+                                    </tr>
+                                    <tr height="19">
+                                        <td height="19" style="height:19px;width:27px;">
+                                            &nbsp;
+                                        </td>
+                                        <td style="width:209px;">
+                                            &nbsp;
+                                        </td>
+                                        <td align="left" colspan="6">
+                                            [&nbsp; ] 30% Payment in advance, 70% Payment before deliver the goods.
+                                        </td>
+                                        <td style="width:71px;">
+                                            &nbsp;
+                                        </td>
+                                    </tr>
+                                    <tr height="19">
+                                        <td height="19" style="height:19px;width:27px;">
+                                            &nbsp;
+                                        </td>
+                                        <td style="width:209px;">
+                                            &nbsp;
+                                        </td>
+                                        <td align="left" colspan="7">
+                                            [&nbsp; ] End of next month.
+                                        </td>
+                                    </tr>
+                                    <tr height="20">
+                                        <td height="20" style="height:20px;">
+                                            &nbsp;
+                                        </td>
+                                        <td align="left">
+                                            * Validity:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        </td>
+                                        <td align="left" colspan="2">
+                                            30 days (from date of it)
+                                        </td>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                    </tr>
+                                    <tr height="20">
+                                        <td height="20" style="height:20px;">
+                                            &nbsp;
+                                        </td>
+                                        <td align="left">
+                                            * Warranty:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        </td>
+                                        <td align="left" colspan="3">
+                                            12 months (for technical error of manufacturer)
+                                        </td>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                    </tr>
+                                    <tr height="22">
+                                        <td height="22" style="height:22px;">
+                                            &nbsp;
+                                        </td>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                    </tr>
+                                    <tr height="25">
+                                        <td height="25" style="height:25px;">
+                                            &nbsp;
+                                        </td>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                    </tr>
+                                    <tr height="19">
+                                        <td height="19" style="height:19px;">
+                                            &nbsp;
+                                        </td>
+                                        <td colspan="3">
+                                            &nbsp;CUSTOMER CONFIRMATION&nbsp;
+                                        </td>
+
+                                        <td colspan="2">
+                                            HopLongTech
+                                        </td>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                    </tr>
+                                    <tr height="21">
+                                        <td height="21" style="height:21px;">
+                                            &nbsp;
+                                        </td>
+                                        <td colspan="3" style="font-style:italic">
+                                            &nbsp;(Sign, write full name &amp; put the seal)&nbsp;
+                                        </td>
+
+                                        <td align="left" colspan="3" style="font-style:italic">
+                                            &nbsp;(Sign &amp; write full name)
+                                        </td>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                    </tr>
+                                    <tr height="10">
+                                        <td height="10" style="height:10px;">
+                                            &nbsp;
+                                        </td>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                    </tr>
+                                    <tr height="17">
+                                        <td height="17" style="height:17px;">
+                                            &nbsp;
+                                        </td>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                        <td align="left" colspan="3"></td>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                    </tr>
+                                    <tr height="17">
+                                        <td height="17" style="height:17px;">
+                                            &nbsp;
+                                        </td>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                        <td align="left" colspan="3">
+                                            @Session["HO_VA_TEN"]
+                                        </td>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                    </tr>
+                                   
+                                    <tr height="17">
+                                        <td height="17" style="height:17px;">
+                                            &nbsp;
+                                        </td>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                        <td colspan="2">
+                                            {{CurrentDate | date: 'dd/MM/yyyy'}}
+                                        </td>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+
+
+            </table>
+        </center>
+    </div>
+    <center><button ng-click="printToCart('printSectionId')" class="button">Print</button></center>
+</div>
+

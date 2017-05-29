@@ -1,0 +1,324 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Settings/Views/Shared/Layout.cshtml";
+}
+<div ng-app="myApp" ng-controller="congtyCtrl">
+    <div class="content">
+
+        <div id="quick-access">
+            <form class="form-inline quick-search-form" role="form" action="#">
+                <div class="form-group" style="width: 100%;text-align: center;">
+                    <input type="text" class="form-control" placeholder="Type Inventory Name You Want To Search Here" ng-model="searchtext" style="width:  60%">
+                </div>
+
+            </form>
+
+        </div>
+        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">Add New Company</button>
+
+        <!-- Modal Add New-->
+        <div class="modal fade" id="myModal" role="dialog">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+
+                    <div class="modal-body">
+                        <form class="form-horizontal" name="myForm" novalidate>
+                            <fieldset>
+                                <!-- Form Name -->
+                                <legend>Add New Inventory</legend>
+                                <!-- Text input-->
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="name">Mã công ty: </label>
+                                    <div class="col-md-4">
+                                        <input id="makho" name="makho" type="text" placeholder="Mã công ty" class="form-control input-md" ng-model="macongty">
+                                    </div>
+                                </div>
+                                <!-- Text input-->
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="name">Tên công ty: </label>
+                                    <div class="col-md-4">
+                                        <input id="tenkho" name="tenkho" type="text" placeholder="Tên công ty" class="form-control input-md" ng-model="tencongty">
+                                    </div>
+                                </div>
+                                <!-- Text input-->
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="name">Ngày thành lập: </label>
+                                    <div class="col-md-4">
+                                        <input id="diachikho" name="diachikho" mask="39/19/9999" type="text" placeholder="Ngày thành lập" class="form-control input-md" ng-model="ngaythanhlap">
+                                    </div>
+                                </div>                                
+                               <!-- Text input-->
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="name">Email: </label>
+                                    <div class="col-md-4">
+                                        <input id="diachikho" name="diachikho" type="text" placeholder="Email" class="form-control input-md" ng-model="email">
+                                    </div>
+                                </div>  
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="name">Fax: </label>
+                                    <div class="col-md-4">
+                                        <input id="diachikho" name="diachikho" type="text" placeholder="Fax" class="form-control input-md" ng-model="fax">
+                                    </div>
+                                </div>  
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="name">Số điện thoại: </label>
+                                    <div class="col-md-4">
+                                        <input id="diachikho" name="diachikho" type="text" placeholder="Số điện thoại" class="form-control input-md" ng-model="sdt">
+                                    </div>
+                                </div>  
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="name">Mã số thuế: </label>
+                                    <div class="col-md-4">
+                                        <input id="diachikho" name="diachikho" type="text" placeholder="Mã số thuế" class="form-control input-md" ng-model="mst">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="name">Logo: </label>
+                                    <div class="col-md-4">
+                                        <input id="diachikho" name="diachikho" type="text" placeholder="Logo" class="form-control input-md" ng-model="logo">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="name">Địa chỉ: </label>
+                                    <div class="col-md-4">
+                                        <input id="diachikho" name="diachikho" type="text" placeholder="Địa chỉ" class="form-control input-md" ng-model="diachi">
+                                    </div>
+                                </div>  
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="name">Địa chỉ xuất hóa đơn: </label>
+                                    <div class="col-md-4">
+                                        <input id="diachikho" name="diachikho" type="text" placeholder="Địa chỉ xuất hóa đơn" class="form-control input-md" ng-model="diachixuathoadon">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="name">Công ty mẹ: </label>
+                                    <div class="col-md-4">
+                                        <input id="diachikho" name="diachikho" type="text" placeholder="Công ty mẹ" class="form-control input-md" ng-model="congtyme">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="name">Cấp tổ chức: </label>
+                                    <div class="col-md-4">
+                                        <input id="diachikho" name="diachikho" type="text" placeholder="Cấp tổ chức" class="form-control input-md" ng-model="captochuc">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="ghichu">Ghi chú</label>
+                                    <div class="col-md-4">
+                                        <textarea class="form-control" id="ghichu" name="ghichu" ng-model="ghi_chu"></textarea>
+                                    </div>
+                                </div>
+                                <!-- Button (Double) -->
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="anmelden"></label>
+                                    <div class="col-md-8">
+                                        <button id="addnew" name="addnew" class="btn btn-success" ng-click="add()" data-dismiss="modal">Add New</button>
+                                        <button id="exit" name="exit" class="btn btn-danger" data-dismiss="modal">Exit</button>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--end modal-->
+        <!-- Modal Update -->
+        <div class="modal fade" id="myEdit" role="dialog">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+
+                    <div class="modal-body">
+                        <form class="form-horizontal" name="myForm" novalidate>
+                            <fieldset>
+                                <!-- Form Name -->
+                                <legend>Update Inventory</legend>
+                                <!-- Text input-->
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="name">Inventory Code: </label>
+                                    <div class="col-md-4">
+                                        <input id="makho" name="makho" type="text" placeholder="Inventory Code" class="form-control input-md" ng-model="item.MA_CONG_TY" ng-disabled="true">
+                                    </div>
+                                </div>
+                                <!-- Text input-->
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="name">Inventory Name: </label>
+                                    <div class="col-md-4">
+                                        <input id="tenkho" name="tenkho" type="text" placeholder="Inventory Name" class="form-control input-md" ng-model="item.TEN_CONG_TY">
+                                    </div>
+                                </div>
+                                <!-- Text input-->
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="name">Ngay thanh lap: </label>
+                                    <div class="col-md-4">
+                                        <input id="diachikho" name="diachikho" mask="39/19/9999" type="text" placeholder="Address kho" class="form-control input-md" ng-model="item.NGAY_THANH_LAP">
+                                    </div>
+                                </div>
+                                <!-- Text input-->
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="name">Email: </label>
+                                    <div class="col-md-4">
+                                        <input id="tructhuoc" name="tructhuoc" type="text" class="form-control input-md" ng-model="item.EMAIL">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="name">Fax: </label>
+                                    <div class="col-md-4">
+                                        <input id="tenkho" name="tenkho" type="text"  class="form-control input-md" ng-model="item.FAX">
+                                    </div>
+                                </div>
+                                <!-- Text input-->
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="name">Số điện thoại: </label>
+                                    <div class="col-md-4">
+                                        <input id="diachikho" name="diachikho" type="text"  class="form-control input-md" ng-model="item.SDT">
+                                    </div>
+                                </div>
+                                <!-- Text input-->
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="name">Mã số thuế: </label>
+                                    <div class="col-md-4">
+                                        <input id="tructhuoc" name="tructhuoc" type="text" placeholder="Region" class="form-control input-md" ng-model="item.MST">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="name">Logo: </label>
+                                    <div class="col-md-4">
+                                        <input id="tenkho" name="tenkho" type="text" placeholder="Inventory Name" class="form-control input-md" ng-model="item.LOGO">
+                                    </div>
+                                </div>
+                                <!-- Text input-->
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="name">Địa chỉ: </label>
+                                    <div class="col-md-4">
+                                        <input id="diachikho" name="diachikho" type="text" placeholder="Address kho" class="form-control input-md" ng-model="item.DIA_CHI">
+                                    </div>
+                                </div>
+                                <!-- Text input-->
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="name">Địa chỉ xuất hóa đơn: </label>
+                                    <div class="col-md-4">
+                                        <input id="tructhuoc" name="tructhuoc" type="text" placeholder="Region" class="form-control input-md" ng-model="item.DIA_CHI_XUAT_HOA_DON">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="name">Công ty mẹ: </label>
+                                    <div class="col-md-4">
+                                        <input id="diachikho" name="diachikho" type="text" placeholder="Công ty mẹ" class="form-control input-md" ng-model="item.CONG_TY_ME">
+                                    </div>
+                                </div>
+                                <!-- Text input-->
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="name">Cấp tổ chức: </label>
+                                    <div class="col-md-4">
+                                        <input id="tructhuoc" name="tructhuoc" type="text" placeholder="Cấp tổ chức" class="form-control input-md" ng-model="item.CAP_TO_CHUC">
+                                    </div>
+                                </div>
+
+                                <!-- Textarea -->
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="ghichu">Note</label>
+                                    <div class="col-md-4">
+                                        <textarea class="form-control" id="ghichu" name="ghichu" ng-model="item.GHI_CHU">Note</textarea>
+                                    </div>
+                                </div>
+                                <!-- Button (Double) -->
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="anmelden"></label>
+                                    <div class="col-md-8">
+                                        <button id="addnew" name="addnew" class="btn btn-success" ng-click="save(item.MA_CONG_TY)" data-dismiss="modal">Save</button>
+                                        <button id="exit" name="exit" class="btn btn-danger" data-dismiss="modal">Exit</button>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br />
+        <!--end modal-->
+        <!-- Modal delete -->
+        <div class="modal fade" id="delete_item" role="dialog">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+
+                    <div class="modal-body">
+                        <form class="form-horizontal" name="myForm" novalidate>
+                            <fieldset>
+                                <!-- Form Name -->
+                                <legend>Delete Company</legend>
+                                <center>Are you sure you want to delete <b>{{item.TEN_CONG_TY}}</b></center>
+                                <p></p>
+
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="delete"></label>
+                                    <div class="col-md-8">
+                                        <button id="delete" name="delete" class="btn btn-danger" ng-click="delete(item.MA_CONG_TY)" data-dismiss="modal">Delete</button>
+                                        <button id="exit" name="exit" class="btn btn-success" data-dismiss="modal">Exit</button>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br />
+        <!--end modal-->
+        <!-- Show Table -->
+        <table id="example" class="table  content" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>Tên công ty</th>
+                    <th>Ngày thành lập</th>
+                    <th>Email</th>
+                    <th>Fax</th>
+                    <th>Số điện thoại</th>
+                    <th>Mã số thuế</th>
+                    <th>Logo</th>
+                    <th>Địa chỉ</th>
+                    <th>Công ty mẹ</th>
+                    <th>Cấp tổ chức</th>
+                    <th>Sửa</th>
+                    <th>Xóa</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr dir-paginate-start="item in filtered = (listcongty | filter: {TEN_CONG_TY:searchtext}) | itemsPerPage:10 ">
+                    <td>{{ item.TEN_CONG_TY}}</td>
+                    <td>{{item.NGAY_THANH_LAP | date: 'dd/MM/yyyy'}}</td>
+                    <td>{{item.EMAIL}}</td>
+                    <td>{{item.FAX}}</td>
+                    <td>{{item.SDT}}</td>
+                    <td>{{item.MST}}</td>
+                    <td>{{item.LOGO}}</td>
+                    <td>{{item.DIA_CHI}}</td>
+                    <td>{{item.CONG_TY_ME}}</td>
+                    <td>{{item.CAP_TO_CHUC}}</td>
+                    <td>
+                        <button class="btn btn-success btn-circle" ng-click="edit(item)" type="button" data-toggle="modal" data-target="#myEdit"><i class="glyphicon glyphicon-edit"></i></button>
+                    </td>
+                    <td>
+                        <button class="btn btn-warning btn-circle" ng-click="edit(item)" type="button" data-toggle="modal" data-target="#delete_item"><i class="glyphicon glyphicon-remove"></i></button>
+                        <!--<button class="btn btn-warning btn-circle" ng-click="delete(item.MA_KHO)"><i class="glyphicon glyphicon-remove"></i></button>-->
+                    </td>
+                </tr>
+                <tr dir-paginate-end=""></tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="9" style="border: none !important">
+                        <dir-pagination-controls max-size="12" style="float:right;"
+                                                 direction-links="true"
+                                                 boundary-links="true">
+                        </dir-pagination-controls>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+
+

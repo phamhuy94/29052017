@@ -1,0 +1,99 @@
+﻿@model IEnumerable<ERP.Web.Models.Database.BH_DON_HANG_DU_KIEN>
+
+@{
+    ViewBag.Title = "Index";
+}
+<script src="~/Content/download/pnotify.custom.min.js"></script>
+<link href="~/Content/download/pnotify.custom.min.css" rel="stylesheet" />
+<script src="~/Content/self-writing/js/Controllers/DonDuKienCtrl.js"></script>
+
+<div ng-app="myApp" ng-controller="DonDuKienCtrl">
+    <input type="hidden" id="salehienthoi" name="salehienthoi" value="@Session["USERNAME"]" />
+    <input type="hidden" id="maphongban" name="maphongban" value="@Session["MA_PHONG_BAN"]" />
+    <input type="hidden" id="isadmin" name="isadmin" value="@Session["IS_AMIN"]" />
+    <div class="content">
+        <div class="panel panel-default">
+            <div class="panel-heading" style="height: 40px;">
+                 <div class="panel-title">
+                     <div style="float: left">Danh sách đơn dự kiến</div>
+                     <div style="float: right">@Html.ActionLink("Tạo đơn mới", "Create")</div>
+                 </div>
+                    
+            
+                   
+            </div>
+            <div class="panel-body">
+                <div class="form-horizontal">
+                    <table class="table">
+                        <tr>
+                            <th>
+                                Mã dự kiến
+                            </th>
+                            <th>
+                                Ngày tạo
+                            </th>
+                            <th>
+                                Khách hàng
+                            </th>
+                            <th>
+                                Liên hệ
+                            </th>
+                            <th>
+                                Thành công
+                            </th>
+                            <th>
+                                Thất bại
+                            </th>
+                            <th>
+                                Lý do thất bại
+                            </th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+
+                        @*@foreach (var item in Model)
+                        {*@
+                            <tr ng-repeat="item in danhsachdukien">
+                                <td>
+                                    {{item.MA_DU_KIEN}}
+                                </td>
+                                <td>
+                                    {{item.NGAY_TAO| date:"dd/MM/yyyy"}}
+                                </td>
+                                <td>                                   
+                                    {{item.TEN_KHACH_HANG}}
+                                </td>
+                                <td>
+                                    {{item.NGUOI_LIEN_HE}}
+                                </td>
+                                <td>
+                                    <input type="checkbox" ng-checked="{{item.THANH_CONG}}" ng-hide="editMode" ng-disabled="true"/>
+                                    <input type="checkbox" ng-model="item.THANH_CONG" ng-show="editMode"/>
+                                </td>
+                                <td>
+                                    <input type="checkbox" ng-checked="{{item.THAT_BAI}}" ng-hide="editMode" ng-disabled="true"/>
+                                    <input type="checkbox" ng-model="item.THAT_BAI" ng-show="editMode" />
+                                </td>
+                                <td>
+                                    <p ng-hide="editMode">{{item.LY_DO_THAT_BAI}}</p>
+                                    <input type="text" ng-model="item.LY_DO_THAT_BAI" ng-show="editMode" />
+                                </td>
+                                <td>
+                                    <button type="submit" ng-hide="editMode" ng-click="editMode = true; editAppKey(item)" class="btn btn-default">Sửa nhanh</button>
+                                    <button type="submit" ng-show="editMode" ng-click="editMode = false; save_inline(item)" class="btn btn-default">Save</button>
+                                    <button type="submit" ng-show="editMode" ng-click="editMode = false; cancel()" class="btn btn-default">Cancel</button>
+                                </td>
+                                <td>
+                                    <a href="/Baogia/Index/{{item.MA_DU_KIEN}}">Sinh báo giá</a> | 
+                                    <a href="KinhDoanh/DonDuKien/Delete/{{item.MA_DU_KIEN}}">Xóa</a>
+                                </td>
+                            </tr>
+                        @*}*@
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

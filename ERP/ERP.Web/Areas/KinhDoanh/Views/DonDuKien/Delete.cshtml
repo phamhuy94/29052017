@@ -1,0 +1,80 @@
+﻿@model ERP.Web.Models.Database.BH_DON_HANG_DU_KIEN
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>BH_DON_HANG_DU_KIEN</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.NGAY_TAO)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NGAY_TAO)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.THANH_CONG)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.THANH_CONG)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.THAT_BAI)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.THAT_BAI)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LY_DO_THAT_BAI)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LY_DO_THAT_BAI)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.KH.TEN_CONG_TY)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.KH.TEN_CONG_TY)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CCTC_NHAN_VIEN.GIOI_TINH)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CCTC_NHAN_VIEN.GIOI_TINH)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CCTC_CONG_TY.TEN_CONG_TY)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CCTC_CONG_TY.TEN_CONG_TY)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

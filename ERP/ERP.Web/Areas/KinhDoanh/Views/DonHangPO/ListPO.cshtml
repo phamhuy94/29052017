@@ -1,0 +1,164 @@
+﻿@{ Layout = null;}
+
+<script src="~/Content/self-writing/js/Services/DonHangPOService.js"></script>
+<script src="~/Content/self-writing/js/Controllers/DonHangPOCtrl.js"></script>
+
+
+<div ng-app="myApp" ng-controller="DonHangPOCtrl" class="content">
+    <input type="hidden" value="@Session["USERNAME"]" id="username" />
+    <input type="hidden" value="@Session["IS_AMIN"]" id="isadmin" />
+    <input type="hidden" id="macongty" name="macongty" value="@Session["MA_CONG_TY"]" />
+    <div class="col-md-12" style="margin: 10px 0px 10px 0px; color;#red;">
+        Trạng thái: <i class="fa fa-check" aria-hidden="true"></i> : Đã duyệt  |  <i class="fa fa-times" aria-hidden="true"></i> : Chưa duyệt  | <i class="fa fa-spinner" aria-hidden="true"></i> : Đang chờ duyệt  |  <i class="fa fa-pencil-square-o" aria-hidden="true"></i> : Đang duyệt | <i class="fa fa-star-o" aria-hidden="true"></i> : Đã bán đủ hàng | <i class="fa fa-shopping-cart" aria-hidden="true"></i> : Đang bán dở
+    </div>
+    <div class="col-md-8">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Mã số PO</th>
+                    <th>Ngày lên PO</th>
+                    <th>Khách hàng</th>
+                    <th>Người liên hệ</th>
+                    <th>Tổng tiền thanh toán</th>
+                    <th>Ngày giao hàng</th>
+                    <th>Địa điểm giao hàng</th>
+                    <th>Nhân viên quản lý</th>
+                    <th>Trạng thái</th>
+                    @*<th>Sửa</th>*@
+                    <th>Tạo phiếu bán hàng</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="item in list_PO"  ng-click="xemchitietPO(item.MA_SO_PO)">
+                    <td>{{item.MA_SO_PO}}</td>
+                    <td>{{item.NGAY_LEN_PO | date: 'dd/MM/yyyy'}}</td>
+                    <td>{{item.TEN_CONG_TY}}</td>
+                    <td>{{item.TEN_LIEN_HE}}</td>
+                    <td>{{item.TONG_TIEN_THANH_TOAN | currency: '' : 0}}</td>
+                    <td>{{item.NGAY_GIAO_HANG | date: 'dd/MM/yyyy'}}</td>
+                    <td>{{item.DIA_DIEM_GIAO_HANG}}</td>
+                    <td>{{item.TEN_NHAN_VIEN_QUAN_LY}}</td>
+                    <td>
+                        <input type="checkbox" ng-model="item.DA_DUYET" style="display:none"/>
+                        <input type="checkbox" ng-model="item.DA_HUY" style="display:none" />
+                        <input type="checkbox" ng-model="item.DANG_DUYET" style="display:none" />
+                        <input type="checkbox" ng-model="item.DA_BAN_HANG" style="display:none" />
+                        <input type="checkbox" ng-model="item.DANG_BAN_DO" style="display:none" />
+                        <div ng-if="item.DA_DUYET == true && item.DA_HUY == false && item.DANG_DUYET == false && item.DANG_BAN_DO == false && item.DA_BAN_HANG == false">
+                            <i class="fa fa-check" aria-hidden="true"></i>
+                        </div>
+                        <div ng-if="item.DA_DUYET == true && item.DA_HUY == true && item.DANG_DUYET == false  && item.DANG_BAN_DO == false && item.DA_BAN_HANG == false">
+                            <i class="fa fa-times" aria-hidden="true"></i>
+                        </div>
+                        <div  ng-if="item.DA_DUYET == false && item.DA_HUY == false && item.DANG_DUYET == false  && item.DANG_BAN_DO == false && item.DA_BAN_HANG == false">
+                            <i class="fa fa-spinner" aria-hidden="true"></i>
+                        </div>
+                        <div ng-if="item.DA_DUYET == false && item.DA_HUY == false && item.DANG_DUYET == true  && item.DANG_BAN_DO == false && item.DA_BAN_HANG == false">
+                            <i  class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                        </div>
+                        <div ng-if="item.DA_DUYET == true && item.DA_HUY == false && item.DANG_DUYET == false  && item.DANG_BAN_DO == false && item.DA_BAN_HANG == true">
+                            <i class="fa fa-star-o" aria-hidden="true"></i>
+                        </div>
+                        <div ng-if="item.DA_DUYET == true && item.DA_HUY == false && item.DANG_DUYET == false  && item.DANG_BAN_DO == true && item.DA_BAN_HANG == false">
+                            <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                        </div>
+                    </td>
+                    @*<td>
+                        <a href="/KinhDoanh/DonHangPO/Edit/{{item.MA_SO_PO}}">Sửa</a>
+                    </td>*@
+                    <td>
+                        <a href="/KinhDoanh/DonHangPO/POLenBanHang/{{item.MA_SO_PO}}" ng-if="item.DA_BAN_HANG == false && item.DA_GIU == true">Tạo phiếu bán hàng</a>
+                        <a href="/KinhDoanh/DonHangPO/ChiTietPOChuaGiuDu/{{item.MA_SO_PO}}" ng-if="item.DA_BAN_HANG == false && item.DA_GIU == false">Tạo phiếu bán hàng</a>
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="10">
+                        <div class="col-md-12" id="list_PO" style="text-align:center">
+                            <div>
+                                <div id="phan_trang_tong_list_don_hang_PO" style="width: 100%;display:inline-block; text-align:center"></div>
+                                <br />
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+    <div class="col-md-4">
+        <table class="table">
+            <tr>
+                <th colspan="2" class="border-td"><h4>PO đang chờ duyệt</h4></th>
+            </tr>
+            <tr>
+                <td class="border-td">
+                    <div style="height: 400px;overflow:auto">
+                        <table class="table right-table">
+                            <thead>
+                                <tr>
+                                    <th>Mã số PO</th>
+                                    <th>Ngày lên PO</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="item in list_PO_DangChoDuyet"  ng-click="xemchitietPO(item.MA_SO_PO)">
+                                    <td>{{item.MA_SO_PO}}</td>
+                                    <td>{{item.NGAY_LEN_PO | date: 'dd/MM/yyyy'}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th class="border-td" colspan="2"><h4>PO đã duyệt(chưa lên đơn bán)</h4></th>
+            </tr>
+            <tr>
+                <td class="border-td">
+                    <div style="height: 400px;overflow:auto">
+                        <table class="table right-table">
+                            <thead>
+                                <tr>
+                                    <th>Mã số PO</th>
+                                    <th>Ngày lên PO</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="item in list_PO_ChuaLenDonBan"  ng-click="xemchitietPO(item.MA_SO_PO)">
+                                    <td>{{item.MA_SO_PO}}</td>
+                                    <td>{{item.NGAY_LEN_PO | date: 'dd/MM/yyyy'}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th class="border-td" colspan="2"><h4>PO đã lên đơn bán hàng</h4></th>
+            </tr>
+            <tr>
+                <td class="border-td">
+                    <div style="height: 400px;overflow:auto">
+                        <table class="table right-table">
+                            <thead>
+                                <tr>
+                                    <th>Mã số PO</th>
+                                    <th>Ngày lên PO</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="item in list_PO_DaLenDonBanHang"  ng-click="xemchitietPO(item.MA_SO_PO)">
+                                    <td>{{item.MA_SO_PO}}</td>
+                                    <td>{{item.NGAY_LEN_PO | date: 'dd/MM/yyyy'}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+    </div>
+</div>
+

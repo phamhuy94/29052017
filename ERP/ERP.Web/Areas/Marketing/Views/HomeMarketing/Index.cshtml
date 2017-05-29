@@ -1,0 +1,81 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+
+<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+<link href="~/Content/download/pnotify.custom.min.css" rel="stylesheet" />
+<link href="~/Content/self-writing/css/Feedback.css" rel="stylesheet" />
+<script src="~/Content/Scripts/moment.min.js"></script>
+<script src="~/Content/assets/js/plugins/notifications/pnotify.min.js"></script>
+<link href="~/Content/self-writing/css/MetroUI.css" rel="stylesheet" />
+<script src="~/Content/self-writing/js/Metro UI.js"></script>
+
+<script src="~/Content/self-writing/js/Controllers/DanhSachPheDuyetCtrl.js"></script>
+<div id="feedback-main" ng-app="myApp" ng-controller="DanhSachPheDuyetCtrl">
+    <div id="feedback-div" style="left: 50%;width: 50%">
+        <form class="form" id="feedback-form1" name="form1" enctype="multipart/form-data">
+            <input type="hidden" id="nhanvienphanhoi" value="@Session["USERNAME"]" />
+            <table class="table">
+                <tr>
+                    <th>Mã phê duyệt</th>
+                    <th>Người phê duyệt</th>
+                    <th>Ghi chú</th>
+                </tr>
+                <tr ng-repeat="item in list_dspheduyet">
+                    <th>{{item.MA_PHE_DUYET}}</th>
+                    <th>{{item.HO_VA_TEN}}</th>
+                    <th>{{item.GHI_CHU}}</th>
+                </tr>
+                <tfoot>
+                    <tr style="border: 2px solid #ddd !important" ng-show="showrow">
+                        <th>
+                            <input type="text" placeholder="Marketing phụ trách" class="form-control" ng-model="ho_va_ten_marketing" value="{{ho_va_ten_marketing}}" ng-change="onMarketingFind()" ng-focus="showtable_marketing = true" ng-blur="showtable_marketing = false">
+                            <input type="hidden" class="form-control" ng-model="username_marketing">
+                            <div class="input-group-btn">
+                                <div class="dropdown-menu dropdown-menu-center borderRadius0 padding0" style="display: block" ng-show="showtable_marketing">
+                                    <div class="table-responsive" style="max-height: 280px">
+                                        <table class="table table-striped table-hover" st-pagination-scroll st-table="MarketingCollection" st-safe-src="arrayMarketingFinded">
+                                            <tbody>
+                                                <tr ng-repeat="staff in MarketingCollection" style="cursor:pointer" ng-mousedown="showInfoMarketing(staff,item)">
+                                                    <td>{{staff.USERNAME}}</td>
+                                                    <td>{{staff.HO_VA_TEN}}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </th>
+                        <th style="border-top: 2px solid lightsteelblue !important; border-left: 2px solid lightsteelblue !important; border-bottom: 2px solid lightsteelblue !important;">
+                            <textarea ng-model="ghi_chu_phe_duyet" class="form-control" placeholder="Ghi chú" type="text"></textarea>
+                        </th>
+                        <th colspan="3" style="border-top: 2px solid lightsteelblue !important; border-left: 2px solid lightsteelblue !important; border-bottom: 2px solid lightsteelblue !important;border-right: 2px solid lightsteelblue !important;">
+                            <button type="button" ng-click="AddNew_PheDuyet()" class="btn btn-default">Lưu</button>
+                            <button type="button" ng-click="showrow = false" class="btn btn-default">Ẩn dòng</button>
+                        </th>
+
+                    </tr>
+
+                    <tr>
+                        <th colspan="10" style="border: 2px solid lightsteelblue !important"><span ng-click="hienthidong()" style="cursor: pointer; text-decoration:underline; color:blue; font-weight: bold">Click vào đây để thêm dòng mới</span></th>
+                    </tr>
+                </tfoot>
+            </table>
+        </form>
+    </div>
+</div>
+
+<button id="popup" class="feedback-button" onclick="toggle_visibility()">Phê duyệt</button>
+
+
+<script>
+    function toggle_visibility() {
+        var e = document.getElementById('feedback-main');
+        if (e.style.display == 'block')
+            e.style.display = 'none';
+        else
+            e.style.display = 'block';
+    }
+</script>

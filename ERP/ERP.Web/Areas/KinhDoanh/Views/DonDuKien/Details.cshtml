@@ -1,0 +1,74 @@
+﻿@model ERP.Web.Models.Database.BH_DON_HANG_DU_KIEN
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>BH_DON_HANG_DU_KIEN</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.NGAY_TAO)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NGAY_TAO)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.THANH_CONG)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.THANH_CONG)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.THAT_BAI)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.THAT_BAI)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LY_DO_THAT_BAI)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LY_DO_THAT_BAI)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.KH.TEN_CONG_TY)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.KH.TEN_CONG_TY)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CCTC_NHAN_VIEN.GIOI_TINH)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CCTC_NHAN_VIEN.GIOI_TINH)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CCTC_CONG_TY.TEN_CONG_TY)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CCTC_CONG_TY.TEN_CONG_TY)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.MA_DU_KIEN }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

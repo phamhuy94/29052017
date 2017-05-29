@@ -1,0 +1,53 @@
+﻿
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/1.0.3/angular-ui-router.js"></script>
+<script src="~/Content/self-writing/js/Controllers/KhoXuat/HomeKhoXuat.js"></script>
+<script src="~/Content/self-writing/js/Controllers/KhoXuat/KhoXuat.js"></script>
+<div ng-app="myApp"
+     ng-controller="GiuHangCtrl"
+     layout="column">
+    <md-toolbar>
+        <h2 class="md-toolbar-tools">
+            <span>GIỮ HÀNG</span>
+        </h2>
+    </md-toolbar>
+    <md-tabs md-stretch-tabs
+             md-selected="selectedIndex">
+        <md-tab label="List Hàng Giữ"></md-tab>
+        <md-tab label="Hàng giữ chưa bán"></md-tab>
+        <md-tab label="Hàng giữ đã bán"></md-tab>
+        <md-tab label="Hàng giữ quá ngày giao hàng"></md-tab>
+        <md-tab label="Hàng giữ sắp đến ngày xuất"></md-tab>
+    </md-tabs>
+
+    <div id="content" ui-view flex> </div>
+
+</div>
+<style>
+    .intro {
+        position: absolute;
+        left: 30px;
+        top: 20px;
+        width: 600px;
+        height: 20px;
+        font-size: 12px;
+    }
+
+    .demo {
+        position: relative;
+        width: 600px;
+        height: 300px;
+        background-color: #cccccc;
+        margin-top: 40px;
+        margin-left: 0px;
+    }
+
+        .demo #content {
+            background-color: rgb(255, 255, 255);
+            padding: 30px;
+            font-weight: 600;
+            border: 1px solid #999999;
+            border-top: none;
+        }
+</style>
+
+

@@ -1,0 +1,56 @@
+﻿@model ERP.Web.Models.Database.HH
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Areas/Inventory/Views/Shared/Layout.cshtml";
+}
+<style>
+    .top-content p{
+        padding-bottom: 5px;
+        border-bottom: 1px dotted black;
+    }
+</style>
+
+<div ng-app="myApp" ng-controller="productdetailsCtrl" class="container">
+    <div ng-repeat="item in list_productdetails" class="content">
+        <div class="col-md-12">
+            <div class="col-md-4">
+                <img ng-src="~/Content/Images/HangHoa/{{item.HINH_ANH}}" style="width: 90%;height: 285px;" />
+            </div>
+            <div class="col-md-8 top-content">
+                <h2 style="padding-left: 10px;color: deepskyblue;margin-bottom: 25px;">{{item.MA_HANG}} ({{item.TEN_HANG}})</h2>
+                <p>Mã chuẩn : {{item.MA_CHUAN}}</p>
+                <p>Thông số : {{item.THONG_SO}}</p>
+                <p>Giá bán : <span style="color: red;">{{item.GIA_LIST}}</span></p>
+                <p>Bảo hành : <b>{{item.BAO_HANH}} tháng</b></p>
+                <p>Xuất xứ : {{item.XUAT_XU}}</p>
+                <p>Khối lượng :{{item.KHOI_LUONG}}</p>
+            </div>
+        </div>
+        <div class="col-md-12" style="margin-top: 10px;margin-left: 15px;">
+            <ul class="nav nav-tabs list_tab">
+                <li class="active">
+                    <a data-toggle="tab" href="#thong_so_ki_thuat">
+                        <h4>Thông số kĩ thuật</h4>
+                    </a>
+                </li> 
+                <li >
+                    <a data-toggle="tab" href="#quy_cach_dong_goi">
+                        <h4>Quy cách đóng gói</h4>
+                    </a>
+                </li>                         
+            </ul>
+            <div class="tab-content">
+                <div id="quy_cach_dong_goi" class="tab-pane fade ">
+                    <div ng-bind-html="item.QUY_CACH_DONG_GOI | unsafe"></div>
+                </div>
+                <div id="thong_so_ki_thuat" class="tab-pane fade in active">
+                    <div ng-bind-html="item.THONG_SO_KY_THUAT | unsafe"></div>
+                </div>
+                
+            </div>
+            
+        </div>
+    </div>
+</div>
+

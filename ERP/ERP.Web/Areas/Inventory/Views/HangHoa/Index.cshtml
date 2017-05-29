@@ -1,0 +1,2113 @@
+﻿  
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Inventory/Views/Shared/Layout.cshtml";
+}
+
+
+
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+<link href="~/Content/self-writing/css/HangHoaHL.css" rel="stylesheet" />
+<script src="http://malsup.github.com/jquery.form.js"></script>
+<script src="~/Content/self-writing/js/Services/Kho/HangHoaService.js"></script>
+<script src="~/Content/self-writing/js/Controllers/Kho/HangHoaCtrl.js"></script>
+<style>
+    #texttime {
+            color: gray;
+            font-size: 14px;
+            font-weight: 700;
+        }
+</style>
+<div class="panel-heading">
+    <marquee width="80%">Bạn đang xem danh mục hàng hóa.</marquee>
+</div>
+<br />
+@*<script type="text/javascript">var startTime=new Date();function currentTime(){var a=Math.floor((new Date()-startTime)/100)/10;if (a%1==0) a+=".0";document.getElementById("endTime").innerHTML=a;}window.onload=function(){clearTimeout(loopTime);}</script>
+<script type="text/javascript">document.write('<div align="center"><span id="texttime"><i class="fa fa fa-spinner fa-spin"></i> Thời gian tải trang: <span id="endTime">0.0</span>s</span></div> ');var loopTime=setInterval("currentTime()",100);</script>*@
+<div ng-app="myApp" ng-controller="HangHoaCtrl">
+    <input type="hidden" id="userhienthoi" name="userhienthoi" value="@Session["USERNAME"]" />
+    <input type="hidden" id="isadmin" name="isadmin" value="@Session["IS_AMIN"]" />
+    <div class="content">
+        <div class="flr">
+            <button type="button" class="fa fa-plus button_ncc" data-toggle="modal" data-target="#myModal"><span style="font-size: 15px; font-weight: bold; padding-left:5px;">Thêm sản phẩm</span></button>
+            <button type="button" class="fa fa-sign-in button_ncc"><span style="font-size: 15px; font-weight: bold; padding-left:5px;">Nhập từ file</span></button>
+            <button type="button" class="fa fa-sign-out button_ncc"><span style="font-size: 15px; font-weight: bold; padding-left:5px;">Xuất file</span></button>
+        </div>
+        <!-- Modal Thêm mới -->
+        <div class="modal fade" id="myModal" role="dialog" tabindex="-1">
+            <div class="modal-dialog modal-lg" style="width: 90%">
+                <div class="modal-content" style="height: 100%">
+
+                    <div class="modal-body">
+                            <fieldset style="height: 100%">
+                                <!-- Form Name -->
+                                <legend>Thêm Hàng Mới</legend>
+                                <!-- Text input-->
+                                <div class="col-md-6 container_left">
+                                    <div class="col-md-11 content_left">
+                                        <div class="form-group">
+                                            <div class="col-md-12">
+                                                <input type="text" placeholder="Mã hàng" class="form-control input-md" ng-model="mahang">
+                                            </div>                                           
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-md-12">
+                                                <input type="text" placeholder="Mã chuẩn" class="form-control input-md" ng-model="machuan">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-md-12">
+                                                <input type="text" placeholder="Mã nhập hàng" class="form-control input-md" ng-model="manhaphang">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-md-12">
+                                                <input type="text" placeholder="Mã chuyển đổi" class="form-control input-md" ng-model="machuyendoi">
+                                            </div>
+                                        </div>
+                                        <!-- Text input-->
+                                        <div class="form-group">
+                                            <div class="col-md-12">
+                                                <input type="text" placeholder="Tên hàng" class="form-control input-md" ng-model="tenhang">
+                                            </div>
+
+                                        </div>
+                                        <!-- Text input-->
+                                        <div class="form-group">
+                                            <div class="col-md-12">
+                                                <label class="col-md-2">Hãng</label>
+                                                <div class="col-md-10">
+                                                    <select ng-model="manhomhang" class="form-control input-md">
+                                                        <option ng-selected="selectedValue == abc.MA_NHOM_HANG_CHI_TIET" ng-repeat="abc in danhsachnhomhang" value="{{abc.MA_NHOM_HANG_CHI_TIET}}">{{abc.CHUNG_LOAI_HANG}}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-md-12">
+                                                <label class="col-md-2">Series</label>
+                                                <div class="col-md-10">
+                                                    <select ng-model="series" class="form-control input-md">
+                                                        <option ng-repeat="series in danhsachnhomhang" value="{{series.MA_NHOM_HANG_CHI_TIET}}">{{series.CHUNG_LOAI_HANG}}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Text input-->
+                                        <div class="form-group">
+                                            <div class="col-md-12">
+                                                <input type="text" placeholder="Khối lượng" class="form-control input-md" ng-model="khoiluong">
+                                            </div>
+                                        </div>
+                                        <!-- Text input-->
+                                        <div class="form-group">
+                                            <div class="col-md-12">
+                                                <input type="text" placeholder="Đơn vị tính" class="form-control input-md" ng-model="donvitinh">
+                                            </div>
+                                        </div>
+                                        <!-- Text input-->
+                                        <div class="form-group">
+                                            <div class="col-md-12">
+                                                <input type="text" placeholder="Bảo hành" class="form-control input-md" ng-model="baohanh">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-md-12">
+                                                <input type="text" placeholder="Giá nhập" class="form-control input-md" ng-model="gianhap">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-md-12">
+                                                <input type="text" placeholder="Giá list" class="form-control input-md" ng-model="gialist">
+                                            </div>
+                                        </div>
+                                        <!-- Text input-->
+                                        <div class="form-group">
+                                            <div class="col-md-12">
+                                                <input type="text" placeholder="Xuất xứ" class="form-control input-md" ng-model="xuatxu">
+                                            </div>
+                                        </div>
+                                        <!-- Text input-->
+                                        <div class="form-group">
+                                            <div class="col-md-12">
+                                                <input type="text" placeholder="Tài khoản hạch toán kho" class="form-control input-md" ng-model="tkhachtoankho">
+                                            </div>
+                                        </div>
+                                        <!-- Text input-->
+                                        <div class="form-group">
+                                            <div class="col-md-12">
+                                                <input type="text" placeholder="Tài khoản doanh thu" class="form-control input-md" ng-model="tkdoanhthu">
+                                            </div>
+                                        </div>
+                                        <!-- Text input-->
+                                        <div class="form-group">
+                                            <div class="col-md-12">
+                                                <input type="text" placeholder="Tài khoản chi phí" class="form-control input-md" ng-model="tkchiphi">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="col-md-12">
+                                                <textarea id="ghichu" name="ghichu" placeholder="Ghi chú" class="form-control input-md" ng-model="ghichu"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="form-group" style="margin-top: 10%">
+                                            <form action="/Inventory/HangHoa" ng-controller="imgCtrl" method="post">
+                                                <div class="col-md-3">
+                                                    @Html.AntiForgeryToken()
+                                                    <input type='file' name="files" id="imgInp" style="width: 100%" />
+                                                    <input type="submit" value="Upload Ảnh hàng hóa" style="margin-top: 30px;" />
+                                                </div>
+                                                <div class="col-md-9">
+                                                    <img id="blah" src="#" height="250" width="250" />
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div style="padding-top:8px;" class="col-md-1">
+                                        <i style="font-size:24px;" class="fa fa-question-circle nohelp_left" aria-hidden="true" onclick="help_left()"></i>
+                                        <i style="font-size:24px;display: none" class="fa fa-ban help_left" aria-hidden="true" onclick="nohelp_left()"></i>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4 help_left">
+                                    <div class="form-group">
+                                        <ul class="callouts">
+                                            <li style="width:500px;height:50px;" class="callouts--left">Mã hàng: Mã số hàng hóa duy nhất trong hệ thống của Hợp Long </li>
+                                        </ul>
+                                    </div>
+                                    <div class="form-group">
+                                        <ul class="callouts">
+                                            <li style="width:500px;height:50px;" callouts--left">Mã chuẩn: Mã số chuẩn theo bảng giá list của hãng </li>
+                                        </ul>
+                                    </div>
+                                    <div class="form-group">
+                                        <ul class="callouts">
+                                            <li style="width:500px;height:50px;" callouts--left">Mã nhập hàng: Mã dùng cho phòng mua đặt hàng với nhà cung cấp</li>
+                                        </ul>
+                                    </div>
+                                    <div class="form-group">
+                                        <ul class="callouts">
+                                            <li style="width:500px;height:80px;" callouts--left">Mã chuyển đổi: Dùng trong trường hợp mã chuẩn đã ngưng sản xuất và chuyển sang mã mới </li>
+                                        </ul>
+                                    </div>
+                                    <div class="form-group" style="margin-top :10%">
+                                        <ul class="callouts">
+                                            <li style="width:500px;height:50px;" callouts--left">Tên hàng: Tên của hàng hóa </li>
+                                        </ul>
+                                    </div>
+                                    <div class="form-group">
+                                        <ul class="callouts">
+                                            <li style="width:500px;height:50px;" callouts--left">Hãng sản xuất của mã hàng </li>
+                                        </ul>
+                                    </div>
+                                    <div class="form-group">
+                                        <ul class="callouts">
+                                            <li style="width:500px;height:50px;" callouts--left">Khối lượng của hàng hóa(tính bằng g)</li>
+                                        </ul>
+                                    </div>
+                                    <div class="form-group">
+                                        <ul class="callouts">
+                                            <li style="width:500px;height:50px;" callouts--left">Đơn vị tính (cái, chiếc,...)</li>
+                                        </ul>
+                                    </div>
+                                    <div class="form-group">
+                                        <ul class="callouts">
+                                            <li style="width:500px;height:80px;" callouts--left">Bảo hành: Thời gian bảo hành của hàng hóa (tính bằng tháng),nhập vào theo dạng số (12, 24, ...) </li>
+                                        </ul>
+                                    </div>
+                                    <div class="form-group" style="margin-top :10%">
+                                        <ul class="callouts">
+                                            <li style="width:500px;height:50px;" callouts--left">Giá nhập: Giá nhập vào theo bảng giá của hãng</li>
+                                        </ul>
+                                    </div>
+                                    <div class="form-group">
+                                        <ul class="callouts">
+                                            <li style="width:500px;height:50px;" callouts--left">Giá list: Giá theo Price List của Hãng gửi về</li>
+                                        </ul>
+                                    </div>
+                                    <div class="form-group">
+                                        <ul class="callouts">
+                                            <li style="width:500px;height:90px;" callouts--left">Xuất xứ: JPN: Nhật Bản, CHN: Trung Quốc, ...</li>
+                                        </ul>
+                                    </div>
+                                    <div class="form-group" style="margin-top :10%">
+                                        <ul class="callouts">
+                                            <li style="width:500px;height:90px;" callouts--left">Tài khoản hạch toán kho: chỉ dùng cho kế toán(tài khoản kho hàng hóa: 1561) </li>
+                                        </ul>
+                                    </div>
+                                    <div class="form-group" style="margin-top :10%">
+                                        <ul class="callouts">
+                                            <li style="width:500px;height:90px;" callouts--left">Tài khoản doanh thu: chỉ dùng cho kế toán(tài khoản: 51111) </li>
+                                        </ul>
+                                    </div>
+                                    <div class="form-group" style="margin-top :10%">
+                                        <ul class="callouts">
+                                            <li style="width:500px;height:90px;" callouts--left">Tài khoản chi phí: chỉ dùng cho kế toán(tài khoản: 632) </li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 container_right">
+                                    <div class="col-md-12 content_right"> 
+                                        <div class="form-group">
+                                            <div class="col-md-12">
+                                                <textarea id="ghichu" name="ghichu" placeholder="Thông số của hàng hóa (Nếu có)" class="form-control input-md" ng-model="thongso"></textarea>
+                                            </div>
+                                        </div>  
+                                        <div class="form-group"  style="margin-top :10%">
+                                            <label class="col-md-4 control-label" style="padding-top: 0px !important" for="name">Hàng đã ngưng sản xuất:  </label>
+                                            <div class="col-md-8">
+                                                <input type="checkbox" ng-model="discontinue">
+                                            </div>
+                                        </div>    
+                                                                                                                  
+                                        <div class="form-group col-md-12" >
+                                            <label class="control-label ckeditor" for="name">Cách thức đóng gói: </label>
+                                            <div class="ckeditor">
+                                                <textarea id="donggoi" name="donggoi" placeholder="Packing" class="form-control input-md" ng-model="quycachdonggoi"></textarea>
+                                            </div>
+                                            <label class="control-label ckeditor" for="name"> Thông số kỹ thuật khác: </label>
+                                            <div class="ckeditor">
+                                                <textarea id="thongso" name="thongso" placeholder="Specification" class="form-control input-md" ng-model="thongsokythuat"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>                                                                                                                            
+                                <script>
+                                    CKEDITOR.replace('donggoi', {
+                                        height: 150
+                                    });
+                                    CKEDITOR.replace('thongso', {
+                                        height: 150
+                                    });
+
+                                </script>
+
+                            </fieldset>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" for="anmelden"></label>
+                            <div class="col-md-8 addnew">
+                                <button id="addnew" name="addnew" class="btn addnewmodal" ng-click="add()" data-dismiss="modal">Lưu</button>
+                                <button id="exit" name="exit" class="btn addnewmodal" data-dismiss="modal">Thoát</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--end modal-->
+        <!-- Modal Update -->
+        <div class="modal fade" id="myEdit" role="dialog" tabindex="-1">
+            <div class="modal-dialog modal-lg" style="width: 90%">
+                <div class="modal-content" style="height: 100%">
+
+                    <div class="modal-body">
+                            <fieldset style="height: 100%">
+                                <!-- Form Name -->
+                                <legend>Update Product</legend>
+                                <!-- Text input-->
+                                <div class="col-md-6 container_left" >
+                                    <div class="col-md-11">
+                                        <div class="form-group">
+                                            <label class="col-md-3 control-label" for="name">Mã hàng: </label>
+                                            <div class="col-md-9">
+                                                <input type="text" placeholder="Mã hàng" class="form-control input-md" ng-model="item.MA_HANG">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-3 control-label" for="name">Mã chuẩn: </label>
+                                            <div class="col-md-9">
+                                                <input type="text" placeholder="Mã chuẩn" class="form-control input-md" ng-model="item.MA_CHUAN">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-3 control-label" for="name">Mã nhập hàng: </label>
+                                            <div class="col-md-9">
+                                                <input type="text" placeholder="Mã nhập hàng" class="form-control input-md" ng-model="item.MA_NHAP_HANG">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-3 control-label" for="name">Mã chuyển đổi: </label>
+                                            <div class="col-md-9">
+                                                <input type="text" placeholder="Mã chuyển đổi" class="form-control input-md" ng-model="item.MA_CHUYEN_DOI">
+                                            </div>
+                                        </div>
+                                        <!-- Text input-->
+                                        <div class="form-group">
+                                            <label class="col-md-3 control-label" for="name">Tên hàng:</label>
+                                            <div class="col-md-9">
+                                                <input type="text" placeholder="Tên hàng" class="form-control input-md" ng-model="item.TEN_HANG">
+                                            </div>
+                                        </div>
+                                        <!-- Text input-->
+                                        <div class="form-group">
+                                            <label class="col-md-3 control-label" for="name">Hãng: </label>
+                                            <div class="col-md-9">
+                                                <select ng-model="item.MA_NHOM_HANG" class="form-control input-md">
+                                                    <option ng-repeat="abc in danhsachnhomhang" value="{{abc.MA_NHOM_HANG_CHI_TIET}}">{{abc.CHUNG_LOAI_HANG}}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-3 control-label" for="name">Series: </label>
+                                            <div class="col-md-9">
+                                                <select ng-model="item.SERIES" class="form-control input-md">
+                                                    <option ng-repeat="series in danhsachnhomhang" value="{{series.MA_NHOM_HANG_CHI_TIET}}">{{series.CHUNG_LOAI_HANG}}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <!-- Text input-->
+                                        <div class="form-group">
+                                            <label class="col-md-3 control-label" for="name">Trọng lượng(g): </label>
+                                            <div class="col-md-9">
+                                                <input type="text" placeholder="Trọng lượng(g)" class="form-control input-md" ng-model="item.KHOI_LUONG">
+                                            </div>
+                                        </div>
+                                        <!-- Text input-->
+                                        <div class="form-group">
+                                            <label class="col-md-3 control-label" for="name">Đơn vị: </label>
+                                            <div class="col-md-9">
+                                                <input type="text" placeholder="Đơn vị tính" class="form-control input-md" ng-model="item.DON_VI_TINH">
+                                            </div>
+                                        </div>
+                                        <!-- Text input-->
+                                        <div class="form-group">
+                                            <label class="col-md-3 control-label" for="name">Bảo hành(tháng): </label>
+                                            <div class="col-md-9">
+                                                <input type="text" placeholder="Bảo hành(tháng)" class="form-control input-md" ng-model="item.BAO_HANH">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-3 control-label" for="name">Giá nhập: </label>
+                                            <div class="col-md-9">
+                                                <input type="text" placeholder="Giá nhập" class="form-control input-md" ng-model="item.GIA_NHAP">
+                                            </div>
+                                        </div>
+                                        <!-- Text input-->
+                                        <div class="form-group">
+                                            <label class="col-md-3 control-label" for="name">Giá list: </label>
+                                            <div class="col-md-9">
+                                                <input type="text" placeholder="Giá list" class="form-control input-md" ng-model="item.GIA_LIST">
+                                            </div>
+                                        </div>
+                                        <!-- Text input-->
+                                        <div class="form-group">
+                                            <label class="col-md-3 control-label" for="name">Xuất xứ: </label>
+                                            <div class="col-md-9">
+                                                <input type="text" placeholder="Xuất xứ" class="form-control input-md" ng-model="item.XUAT_XU">
+                                            </div>
+                                        </div>
+                                        <!-- Text input-->
+                                        <div class="form-group">
+                                            <label class="col-md-3 control-label no-pad-top" for="name">Tài khoản kho </label>
+                                            <div class="col-md-9">
+                                                <input type="text" placeholder="Tài khoản kho" class="form-control input-md" ng-model="item.TK_HACH_TOAN_KHO">
+                                            </div>
+                                        </div>
+                                        <!-- Text input-->
+                                        <div class="form-group">
+                                            <label class="col-md-3 control-label" for="name">Tài khoản doanh thu: </label>
+                                            <div class="col-md-9">
+                                                <input type="text" placeholder="Tài khoản doanh thu" class="form-control input-md" ng-model="item.TK_DOANH_THU">
+                                            </div>
+                                        </div>
+                                        <!-- Text input-->
+                                        <div class="form-group">
+                                            <label class="col-md-3 control-label" for="name">Tài khoản chi phí </label>
+                                            <div class="col-md-9">
+                                                <input type="text" placeholder="Tài khoản chi phí" class="form-control input-md" ng-model="item.TK_CHI_PHI">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-3 control-label" for="name">Ghi chú: </label>
+                                            <div class="col-md-9">
+                                                <textarea id="ghichu" name="ghichu" placeholder="Ghi chú" class="form-control input-md" ng-model="item.GHI_CHU"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="form-group" style="margin-top: 10%">
+                                            <form action="/Inventory/HangHoa" ng-controller="imgCtrl" method="post">
+                                                <div class="col-md-3">
+                                                    @Html.AntiForgeryToken()
+                                                    <input type='file' name="files" id="imgEdit" style="width: 100%" />
+                                                    <input type="submit" value="Upload File/Image" style="margin-top: 30px;" />
+                                                </div>
+                                                <div class="col-md-9" style="box-shadow: 3px 3px 3px #ddd; width: auto" >
+                                                    <img id="edit_img" src="#" height= 250 width="300" />
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div style="padding-top:8px;" class="col-md-1">
+                                        <i style="font-size:24px;" class="fa fa-question-circle nohelp_left" aria-hidden="true" onclick="help_left()"></i>
+                                        <i style="font-size:24px;" class="fa fa-ban help_left" aria-hidden="true" onclick="nohelp_left()"></i>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4 help_left">
+                                    <div class="form-group">
+                                        <ul class="callouts">
+                                            <li style="width:500px;height:50px;" class="callouts--left">Mã hàng: Mã số hàng hóa duy nhất trong hệ thống của Hợp Long </li>
+                                        </ul>
+                                    </div>
+                                    <div class="form-group">
+                                        <ul class="callouts">
+                                            <li style="width:500px;height:50px;" callouts--left">Mã chuẩn: Mã số chuẩn theo bảng giá list của hãng </li>
+                                        </ul>
+                                    </div>
+                                    <div class="form-group">
+                                        <ul class="callouts">
+                                            <li style="width:500px;height:50px;" callouts--left">Mã nhập hàng: Mã dùng cho phòng mua đặt hàng với nhà cung cấp</li>
+                                        </ul>
+                                    </div>
+                                    <div class="form-group">
+                                        <ul class="callouts">
+                                            <li style="width:500px;height:80px;" callouts--left">Mã chuyển đổi: Dùng trong trường hợp mã chuẩn đã ngưng sản xuất và chuyển sang mã mới </li>
+                                        </ul>
+                                    </div>
+                                    <div class="form-group" style="margin-top :10%">
+                                        <ul class="callouts">
+                                            <li style="width:500px;height:50px;" callouts--left">Tên hàng: Tên của hàng hóa </li>
+                                        </ul>
+                                    </div>
+                                    <div class="form-group">
+                                        <ul class="callouts">
+                                            <li style="width:500px;height:50px;" callouts--left">Hãng sản xuất của mã hàng </li>
+                                        </ul>
+                                    </div>
+                                    <div class="form-group">
+                                        <ul class="callouts">
+                                            <li style="width:500px;height:50px;" callouts--left">Khối lượng của hàng hóa(tính bằng g)</li>
+                                        </ul>
+                                    </div>
+                                    <div class="form-group">
+                                        <ul class="callouts">
+                                            <li style="width:500px;height:50px;" callouts--left">Đơn vị tính (cái, chiếc,...)</li>
+                                        </ul>
+                                    </div>
+                                    <div class="form-group">
+                                        <ul class="callouts">
+                                            <li style="width:500px;height:80px;" callouts--left">Bảo hành: Thời gian bảo hành của hàng hóa (tính bằng tháng),nhập vào theo dạng số (12, 24, ...) </li>
+                                        </ul>
+                                    </div>
+                                    <div class="form-group" style="margin-top :10%">
+                                        <ul class="callouts">
+                                            <li style="width:500px;height:50px;" callouts--left">Giá nhập: Giá nhập vào theo bảng giá của hãng</li>
+                                        </ul>
+                                    </div>
+                                    <div class="form-group">
+                                        <ul class="callouts">
+                                            <li style="width:500px;height:50px;" callouts--left">Giá list: Giá theo Price List của Hãng gửi về</li>
+                                        </ul>
+                                    </div>
+                                    <div class="form-group">
+                                        <ul class="callouts">
+                                            <li style="width:500px;height:90px;" callouts--left">Xuất xứ: JPN: Nhật Bản, CHN: Trung Quốc, ...</li>
+                                        </ul>
+                                    </div>
+                                    <div class="form-group" style="margin-top :10%">
+                                        <ul class="callouts">
+                                            <li style="width:500px;height:90px;" callouts--left">Tài khoản hạch toán kho: chỉ dùng cho kế toán(tài khoản kho hàng hóa: 1561) </li>
+                                        </ul>
+                                    </div>
+                                    <div class="form-group" style="margin-top :10%">
+                                        <ul class="callouts">
+                                            <li style="width:500px;height:90px;" callouts--left">Tài khoản doanh thu: chỉ dùng cho kế toán(tài khoản: 51111) </li>
+                                        </ul>
+                                    </div>
+                                    <div class="form-group" style="margin-top :10%">
+                                        <ul class="callouts">
+                                            <li style="width:500px;height:90px;" callouts--left">Tài khoản chi phí: chỉ dùng cho kế toán(tài khoản: 632) </li>
+                                        </ul>
+                                    </div>
+                                </div>        
+                                                   
+                                <div class="col-md-6 container_right">
+                                    <div class="form-group">
+                                        <label class="col-md-3 control-label" style="padding-top: 0px !important" for="name">Discontinue </label>
+                                        <div class="col-md-9">
+                                            <input type="checkbox" ng-model="item.DISCONTINUE">
+                                        </div>
+                                    </div> 
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                            <textarea id="ghichu" name="ghichu" placeholder="Thông số" class="form-control input-md" ng-model="item.THONG_SO"></textarea>
+                                        </div>
+                                    </div>                                   
+                                    <div class="form-group col-md-12">
+                                        <label class="control-label ckeditor" for="name">Đóng gói: </label>
+                                        <div class="ckeditor">
+                                            <textarea id="editdonggoi" name="editdonggoi" placeholder="Đóng gói" class="form-control input-md" ng-model="item.QUY_CACH_DONG_GOI"></textarea>
+                                        </div>
+
+                                        <label class="control-label ckeditor" for="name">Thông số kĩ thuật: </label>
+                                        <div class="ckeditor">
+                                            <textarea id="editthongso" name="editthongso" placeholder="Details" class="form-control input-md" ng-model="item.THONG_SO_KY_THUAT"></textarea>
+                                        </div>
+                                    </div>
+                                                                      
+                                </div>                              
+                                <script>
+                                    CKEDITOR.replace('editdonggoi', {
+                                        height: 150
+                                    });
+                                    CKEDITOR.replace('editthongso', {
+                                        height: 150
+                                    });
+                                </script>
+                            </fieldset>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" for="anmelden"></label>
+                            <div class="col-md-2 edit">
+                                <button class="btn" ng-click="save(item.MA_HANG)" data-dismiss="modal">Save</button>
+                                <button class="btn" data-dismiss="modal">Exit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br />
+        <!--end modal-->
+        <!-- Modal delete -->
+        <div class="modal fade" id="delete_item" role="dialog" tabindex="-1">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+
+                    <div class="modal-body">
+                        <form class="form-horizontal" name="myForm" novalidate>
+                            <fieldset>
+                                <!-- Form Name -->
+                                <legend>Delete Product</legend>
+                                <center>Are you sure you want to delete <b>{{item.TEN_HANG}}</b></center>
+                                <p></p>
+
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="delete"></label>
+                                    <div class="col-md-8">
+                                        <button id="delete" name="delete" class="btn" ng-click="delete(item.MA_HANG)" data-dismiss="modal">Delete</button>
+                                        <button id="exit" name="exit" class="btn" data-dismiss="modal">Exit</button>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br />
+        <!--end modal-->
+        <!--cHI TIẾT HÀNG HÓA-->
+        <div class="modal fade" id="chitiethanghoa" role="dialog" tabindex="-1">
+            <div class="modal-dialog modal-lg" style="width:80%;">
+                <div class="modal-content" style="height: 100%;">
+                    <div class="box-header-title" style="background-color:#FACE0C;color: #fff;font-weight: bold;font-size: 18px;padding: 10px;">» Thông tin về công ty</div>
+                    <div class="modal-body">
+                        <div class="col-md-3">
+                            <img ng-src="~/Content/Images/HangHoa/{{item.HINH_ANH}}" style="width: 90%;height: 250px;" />
+                        </div>
+                        <div class="col-md-9">
+                            <div style="margin-bottom: 5%;" class="col-md-12">
+                                <h1>{{item.TEN_HANG | uppercase}}</h1>
+                               
+                            </div>
+                            <div>
+                                <ul class="nav nav-tabs">
+                                    <li class="active"><a data-toggle="tab" href="#chitiet">Product Details</a></li>
+                                    <li><a data-toggle="tab" href="#thongsokythuat">Thông số kỹ thuật</a></li>
+                                </ul>
+                                <div class="tab-content">
+                                    <!--Tab chi tiết hàng hóa-->
+                                    <div id="chitiet" class="tab-pane fade in active">
+                                        <div class="col-md-12" style="box-shadow: 3px 3px 3px #ddd">
+                                            <div class="col-md-6">
+                                                <table class="table noborder">
+                                                    <tr>
+                                                        <td><label>Mã hàng</label></td>
+                                                        <td>{{item.MA_HANG}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><label>Mã chuẩn</label></td>
+                                                        <td>{{item.MA_CHUAN}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><label>Mã nhóm hàng</label></td>
+                                                        <td>{{item.MA_NHOM_HANG}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><label>Mã nhập hàng</label></td>
+                                                        <td>{{item.MA_NHAP_HANG}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><label>Mã chuyển đổi</label></td>
+                                                        <td>{{item.MA_CHUYEN_DOI}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><label>Series</label></td>
+                                                        <td>{{item.SERIES}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><label>Giá bán</label></td>
+                                                        <td>{{item.GIA_LIST | currency: '': 0}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><label>Giá nhập</label></td>
+                                                        <td>{{item.GIA_NHAP}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><label>Đơn vị tính</label></td>
+                                                        <td>{{item.DON_VI_TINH}}</td>
+                                                    </tr>
+                                                    
+                                                </table>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <table class="table noborder">
+                                                    <tr>
+                                                        <td><label>Thông số</label></td>
+                                                        <td>{{(item.THONG_SO)}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Quy cách đóng gói</td>
+                                                        <td ng-bind-html="item.QUY_CACH_DONG_GOI | unsafe"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Sale Account</td>
+                                                        <td>{{item.TK_DOANH_THU}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>COGS Account</td>
+                                                        <td>{{item.TK_HACH_TOAN_KHO}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>TK chi phí</td>
+                                                        <td>{{item.TK_CHI_PHI}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Ghi chú</td>
+                                                        <td>{{item.GHI_CHU}}</td>
+                                                    </tr>  
+                                                    <tr>
+                                                        <td>Khối lượng</td>
+                                                        <td>{{(item.KHOI_LUONG)}} g</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Xuất xứ</td>
+                                                        <td>{{(item.XUAT_XU)}}</td>
+                                                    </tr>                                           
+                                                </table>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div id="thongsokythuat" class="tab-pane fade" style="box-shadow: 3px 3px 3px #ddd; padding-bottom:20px;">
+                                        <div class="col-md-12">
+                                            <div ng-bind-html="item.THONG_SO_KY_THUAT | unsafe"></div>      
+                                        </div>                                                                       
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="exit" name="exit" class="btn" data-dismiss="modal">Exit</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <!--END CHI TIẾT HÀNG HÓA-->
+
+        <input type="hidden" ng-model="userquantam" id="userquantam" value="@Session["USERNAME"]" />
+        <div class="col-md-12" style="margin-top: -2.4%">
+            <ul class="nav nav-tabs list_tab">
+                <li class="active">
+                    <a data-toggle="tab" href="#timkiem" style="font-weight: bold">
+                        Tìm Kiếm
+                    </a>
+                </li>
+                <li ng-click="loadHangHoa('AUTONICS',1)" >
+                    <a data-toggle="tab" href="#AUTONICS" style="font-weight: bold; color: #F15A24;">
+                        AUTONICS
+                        <!--<img src="~/Content/Images/HangHoa/AUTONICS.png" height="30"   />-->
+                    </a>
+                </li>
+                <li ng-click="loadHangHoa('SCHNEIDER',1)" >
+                    <a data-toggle="tab" href="#SCHNEIDER" style="font-weight: bold; color: #21C650;" >
+                        SCHNEIDER
+                       <!--<img src="~/Content/Images/HangHoa/SCHNEIDER.png" height="30" />--> 
+                    </a>
+                </li>
+                <li ng-click="loadHangHoa('OMRON',1)">
+                    <a data-toggle="tab" href="#OMRON" style="font-weight: bold; color: #4915E3;">
+                        OMRON
+                        <!--<img src="~/Content/Images/HangHoa/OMRON.png" height="30" />-->   
+                    </a>
+                </li>
+                <li ng-click="loadHangHoa('IDEC',1)">
+                    <a data-toggle="tab" href="#IDEC" style="font-weight: bold; color: #A71C20;">
+                        IDEC
+                        <!--<img src="~/Content/Images/HangHoa/IDEC.png" height="30" />-->  
+                    </a>
+                </li>
+                <li ng-click="loadHangHoa('MITSUBISHI',1)">
+                    <a data-toggle="tab" href="#MITSUBISHI" style="font-weight: bold; color: #ED1B23;">
+                        MITSUBISHI
+                        <!--<img src="~/Content/Images/HangHoa/MITSUBISHI.png" height="30" />-->   
+                    </a>
+                </li>
+                <li ng-click="loadHangHoa('LS',1)">
+                    <a data-toggle="tab" href="#LS" style="font-weight: bold; color:#003875;">
+                        LS
+                        <!--<img src="~/Content/Images/HangHoa/LS.png" height="30" />-->  
+                    </a>
+                </li>
+                <li ng-click="loadHangHoa('FUJI',1)">
+                    <a data-toggle="tab" href="#FUJI" style="font-weight: bold; color: #005BAA;">
+                        FUJI
+                        <!--<img src="~/Content/Images/HangHoa/FUJI.png" height="30" />-->  
+                    </a>
+                </li>
+                <li ng-click="loadHangHoa('CKD',1)">
+                    <a data-toggle="tab" href="#CKD" style="font-weight: bold; color: #34A55E;">
+                        CKD
+                        <!--<img src="~/Content/Images/HangHoa/CKD.png" height="30" />-->  
+                    </a>
+                </li>
+                <li ng-click="loadHangHoa('DECA',1)">
+                    <a data-toggle="tab" href="#DECA" style="font-weight: bold; color: #08519E;">
+                        DECA
+                        <!--<img src="~/Content/Images/HangHoa/DECA.png" height="30" />-->  
+                    </a>
+                </li>
+                <li ng-click="loadHangHoa('HANYOUNG',1)">
+                    <a data-toggle="tab" href="#HANYOUNG" style="font-weight: bold; color: #C1001F;">
+                        HANYOUNG
+                        <!--<img src="~/Content/Images/HangHoa/HANYOUNG.png" height="30" />-->    
+                    </a>
+                </li>
+                <li ng-click="loadHangHoa('HITACHI',1)">
+                    <a data-toggle="tab" href="#HITACHI" style="font-weight: bold; color:#FF0000;">
+                        HITACHI
+                        <!--<img src="~/Content/Images/HangHoa/HITACHI.png" height="30" />-->  
+                    </a>
+                </li>
+                <li ng-click="loadHangHoa('MAX',1)">
+                    <a data-toggle="tab" href="#MAX" style="font-weight: bold; color: #F15A24;">
+                        MAX
+                        <!--<img src="~/Content/Images/HangHoa/MAX.png" height="30" />-->    
+                    </a>
+                </li>
+                <li ng-click="loadHangHoa('PROFACE',1)">
+                    <a data-toggle="tab" href="#PROFACE" style="font-weight: bold; color:#0065B3;">
+                        PROFACE
+                        <!--<img src="~/Content/Images/HangHoa/PROFACE.png" height="30" />-->   
+                    </a>
+                </li>
+                <li ng-click="loadHangHoa('RITTAL',1)">
+                    <a data-toggle="tab" href="#RITTAL" style="font-weight: bold; color: #010101;">
+                        RITTAL
+                        <!--<img src="~/Content/Images/HangHoa/RITTAL.png" height="30" />-->   
+                    </a>
+                </li>
+                <li ng-click="loadHangHoa('SIEMENS',1)">
+                    <a data-toggle="tab" href="#SIEMENS" style="font-weight: bold; color: #009999;">
+                        SIEMENS
+                        <!--<img src="~/Content/Images/HangHoa/SIEMENS.png" height="30" />-->   
+                    </a>
+                </li>
+                <li ng-click="loadHangHoa('SMC',1)">
+                    <a data-toggle="tab" href="#SMC" style="font-weight: bold; color:#3380CC;">
+                        SMC
+                        <!--<img src="~/Content/Images/HangHoa/SMC.png" height="30" />-->   
+                    </a>
+                </li>
+                <li ng-click="loadHangHoa('TEND',1)">
+                    <a data-toggle="tab" href="#TEND" style="font-weight: bold; color:#115E07;">
+                        <!--<img src="~/Content/Images/HangHoa/TEND.png" height="30" />-->   
+                    </a>
+                </li>
+                <li ng-click="loadHangHoa('TOSHIBA',1)">
+                    <a data-toggle="tab" href="#TOSHIBA" style="font-weight: bold; color: #FF0000;">
+                        TOSHIBA
+                        <!--<img src="~/Content/Images/HangHoa/TOSHIBA.png" height="30" />--> 
+                    </a>
+                </li>
+               
+            </ul>
+            <div class="tab-content">
+
+                <!----------------------------------------AUTONICS------------------------------------------------------>
+                <div id="AUTONICS" class="tab-pane fade">
+                    <table id="example" class="table " cellspacing="0" name="tblhanghoa">
+                        <thead>
+                            <tr>
+                                <th>Mã Chuẩn</th>
+                                <th>Tên Hàng</th>
+                                <th>Thông số</th>
+                                <th>Hãng</th>
+                                <th>Đơn Vị</th>
+                                <th>Xuất Xứ</th>
+                                <th>Giá List</th>
+                                <th>Ngưng sản xuất <br /> Mã chuyển đổi</th>
+                                <th>Quy cách đóng gói</th>
+                                <th>Thông số kỹ thuật</th>
+                                <th>Edit</th>
+                                <th>Delete</th>
+                            </tr>
+
+                        </thead>
+                        <tbody>
+                            <tr dir-paginate-start="item in filtered = (danhsachhanghoa | filter: {MA_NHOM_HANG: 'AUTONICS'}) | filter: {MA_HANG:search_text} | itemsPerPage: 30 " class="hover" ng-click="edit(item);get_tonkho(item.MA_HANG)" ng-class-odd="'odd'" ng-class-even="'even'" pagination-id="autonics">
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.MA_CHUAN}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.TEN_HANG}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.THONG_SO}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.MA_NHOM_HANG}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.DON_VI_TINH}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.XUAT_XU}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.GIA_LIST | currency: '' :0}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.DISCONTINUE}}<br />{{item.MA_CHUYEN_DOI}}</td>
+                                <td ng-bind-html="item.QUY_CACH_DONG_GOI | unsafe" class="{{item.MA_HANG}}-1 text-left"></td>
+                                <td ng-bind-html="item.THONG_SO_KY_THUAT | unsafe" class="{{item.MA_HANG}}-2 text-left"></td>
+
+                                <td>
+                                    <button class="btn  btn-circle" ng-click="edit(item)" data-dismiss="modal" type="button" data-toggle="modal" data-target="#myEdit"><i class="glyphicon glyphicon-edit"></i></button>
+                                </td>
+                                <td>
+                                    <button class="btn  btn-circle" ng-click="edit(item)" type="button" data-dismiss="modal" data-toggle="modal" data-target="#delete_item"><i class="glyphicon glyphicon-remove"></i></button>
+
+                                </td>
+                            </tr>
+                            <!--Detail row-->
+                            <tr dir-paginate-end="">
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="9" style="border: none !important">
+                                    <dir-pagination-controls pagination-id="autonics" max-size="12"
+                                                             direction-links="true"
+                                                             boundary-links="true">
+                                    </dir-pagination-controls>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                    
+                </div>
+                <!----------------------------------------END AUTONICS------------------------------------------------------>
+
+                <!----------------------------------------LS------------------------------------------------------>
+                <div id="LS" class="tab-pane fade">
+                    <table id="example" class="table " cellspacing="0" name="tblhanghoa">
+                        <thead>
+                            <tr>
+                                <th>Mã Chuẩn</th>
+                                <th>Tên Hàng</th>
+                                <th>Thông số</th>
+                                <th>Hãng</th>
+                                <th>Đơn Vị</th>
+                                <th>Xuất Xứ</th>
+                                <th>Giá List</th>
+                                <th>Ngưng sản xuất <br /> Mã chuyển đổi</th>
+                                <th>Quy cách đóng gói</th>
+                                <th>Thông số kỹ thuật</th>
+                                <th>Edit</th>
+                                <th>Delete</th>
+                           
+                            </tr>
+
+                        </thead>
+                        <tbody>
+                            <tr dir-paginate-start="item in filtered = (danhsachhanghoa | filter: {MA_NHOM_HANG: 'LS'}) | filter: {MA_HANG:search_text} | itemsPerPage: 30 " class="hover" ng-click="edit(item);get_tonkho(item.MA_HANG)" ng-class-odd="'odd'" ng-class-even="'even'" pagination-id="ls">
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.MA_CHUAN}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.TEN_HANG}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.THONG_SO}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.MA_NHOM_HANG}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.DON_VI_TINH}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.XUAT_XU}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.GIA_LIST | currency: '' :0}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.DISCONTINUE}}<br />{{item.MA_CHUYEN_DOI}}</td>
+                                <td ng-bind-html="item.QUY_CACH_DONG_GOI | unsafe" class="{{item.MA_HANG}}-1 text-left"></td>
+                                <td ng-bind-html="item.THONG_SO_KY_THUAT | unsafe" class="{{item.MA_HANG}}-2 text-left"></td>
+
+                                <td>
+                                    <button class="btn  btn-circle" ng-click="edit(item)" data-dismiss="modal" type="button" data-toggle="modal" data-target="#myEdit"><i class="glyphicon glyphicon-edit"></i></button>
+                                </td>
+                                <td>
+                                    <button class="btn  btn-circle" ng-click="edit(item)" type="button" data-dismiss="modal" data-toggle="modal" data-target="#delete_item"><i class="glyphicon glyphicon-remove"></i></button>
+
+                                </td>
+                            </tr>
+                            <tr dir-paginate-end="">
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="9" style="border: none !important">
+                                    <dir-pagination-controls pagination-id="ls" max-size="12" style="float:right;"
+                                                             direction-links="true"
+                                                             boundary-links="true">
+                                    </dir-pagination-controls>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <!----------------------------------------END LS------------------------------------------------------>
+
+                <!----------------------------------------OMRON------------------------------------------------------>
+                <div id="OMRON" class="tab-pane fade">
+                    <table id="example" class="table " cellspacing="0" name="tblhanghoa">
+                        <thead>
+                            <tr>
+                                <th>Mã Chuẩn</th>
+                                <th>Tên Hàng</th>
+                                <th>Thông số</th>
+                                <th>Hãng</th>
+                                <th>Đơn Vị</th>
+                                <th>Xuất Xứ</th>
+                                <th>Giá List</th>
+                                <th>Ngưng sản xuất <br /> Mã chuyển đổi</th>
+                                <th>Quy cách đóng gói</th>
+                                <th>Thông số kỹ thuật</th>
+                                <th>Edit</th>
+                                <th>Delete</th>
+                            </tr>
+
+                        </thead>
+                        <tbody>
+                            <tr dir-paginate-start="item in filtered = (danhsachhanghoa | filter: {MA_NHOM_HANG: 'OMRON'}) | filter: {MA_HANG:search_text} | itemsPerPage: 30 " class="hover" ng-click="edit(item);get_tonkho(item.MA_HANG)" ng-class-odd="'odd'" ng-class-even="'even'" pagination-id="omron">
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.MA_CHUAN}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.TEN_HANG}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.THONG_SO}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.MA_NHOM_HANG}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.DON_VI_TINH}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.XUAT_XU}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.GIA_LIST | currency: '' :0}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.DISCONTINUE}}<br />{{item.MA_CHUYEN_DOI}}</td>
+                                <td ng-bind-html="item.QUY_CACH_DONG_GOI | unsafe" class="{{item.MA_HANG}}-1 text-left"></td>
+                                <td ng-bind-html="item.THONG_SO_KY_THUAT | unsafe" class="{{item.MA_HANG}}-2 text-left"></td>
+
+                                <td>
+                                    <button class="btn  btn-circle" ng-click="edit(item)" data-dismiss="modal" type="button" data-toggle="modal" data-target="#myEdit"><i class="glyphicon glyphicon-edit"></i></button>
+                                </td>
+                                <td>
+                                    <button class="btn  btn-circle" ng-click="edit(item)" type="button" data-dismiss="modal" data-toggle="modal" data-target="#delete_item"><i class="glyphicon glyphicon-remove"></i></button>
+
+                                </td>
+                            </tr>
+                            <tr dir-paginate-end="">
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="9" style="border: none !important">
+                                    <dir-pagination-controls pagination-id="omron" max-size="12" style="float:right;"
+                                                             direction-links="true"
+                                                             boundary-links="true">
+                                    </dir-pagination-controls>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <!----------------------------------------END OMRON------------------------------------------------------>
+
+                <!----------------------------------------IDEC------------------------------------------------------>
+                <div id="IDEC" class="tab-pane fade">
+                    <table id="example" class="table " cellspacing="0" name="tblhanghoa">
+                        <thead>
+                            <tr>
+                                <th>Mã Chuẩn</th>
+                                <th>Tên Hàng</th>
+                                <th>Thông số</th>
+                                <th>Hãng</th>
+                                <th>Đơn Vị</th>
+                                <th>Xuất Xứ</th>
+                                <th>Giá List</th>
+                                <th>Ngưng sản xuất <br /> Mã chuyển đổi</th>
+                                <th>Quy cách đóng gói</th>
+                                <th>Thông số kỹ thuật</th>
+                                <th>Edit</th>
+                                <th>Delete</th>
+                            </tr>
+
+                        </thead>
+                        <tbody>
+                            <tr dir-paginate-start="item in filtered = (danhsachhanghoa | filter: {MA_NHOM_HANG: 'IDEC'}) | filter: {MA_HANG:search_text} | itemsPerPage: 30 " class="hover" ng-click="edit(item);get_tonkho(item.MA_HANG)" ng-class-odd="'odd'" ng-class-even="'even'" pagination-id="idec">
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.MA_CHUAN}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.TEN_HANG}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.THONG_SO}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.MA_NHOM_HANG}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.DON_VI_TINH}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.XUAT_XU}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.GIA_LIST | currency: '' :0}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.DISCONTINUE}}<br />{{item.MA_CHUYEN_DOI}}</td>
+                                <td ng-bind-html="item.QUY_CACH_DONG_GOI | unsafe" class="{{item.MA_HANG}}-1 text-left"></td>
+                                <td ng-bind-html="item.THONG_SO_KY_THUAT | unsafe" class="{{item.MA_HANG}}-2 text-left"></td>
+
+                                <td>
+                                    <button class="btn  btn-circle" ng-click="edit(item)" data-dismiss="modal" type="button" data-toggle="modal" data-target="#myEdit"><i class="glyphicon glyphicon-edit"></i></button>
+                                </td>
+                                <td>
+                                    <button class="btn  btn-circle" ng-click="edit(item)" type="button" data-dismiss="modal" data-toggle="modal" data-target="#delete_item"><i class="glyphicon glyphicon-remove"></i></button>
+
+                                </td>
+                            </tr>
+                            <tr dir-paginate-end="">
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="9" style="border: none !important">
+                                    <dir-pagination-controls pagination-id="idec" max-size="12" style="float:right;"
+                                                             direction-links="true"
+                                                             boundary-links="true">
+                                    </dir-pagination-controls>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <!----------------------------------------END IDEC------------------------------------------------------>
+
+
+                <!----------------------------------------FUJI------------------------------------------------------>
+                <div id="FUJI" class="tab-pane fade">
+                    <table id="example" class="table " cellspacing="0" name="tblhanghoa">
+                        <thead>
+                            <tr>
+                                <th>Mã Chuẩn</th>
+                                <th>Tên Hàng</th>
+                                <th>Thông số</th>
+                                <th>Hãng</th>
+                                <th>Đơn Vị</th>
+                                <th>Xuất Xứ</th>
+                                <th>Giá List</th>
+                                <th>Ngưng sản xuất <br /> Mã chuyển đổi</th>
+                                <th>Quy cách đóng gói</th>
+                                <th>Thông số kỹ thuật</th>
+                                <th>Edit</th>
+                                <th>Delete</th>
+                            </tr>
+
+                        </thead>
+                        <tbody>
+                            <tr dir-paginate-start="item in filtered = (danhsachhanghoa | filter: {MA_NHOM_HANG: 'FUJI'}) | filter: {MA_HANG:search_text} | itemsPerPage: 30 " class="hover" ng-click="edit(item);get_tonkho(item.MA_HANG)" ng-class-odd="'odd'" ng-class-even="'even'" pagination-id="fuji">
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.MA_CHUAN}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.TEN_HANG}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.THONG_SO}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.MA_NHOM_HANG}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.DON_VI_TINH}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.XUAT_XU}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.GIA_LIST | currency: '' :0}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.DISCONTINUE}}<br />{{item.MA_CHUYEN_DOI}}</td>
+                                <td ng-bind-html="item.QUY_CACH_DONG_GOI | unsafe" class="{{item.MA_HANG}}-1 text-left"></td>
+                                <td ng-bind-html="item.THONG_SO_KY_THUAT | unsafe" class="{{item.MA_HANG}}-2 text-left"></td>
+                                <td>
+                                    <button class="btn  btn-circle" ng-click="edit(item)" data-dismiss="modal" type="button" data-toggle="modal" data-target="#myEdit"><i class="glyphicon glyphicon-edit"></i></button>
+                                </td>
+                                <td>
+                                    <button class="btn  btn-circle" ng-click="edit(item)" type="button" data-dismiss="modal" data-toggle="modal" data-target="#delete_item"><i class="glyphicon glyphicon-remove"></i></button>
+
+                                </td>
+                            </tr>
+                            <tr dir-paginate-end="">
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="9" style="border: none !important">
+                                    <dir-pagination-controls pagination-id="fuji" max-size="12" style="float:right;"
+                                                             direction-links="true"
+                                                             boundary-links="true">
+                                    </dir-pagination-controls>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <!----------------------------------------END FUJI------------------------------------------------------>
+
+                <!----------------------------------------SCHNEIDER------------------------------------------------------>
+                <div id="SCHNEIDER" class="tab-pane fade">
+                    <table id="example" class="table " cellspacing="0" name="tblhanghoa">
+                        <thead>
+                            <tr>
+                                <th>Mã Chuẩn</th>
+                                <th>Tên Hàng</th>
+                                <th>Thông số</th>
+                                <th>Hãng</th>
+                                <th>Đơn Vị</th>
+                                <th>Xuất Xứ</th>
+                                <th>Giá List</th>
+                                <th>Ngưng sản xuất <br /> Mã chuyển đổi</th>
+                                <th>Quy cách đóng gói</th>
+                                <th>Thông số kỹ thuật</th>
+                                <th>Edit</th>
+                                <th>Delete</th>
+                            </tr>
+
+                        </thead>
+                        <tbody>
+                            <tr dir-paginate-start="item in filtered = (danhsachhanghoa | filter: {MA_NHOM_HANG: 'SCHNEIDER'}) | filter: {MA_HANG:search_text} | itemsPerPage: 30 " class="hover" ng-click="edit(item);get_tonkho(item.MA_HANG)" ng-class-odd="'odd'" ng-class-even="'even'" pagination-id="schneider">
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.MA_CHUAN}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.TEN_HANG}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.THONG_SO}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.MA_NHOM_HANG}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.DON_VI_TINH}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.XUAT_XU}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.GIA_LIST | currency: '' :0}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.DISCONTINUE}}<br />{{item.MA_CHUYEN_DOI}}</td>
+                                <td ng-bind-html="item.QUY_CACH_DONG_GOI | unsafe" class="{{item.MA_HANG}}-1 text-left"></td>
+                                <td ng-bind-html="item.THONG_SO_KY_THUAT | unsafe" class="{{item.MA_HANG}}-2 text-left"></td>
+
+                                <td>
+                                    <button class="btn  btn-circle" ng-click="edit(item)" data-dismiss="modal" type="button" data-toggle="modal" data-target="#myEdit"><i class="glyphicon glyphicon-edit"></i></button>
+                                </td>
+                                <td>
+                                    <button class="btn  btn-circle" ng-click="edit(item)" type="button" data-dismiss="modal" data-toggle="modal" data-target="#delete_item"><i class="glyphicon glyphicon-remove"></i></button>
+
+                                </td>
+                            </tr>
+                            <tr dir-paginate-end="">
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="9" style="border: none !important">
+                                    <dir-pagination-controls pagination-id="schneider" max-size="12" style="float:right;"
+                                                             direction-links="true"
+                                                             boundary-links="true">
+                                    </dir-pagination-controls>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <!----------------------------------------END SCHNEIDER------------------------------------------------------>
+
+                <!----------------------------------------MITSUBISHI------------------------------------------------------>
+                <div id="MITSUBISHI" class="tab-pane fade">
+                    <table id="example" class="table " cellspacing="0" name="tblhanghoa">
+                        <thead>
+                            <tr>
+                                <th>Mã Chuẩn</th>
+                                <th>Tên Hàng</th>
+                                <th>Thông số</th>
+                                <th>Hãng</th>
+                                <th>Đơn Vị</th>
+                                <th>Xuất Xứ</th>
+                                <th>Giá List</th>
+                                <th>Ngưng sản xuất <br /> Mã chuyển đổi</th>
+                                <th>Quy cách đóng gói</th>
+                                <th>Thông số kỹ thuật</th>
+                                <th>Edit</th>
+                                <th>Delete</th>
+                            </tr>
+
+                        </thead>
+                        <tbody>
+                            <tr dir-paginate-start="item in filtered = (danhsachhanghoa | filter: {MA_NHOM_HANG: 'MITSUBISHI'}) | filter: {MA_HANG:search_text} | itemsPerPage: 30 " class="hover" ng-click="edit(item);get_tonkho(item.MA_HANG)" ng-class-odd="'odd'" ng-class-even="'even'" pagination-id="mitsubishi">
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.MA_CHUAN}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.TEN_HANG}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.THONG_SO}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.MA_NHOM_HANG}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.DON_VI_TINH}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.XUAT_XU}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.GIA_LIST | currency: '' :0}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.DISCONTINUE}}<br />{{item.MA_CHUYEN_DOI}}</td>
+                                <td ng-bind-html="item.QUY_CACH_DONG_GOI | unsafe" class="{{item.MA_HANG}}-1 text-left"></td>
+                                <td ng-bind-html="item.THONG_SO_KY_THUAT | unsafe" class="{{item.MA_HANG}}-2 text-left"></td>
+
+                                <td>
+                                    <button class="btn  btn-circle" ng-click="edit(item)" data-dismiss="modal" type="button" data-toggle="modal" data-target="#myEdit"><i class="glyphicon glyphicon-edit"></i></button>
+                                </td>
+                                <td>
+                                    <button class="btn  btn-circle" ng-click="edit(item)" type="button" data-dismiss="modal" data-toggle="modal" data-target="#delete_item"><i class="glyphicon glyphicon-remove"></i></button>
+
+                                </td>
+                            </tr>
+                            <tr dir-paginate-end="">
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="9" style="border: none !important">
+                                    <dir-pagination-controls pagination-id="mitsubishi" max-size="12" style="float:right;"
+                                                             direction-links="true"
+                                                             boundary-links="true">
+                                    </dir-pagination-controls>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <!----------------------------------------END MITSUBISHI------------------------------------------------------>
+
+                <!----------------------------------------CKD------------------------------------------------------>
+                <div id="CKD" class="tab-pane fade">
+                    <table id="example" class="table " cellspacing="0" name="tblhanghoa">
+                        <thead>
+                            <tr>
+                                <th>Mã Chuẩn</th>
+                                <th>Tên Hàng</th>
+                                <th>Thông số</th>
+                                <th>Hãng</th>
+                                <th>Đơn Vị</th>
+                                <th>Xuất Xứ</th>
+                                <th>Giá List</th>
+                                <th>Ngưng sản xuất <br /> Mã chuyển đổi</th>
+                                <th>Quy cách đóng gói</th>
+                                <th>Thông số kỹ thuật</th>
+                                <th>Edit</th>
+                                <th>Delete</th>
+                            </tr>
+
+                        </thead>
+                        <tbody>
+                            <tr dir-paginate-start="item in filtered = (danhsachhanghoa | filter: {MA_NHOM_HANG: 'CKD'}) | filter: {MA_HANG:search_text} | itemsPerPage: 30 " class="hover" ng-click="edit(item);get_tonkho(item.MA_HANG)" ng-class-odd="'odd'" ng-class-even="'even'" pagination-id="ckd">
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.MA_CHUAN}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.TEN_HANG}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.THONG_SO}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.MA_NHOM_HANG}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.DON_VI_TINH}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.XUAT_XU}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.GIA_LIST | currency: '' :0}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.DISCONTINUE}}<br />{{item.MA_CHUYEN_DOI}}</td>
+                                <td ng-bind-html="item.QUY_CACH_DONG_GOI | unsafe" class="{{item.MA_HANG}}-1 text-left"></td>
+                                <td ng-bind-html="item.THONG_SO_KY_THUAT | unsafe" class="{{item.MA_HANG}}-2 text-left"></td>
+
+                                <td>
+                                    <button class="btn  btn-circle" ng-click="edit(item)" data-dismiss="modal" type="button" data-toggle="modal" data-target="#myEdit"><i class="glyphicon glyphicon-edit"></i></button>
+                                </td>
+                                <td>
+                                    <button class="btn  btn-circle" ng-click="edit(item)" type="button" data-dismiss="modal" data-toggle="modal" data-target="#delete_item"><i class="glyphicon glyphicon-remove"></i></button>
+
+                                </td>
+                            </tr>
+                            <tr dir-paginate-end="">
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="9" style="border: none !important">
+                                    <dir-pagination-controls pagination-id="ckd" max-size="12" style="float:right;"
+                                                             direction-links="true"
+                                                             boundary-links="true">
+                                    </dir-pagination-controls>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <!----------------------------------------END CKD------------------------------------------------------>
+
+                <!----------------------------------------MAX------------------------------------------------------>
+                <div id="MAX" class="tab-pane fade">
+                    <table id="example" class="table " cellspacing="0" name="tblhanghoa">
+                        <thead>
+                            <tr>
+                                <th>Mã Chuẩn</th>
+                                <th>Tên Hàng</th>
+                                <th>Thông số</th>
+                                <th>Hãng</th>
+                                <th>Đơn Vị</th>
+                                <th>Xuất Xứ</th>
+                                <th>Giá List</th>
+                                <th>Ngưng sản xuất <br /> Mã chuyển đổi</th>
+                                <th>Quy cách đóng gói</th>
+                                <th>Thông số kỹ thuật</th>
+                                <th>Edit</th>
+                                <th>Delete</th>
+                            </tr>
+
+                        </thead>
+                        <tbody>
+                            <tr dir-paginate-start="item in filtered = (danhsachhanghoa | filter: {MA_NHOM_HANG: 'MAX'}) | filter: {MA_HANG:search_text} | itemsPerPage: 30 " class="hover" ng-click="edit(item);get_tonkho(item.MA_HANG)" ng-class-odd="'odd'" ng-class-even="'even'" pagination-id="max">
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.MA_CHUAN}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.TEN_HANG}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.THONG_SO}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.MA_NHOM_HANG}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.DON_VI_TINH}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.XUAT_XU}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.GIA_LIST | currency: '' :0}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.DISCONTINUE}}<br />{{item.MA_CHUYEN_DOI}}</td>
+                                <td ng-bind-html="item.QUY_CACH_DONG_GOI | unsafe" class="{{item.MA_HANG}}-1 text-left"></td>
+                                <td ng-bind-html="item.THONG_SO_KY_THUAT | unsafe" class="{{item.MA_HANG}}-2 text-left"></td>
+
+                                <td>
+                                    <button class="btn  btn-circle" ng-click="edit(item)" data-dismiss="modal" type="button" data-toggle="modal" data-target="#myEdit"><i class="glyphicon glyphicon-edit"></i></button>
+                                </td>
+                                <td>
+                                    <button class="btn  btn-circle" ng-click="edit(item)" type="button" data-dismiss="modal" data-toggle="modal" data-target="#delete_item"><i class="glyphicon glyphicon-remove"></i></button>
+
+                                </td>
+                            </tr>
+                            <tr dir-paginate-end="">
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="9" style="border: none !important">
+                                    <dir-pagination-controls pagination-id="max" max-size="12" style="float:right;"
+                                                             direction-links="true"
+                                                             boundary-links="true">
+                                    </dir-pagination-controls>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <!----------------------------------------END MAX------------------------------------------------------>
+
+                <!----------------------------------------PROFACE------------------------------------------------------>
+                <div id="PROFACE" class="tab-pane fade">
+                    <table id="example" class="table " cellspacing="0" name="tblhanghoa">
+                        <thead>
+                            <tr>
+                                <th>Mã Chuẩn</th>
+                                <th>Tên Hàng</th>
+                                <th>Thông số</th>
+                                <th>Hãng</th>
+                                <th>Đơn Vị</th>
+                                <th>Xuất Xứ</th>
+                                <th>Giá List</th>
+                                <th>Ngưng sản xuất <br /> Mã chuyển đổi</th>
+                                <th>Quy cách đóng gói</th>
+                                <th>Thông số kỹ thuật</th>
+                                <th>Edit</th>
+                                <th>Delete</th>
+                            </tr>
+
+                        </thead>
+                        <tbody>
+                            <tr dir-paginate-start="item in filtered = (danhsachhanghoa | filter: {MA_NHOM_HANG: 'PROFACE'}) | filter: {MA_HANG:search_text} | itemsPerPage: 30 " class="hover" ng-click="edit(item);get_tonkho(item.MA_HANG)" ng-class-odd="'odd'" ng-class-even="'even'" pagination-id="proface">
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.MA_CHUAN}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.TEN_HANG}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.THONG_SO}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.MA_NHOM_HANG}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.DON_VI_TINH}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.XUAT_XU}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.GIA_LIST | currency: '' :0}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.DISCONTINUE}}<br />{{item.MA_CHUYEN_DOI}}</td>
+                                <td ng-bind-html="item.QUY_CACH_DONG_GOI | unsafe" class="{{item.MA_HANG}}-1 text-left"></td>
+                                <td ng-bind-html="item.THONG_SO_KY_THUAT | unsafe" class="{{item.MA_HANG}}-2 text-left"></td>
+                                <td>
+                                    <button class="btn  btn-circle" ng-click="edit(item)" data-dismiss="modal" type="button" data-toggle="modal" data-target="#myEdit"><i class="glyphicon glyphicon-edit"></i></button>
+                                </td>
+                                <td>
+                                    <button class="btn  btn-circle" ng-click="edit(item)" type="button" data-dismiss="modal" data-toggle="modal" data-target="#delete_item"><i class="glyphicon glyphicon-remove"></i></button>
+
+                                </td>
+                            </tr>
+                            <tr dir-paginate-end="">
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="9" style="border: none !important">
+                                    <dir-pagination-controls pagination-id="proface" max-size="12" style="float:right;"
+                                                             direction-links="true"
+                                                             boundary-links="true">
+                                    </dir-pagination-controls>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <!----------------------------------------END PROFACE------------------------------------------------------>
+
+                <!----------------------------------------DECA------------------------------------------------------>
+                <div id="DECA" class="tab-pane fade">
+                    <table id="example" class="table " cellspacing="0" name="tblhanghoa">
+                        <thead>
+                            <tr>
+                                <th>Mã Chuẩn</th>
+                                <th>Tên Hàng</th>
+                                <th>Thông số</th>
+                                <th>Hãng</th>
+                                <th>Đơn Vị</th>
+                                <th>Xuất Xứ</th>
+                                <th>Giá List</th>
+                                <th>Ngưng sản xuất <br /> Mã chuyển đổi</th>
+                                <th>Quy cách đóng gói</th>
+                                <th>Thông số kỹ thuật</th>
+                                <th>Edit</th>
+                                <th>Delete</th>
+                            </tr>
+
+                        </thead>
+                        <tbody>
+                            <tr dir-paginate-start="item in filtered = (danhsachhanghoa | filter: {MA_NHOM_HANG: 'DECA'}) | filter: {MA_HANG:search_text} | itemsPerPage: 30 " class="hover" ng-click="edit(item);get_tonkho(item.MA_HANG)" ng-class-odd="'odd'" ng-class-even="'even'" pagination-id="deca">
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.MA_CHUAN}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.TEN_HANG}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.THONG_SO}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.MA_NHOM_HANG}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.DON_VI_TINH}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.XUAT_XU}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.GIA_LIST | currency: '' :0}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.DISCONTINUE}}<br />{{item.MA_CHUYEN_DOI}}</td>
+                                <td ng-bind-html="item.QUY_CACH_DONG_GOI | unsafe" class="{{item.MA_HANG}}-1 text-left"></td>
+                                <td ng-bind-html="item.THONG_SO_KY_THUAT | unsafe" class="{{item.MA_HANG}}-2 text-left"></td>
+
+                                <td>
+                                    <button class="btn  btn-circle" ng-click="edit(item)" data-dismiss="modal" type="button" data-toggle="modal" data-target="#myEdit"><i class="glyphicon glyphicon-edit"></i></button>
+                                </td>
+                                <td>
+                                    <button class="btn  btn-circle" ng-click="edit(item)" type="button" data-dismiss="modal" data-toggle="modal" data-target="#delete_item"><i class="glyphicon glyphicon-remove"></i></button>
+
+                                </td>
+                            </tr>
+                            <tr dir-paginate-end="">
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="9" style="border: none !important">
+                                    <dir-pagination-controls pagination-id="deca" max-size="12" style="float:right;"
+                                                             direction-links="true"
+                                                             boundary-links="true">
+                                    </dir-pagination-controls>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <!----------------------------------------END DECA------------------------------------------------------>
+
+                <!----------------------------------------HANYOUNG------------------------------------------------------>
+                <div id="HANYOUNG" class="tab-pane fade">
+                    <table id="example" class="table " cellspacing="0" name="tblhanghoa">
+                        <thead>
+                            <tr>
+                                <th>Mã Chuẩn</th>
+                                <th>Tên Hàng</th>
+                                <th>Thông số</th>
+                                <th>Hãng</th>
+                                <th>Đơn Vị</th>
+                                <th>Xuất Xứ</th>
+                                <th>Giá List</th>
+                                <th>Ngưng sản xuất <br /> Mã chuyển đổi</th>
+                                <th>Quy cách đóng gói</th>
+                                <th>Thông số kỹ thuật</th>
+                                <th>Edit</th>
+                                <th>Delete</th>
+                            </tr>
+
+                        </thead>
+                        <tbody>
+                            <tr dir-paginate-start="item in filtered = (danhsachhanghoa | filter: {MA_NHOM_HANG: 'HANYOUNG'}) | filter: {MA_HANG:search_text} | itemsPerPage: 30 " class="hover" ng-click="edit(item);get_tonkho(item.MA_HANG)" ng-class-odd="'odd'" ng-class-even="'even'" pagination-id="hanyoung">
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.MA_CHUAN}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.TEN_HANG}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.THONG_SO}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.MA_NHOM_HANG}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.DON_VI_TINH}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.XUAT_XU}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.GIA_LIST | currency: '' :0}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.DISCONTINUE}}<br />{{item.MA_CHUYEN_DOI}}</td>
+                                <td ng-bind-html="item.QUY_CACH_DONG_GOI | unsafe" class="{{item.MA_HANG}}-1 text-left"></td>
+                                <td ng-bind-html="item.THONG_SO_KY_THUAT | unsafe" class="{{item.MA_HANG}}-2 text-left"></td>
+                                <td>
+                                    <button class="btn  btn-circle" ng-click="edit(item)" data-dismiss="modal" type="button" data-toggle="modal" data-target="#myEdit"><i class="glyphicon glyphicon-edit"></i></button>
+                                </td>
+                                <td>
+                                    <button class="btn  btn-circle" ng-click="edit(item)" type="button" data-dismiss="modal" data-toggle="modal" data-target="#delete_item"><i class="glyphicon glyphicon-remove"></i></button>
+
+                                </td>
+                            </tr>
+                            <tr dir-paginate-end="">
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="9" style="border: none !important">
+                                    <dir-pagination-controls pagination-id="hanyoung" max-size="12" style="float:right;"
+                                                             direction-links="true"
+                                                             boundary-links="true">
+                                    </dir-pagination-controls>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <!----------------------------------------END HANYOUNG------------------------------------------------------>
+
+                <!----------------------------------------HITACHI------------------------------------------------------>
+                <div id="HITACHI" class="tab-pane fade">
+                    <table id="example" class="table " cellspacing="0" name="tblhanghoa">
+                        <thead>
+                            <tr>
+                                <th>Mã Chuẩn</th>
+                                <th>Tên Hàng</th>
+                                <th>Thông số</th>
+                                <th>Hãng</th>
+                                <th>Đơn Vị</th>
+                                <th>Xuất Xứ</th>
+                                <th>Giá List</th>
+                                <th>Ngưng sản xuất <br /> Mã chuyển đổi</th>
+                                <th>Quy cách đóng gói</th>
+                                <th>Thông số kỹ thuật</th>
+                                <th>Edit</th>
+                                <th>Delete</th>
+                            </tr>
+
+                        </thead>
+                        <tbody>
+                            <tr dir-paginate-start="item in filtered = (danhsachhanghoa | filter: {MA_NHOM_HANG: 'HITACHI'}) | filter: {MA_HANG:search_text} | itemsPerPage: 30 " class="hover" ng-click="edit(item);get_tonkho(item.MA_HANG)" ng-class-odd="'odd'" ng-class-even="'even'" pagination-id="hitachi">
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.MA_CHUAN}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.TEN_HANG}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.THONG_SO}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.MA_NHOM_HANG}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.DON_VI_TINH}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.XUAT_XU}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.GIA_LIST | currency: '' :0}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.DISCONTINUE}}<br />{{item.MA_CHUYEN_DOI}}</td>
+                                <td ng-bind-html="item.QUY_CACH_DONG_GOI | unsafe" class="{{item.MA_HANG}}-1 text-left"></td>
+                                <td ng-bind-html="item.THONG_SO_KY_THUAT | unsafe" class="{{item.MA_HANG}}-2 text-left"></td>
+
+                                <td>
+                                    <button class="btn  btn-circle" ng-click="edit(item)" data-dismiss="modal" type="button" data-toggle="modal" data-target="#myEdit"><i class="glyphicon glyphicon-edit"></i></button>
+                                </td>
+                                <td>
+                                    <button class="btn  btn-circle" ng-click="edit(item)" type="button" data-dismiss="modal" data-toggle="modal" data-target="#delete_item"><i class="glyphicon glyphicon-remove"></i></button>
+
+                                </td>
+                            </tr>
+                            <tr dir-paginate-end="">
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="9" style="border: none !important">
+                                    <dir-pagination-controls pagination-id="hitachi" max-size="12" style="float:right;"
+                                                             direction-links="true"
+                                                             boundary-links="true">
+                                    </dir-pagination-controls>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <!----------------------------------------END HITACHI------------------------------------------------------>
+
+                <!----------------------------------------RITTAL------------------------------------------------------>
+                <div id="RITTAL" class="tab-pane fade">
+                    <table id="example" class="table " cellspacing="0" name="tblhanghoa">
+                        <thead>
+                            <tr>
+                                <th>Mã Chuẩn</th>
+                                <th>Tên Hàng</th>
+                                <th>Thông số</th>
+                                <th>Hãng</th>
+                                <th>Đơn Vị</th>
+                                <th>Xuất Xứ</th>
+                                <th>Giá List</th>
+                                <th>Ngưng sản xuất <br /> Mã chuyển đổi</th>
+                                <th>Quy cách đóng gói</th>
+                                <th>Thông số kỹ thuật</th>
+                                <th>Edit</th>
+                                <th>Delete</th>
+                            </tr>
+
+                        </thead>
+                        <tbody>
+                            <tr dir-paginate-start="item in filtered = (danhsachhanghoa | filter: {MA_NHOM_HANG: 'RITTAL'}) | filter: {MA_HANG:search_text} | itemsPerPage: 30 " class="hover" ng-click="edit(item);get_tonkho(item.MA_HANG)" ng-class-odd="'odd'" ng-class-even="'even'" pagination-id="rittal">
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.MA_CHUAN}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.TEN_HANG}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.THONG_SO}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.MA_NHOM_HANG}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.DON_VI_TINH}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.XUAT_XU}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.GIA_LIST | currency: '' :0}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.DISCONTINUE}}<br />{{item.MA_CHUYEN_DOI}}</td>
+                                <td ng-bind-html="item.QUY_CACH_DONG_GOI | unsafe" class="{{item.MA_HANG}}-1 text-left"></td>
+                                <td ng-bind-html="item.THONG_SO_KY_THUAT | unsafe" class="{{item.MA_HANG}}-2 text-left"></td>
+
+                                <td>
+                                    <button class="btn  btn-circle" ng-click="edit(item)" data-dismiss="modal" type="button" data-toggle="modal" data-target="#myEdit"><i class="glyphicon glyphicon-edit"></i></button>
+                                </td>
+                                <td>
+                                    <button class="btn  btn-circle" ng-click="edit(item)" type="button" data-dismiss="modal" data-toggle="modal" data-target="#delete_item"><i class="glyphicon glyphicon-remove"></i></button>
+
+                                </td>
+                            </tr>
+                            <tr dir-paginate-end="">
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="9" style="border: none !important">
+                                    <dir-pagination-controls pagination-id="rittal" max-size="12" style="float:right;"
+                                                             direction-links="true"
+                                                             boundary-links="true">
+                                    </dir-pagination-controls>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <!----------------------------------------END RITTAL------------------------------------------------------>
+
+                <!----------------------------------------SIEMENS------------------------------------------------------>
+                <div id="SIEMENS" class="tab-pane fade">
+                    <table id="example" class="table " cellspacing="0" name="tblhanghoa">
+                        <thead>
+                            <tr>
+                                <th>Mã Chuẩn</th>
+                                <th>Tên Hàng</th>
+                                <th>Thông số</th>
+                                <th>Hãng</th>
+                                <th>Đơn Vị</th>
+                                <th>Xuất Xứ</th>
+                                <th>Giá List</th>
+                                <th>Ngưng sản xuất <br /> Mã chuyển đổi</th>
+                                <th>Quy cách đóng gói</th>
+                                <th>Thông số kỹ thuật</th>
+                                <th>Edit</th>
+                                <th>Delete</th>
+                            </tr>
+
+                        </thead>
+                        <tbody>
+                            <tr dir-paginate-start="item in filtered = (danhsachhanghoa | filter: {MA_NHOM_HANG: 'SIEMENS'}) | filter: {MA_HANG:search_text} | itemsPerPage: 30 " class="hover" ng-click="edit(item);get_tonkho(item.MA_HANG)" ng-class-odd="'odd'" ng-class-even="'even'" pagination-id="siemens">
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.MA_CHUAN}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.TEN_HANG}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.THONG_SO}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.MA_NHOM_HANG}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.DON_VI_TINH}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.XUAT_XU}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.GIA_LIST | currency: '' :0}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.DISCONTINUE}}<br />{{item.MA_CHUYEN_DOI}}</td>
+                                <td ng-bind-html="item.QUY_CACH_DONG_GOI | unsafe" class="{{item.MA_HANG}}-1 text-left"></td>
+                                <td ng-bind-html="item.THONG_SO_KY_THUAT | unsafe" class="{{item.MA_HANG}}-2 text-left"></td>
+
+                                <td>
+                                    <button class="btn  btn-circle" ng-click="edit(item)" data-dismiss="modal" type="button" data-toggle="modal" data-target="#myEdit"><i class="glyphicon glyphicon-edit"></i></button>
+                                </td>
+                                <td>
+                                    <button class="btn  btn-circle" ng-click="edit(item)" type="button" data-dismiss="modal" data-toggle="modal" data-target="#delete_item"><i class="glyphicon glyphicon-remove"></i></button>
+
+                                </td>
+                            </tr>
+                            <tr dir-paginate-end="">
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="9" style="border: none !important">
+                                    <dir-pagination-controls pagination-id="siemens" max-size="12" style="float:right;"
+                                                             direction-links="true"
+                                                             boundary-links="true">
+                                    </dir-pagination-controls>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <!----------------------------------------END SIEMENS------------------------------------------------------>
+
+                <!----------------------------------------SMC------------------------------------------------------>
+                <div id="SMC" class="tab-pane fade">
+                    <table id="example" class="table " cellspacing="0" name="tblhanghoa">
+                        <thead>
+                            <tr>
+                                <th>Mã Chuẩn</th>
+                                <th>Tên Hàng</th>
+                                <th>Thông số</th>
+                                <th>Hãng</th>
+                                <th>Đơn Vị</th>
+                                <th>Xuất Xứ</th>
+                                <th>Giá List</th>
+                                <th>Ngưng sản xuất <br /> Mã chuyển đổi</th>
+                                <th>Quy cách đóng gói</th>
+                                <th>Thông số kỹ thuật</th>
+                                <th>Edit</th>
+                                <th>Delete</th>
+                            </tr>
+
+                        </thead>
+                        <tbody>
+                            <tr dir-paginate-start="item in filtered = (danhsachhanghoa | filter: {MA_NHOM_HANG: 'SMC'}) | filter: {MA_HANG:search_text} | itemsPerPage: 30 " class="hover" ng-click="edit(item);get_tonkho(item.MA_HANG)" ng-class-odd="'odd'" ng-class-even="'even'" pagination-id="smc">
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.MA_CHUAN}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.TEN_HANG}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.THONG_SO}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.MA_NHOM_HANG}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.DON_VI_TINH}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.XUAT_XU}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.GIA_LIST | currency: '' :0}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.DISCONTINUE}}<br />{{item.MA_CHUYEN_DOI}}</td>
+                                <td ng-bind-html="item.QUY_CACH_DONG_GOI | unsafe" class="{{item.MA_HANG}}-1 text-left"></td>
+                                <td ng-bind-html="item.THONG_SO_KY_THUAT | unsafe" class="{{item.MA_HANG}}-2 text-left"></td>
+
+                                <td>
+                                    <button class="btn  btn-circle" ng-click="edit(item)" data-dismiss="modal" type="button" data-toggle="modal" data-target="#myEdit"><i class="glyphicon glyphicon-edit"></i></button>
+                                </td>
+                                <td>
+                                    <button class="btn  btn-circle" ng-click="edit(item)" type="button" data-dismiss="modal" data-toggle="modal" data-target="#delete_item"><i class="glyphicon glyphicon-remove"></i></button>
+
+                                </td>
+                            </tr>
+                            <tr dir-paginate-end="">
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="9" style="border: none !important">
+                                    <dir-pagination-controls pagination-id="smc" max-size="12" style="float:right;"
+                                                             direction-links="true"
+                                                             boundary-links="true">
+                                    </dir-pagination-controls>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <!----------------------------------------END SMC------------------------------------------------------>
+
+                <!----------------------------------------TEND------------------------------------------------------>
+                <div id="TEND" class="tab-pane fade">
+                    <table id="example" class="table " cellspacing="0" name="tblhanghoa">
+                        <thead>
+                            <tr>
+                                <th>Mã Chuẩn</th>
+                                <th>Tên Hàng</th>
+                                <th>Thông số</th>
+                                <th>Hãng</th>
+                                <th>Đơn Vị</th>
+                                <th>Xuất Xứ</th>
+                                <th>Giá List</th>
+                                <th>Ngưng sản xuất <br /> Mã chuyển đổi</th>
+                                <th>Quy cách đóng gói</th>
+                                <th>Thông số kỹ thuật</th>
+                                <th>Edit</th>
+                                <th>Delete</th>
+                            </tr>
+
+                        </thead>
+                        <tbody>
+                            <tr dir-paginate-start="item in filtered = (danhsachhanghoa | filter: {MA_NHOM_HANG: 'TEND'}) | filter: {MA_HANG:search_text} | itemsPerPage: 30 " class="hover" ng-click="edit(item);get_tonkho(item.MA_HANG)" ng-class-odd="'odd'" ng-class-even="'even'" pagination-id="tend">
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.MA_CHUAN}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.TEN_HANG}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.THONG_SO}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.MA_NHOM_HANG}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.DON_VI_TINH}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.XUAT_XU}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.GIA_LIST | currency: '' :0}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.DISCONTINUE}}<br />{{item.MA_CHUYEN_DOI}}</td>
+                                <td ng-bind-html="item.QUY_CACH_DONG_GOI | unsafe" class="{{item.MA_HANG}}-1 text-left"></td>
+                                <td ng-bind-html="item.THONG_SO_KY_THUAT | unsafe" class="{{item.MA_HANG}}-2 text-left"></td>
+                                <td>
+                                    <button class="btn  btn-circle" ng-click="edit(item)" data-dismiss="modal" type="button" data-toggle="modal" data-target="#myEdit"><i class="glyphicon glyphicon-edit"></i></button>
+                                </td>
+                                <td>
+                                    <button class="btn  btn-circle" ng-click="edit(item)" type="button" data-dismiss="modal" data-toggle="modal" data-target="#delete_item"><i class="glyphicon glyphicon-remove"></i></button>
+
+                                </td>
+                            </tr>
+                            <tr dir-paginate-end="">
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="9" style="border: none !important">
+                                    <dir-pagination-controls pagination-id="tend" max-size="12" style="float:right;"
+                                                             direction-links="true"
+                                                             boundary-links="true">
+                                    </dir-pagination-controls>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <!----------------------------------------END TEND------------------------------------------------------>
+
+                <!----------------------------------------TOSHIBA------------------------------------------------------>
+                <div id="TOSHIBA" class="tab-pane fade">
+                    <table id="example" class="table " cellspacing="0" name="tblhanghoa">
+                        <thead>
+                            <tr>
+                                <th>Mã Chuẩn</th>
+                                <th>Tên Hàng</th>
+                                <th>Thông số</th>
+                                <th>Hãng</th>
+                                <th>Đơn Vị</th>
+                                <th>Xuất Xứ</th>
+                                <th>Giá List</th>
+                                <th>Ngưng sản xuất <br /> Mã chuyển đổi</th>
+                                <th>Quy cách đóng gói</th>
+                                <th>Thông số kỹ thuật</th>
+                                <th>Edit</th>
+                                <th>Delete</th>
+                            </tr>
+
+                        </thead>
+                        <tbody>
+                            <tr dir-paginate-start="item in filtered  = (danhsachhanghoa | filter: {MA_NHOM_HANG: 'TOSHIBA'}) | filter: {MA_HANG:search_text} | itemsPerPage: 30 " class="hover" ng-click="edit(item);get_tonkho(item.MA_HANG)" ng-class-odd="'odd'" ng-class-even="'even'" pagination-id="toshiba">
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.MA_CHUAN}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.TEN_HANG}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.THONG_SO}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.MA_NHOM_HANG}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.DON_VI_TINH}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.XUAT_XU}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.GIA_LIST | currency: '' :0}}</td>
+                                <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.DISCONTINUE}}<br />{{item.MA_CHUYEN_DOI}}</td>
+                                <td ng-bind-html="item.QUY_CACH_DONG_GOI | unsafe" class="{{item.MA_HANG}}-1 text-left"></td>
+                                <td ng-bind-html="item.THONG_SO_KY_THUAT | unsafe" class="{{item.MA_HANG}}-2 text-left"></td>
+
+                                <td>
+                                    <button class="btn  btn-circle" ng-click="edit(item)" data-dismiss="modal" type="button" data-toggle="modal" data-target="#myEdit"><i class="glyphicon glyphicon-edit"></i></button>
+                                </td>
+                                <td>
+                                    <button class="btn  btn-circle" ng-click="edit(item)" type="button" data-dismiss="modal" data-toggle="modal" data-target="#delete_item"><i class="glyphicon glyphicon-remove"></i></button>
+
+                                </td>
+                            </tr>
+                            <tr dir-paginate-end="">
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="9" style="border: none !important">
+                                    <dir-pagination-controls pagination-id="toshiba" max-size="12" style="float:right;"
+                                                             direction-links="true"
+                                                             boundary-links="true">
+                                    </dir-pagination-controls>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <!----------------------------------------END TOSHIBA------------------------------------------------------>
+                <!----------------------------------------Tim Kiem------------------------------------------------------>
+                <div id="timkiem" class="tab-pane fade in active">
+                    @*<div id="quick-access" style="padding-bottom: 20px;">
+                        <form class="form-inline quick-search-form" role="form" action="#">
+                            <div class="form-group" style="width: 90%">
+                                <input type="text" style="width: 60%" class="form-control" placeholder="Type System Code You Want To Search Here" ng-model="search_text">
+
+                                <button type="button" style="border-radius: 5px" class="btn btn-info" ng-model="find" ng-click="timkiemhanghoa(search_text)">Tìm kiếm</button> 
+                            </div>
+                        </form>
+                    </div>*@
+                    <div id="box-middle" class="corner">
+                        <div class="search_box corner">
+                            <form action="#" method="post">
+                                <ul class="formSearch">
+                                    <li><input class="addText corner" type="text" placeholder="Mã sản phẩm" ng-model="search_text"></li>
+                                    <li><input class="addText corner" type="text" placeholder="Tên sản phẩm"></li>
+                                    <li><input class="addText corner" type="text" placeholder="Series"></li>
+                                    <li><input class="addText corner" type="text" placeholder="Nhà sản xuất"></li>
+                                    <li><input class="addText corner" type="text" placeholder="Xuất xứ"></li>
+                                    <li><input type="submit" class="sbox_header_action_search_btn" value="Tìm kiếm" ng-model="find" ng-click="timkiemhanghoa(search_text)"/></li>
+                                </ul>
+                            </form>
+                       </div>
+                     </div>
+                        <table id="tbl" cellspacing="0" cellpadding="0" class="table " cellspacing="0" name="tblhanghoa">
+                            <thead>
+                                <tr>
+                                    <th><span>Product Code</span></th>
+                                    <th><span>Product Name</span></th>
+                                    <th><span>Maker</span></th>
+                                    <th><span>Price list</span></th>
+                                    <th><span>Unit</span></th>
+                                    <th><span>Weight</span></th>
+                                    <th><span>Original</span></th>
+                                    <th><span>Note</span></th>
+                                    <th><span>Edit</span></th>
+                                    <th><span>Delete</span></th>
+                                </tr>
+
+                            </thead>
+                            <tbody>
+                                <tr dir-paginate-start="item in danhsachtimkiem | itemsPerPage: 30 " class="hover" ng-click="edit(item)" ng-class-odd="'odd'" ng-class-even="'even'" pagination-id="timkiem">
+                                    <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.MA_HANG}}</td>
+                                    <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.TEN_HANG}}</td>
+                                    <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.MA_NHOM_HANG}}</td>
+                                    <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.GIA_LIST | currency: '' :0}}</td>
+                                    <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.DON_VI_TINH}}</td>
+                                    <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.KHOI_LUONG}}</td>
+                                    <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.XUAT_XU}}</td>
+                                    <td class="text-left" data-toggle="modal" data-target="#chitiethanghoa">{{item.GHI_CHU}}</td>
+                                    <td ng-bind-html="item.QUY_CACH_DONG_GOI | unsafe" class="{{item.MA_HANG}}-1 hidden"></td>
+                                    <td ng-bind-html="item.THONG_SO_KY_THUAT | unsafe" class="{{item.MA_HANG}}-2 hidden"></td>
+
+                                    <td>
+                                        <button class="btn  btn-circle" ng-click="edit(item)" data-dismiss="modal" type="button" data-toggle="modal" data-target="#myEdit"><i class="glyphicon glyphicon-edit"></i></button>
+                                    </td>
+                                    <td>
+                                        <button class="btn  btn-circle" ng-click="edit(item)" type="button" data-dismiss="modal" data-toggle="modal" data-target="#delete_item"><i class="glyphicon glyphicon-remove"></i></button>
+
+                                    </td>
+                                </tr>
+                                <tr dir-paginate-end=""></tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="10" style="border: none !important">
+                                        <dir-pagination-controls pagination-id="timkiem" max-size="12" style="float:right;"
+                                                                 direction-links="true"
+                                                                 boundary-links="true">
+                                        </dir-pagination-controls>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                <!----------------------------------------END TOSHIBA------------------------------------------------------>
+
+            </div>
+        </div>
+        <!-- khuyến mãi-->
+   <!--
+        <div class="col-md-3">
+            <div class="panel panel-default">
+                <div class="panel-heading title">Thông tin khuyến mãi</div>
+                <div class="panel-body">
+                    <div>
+                        <div class=col-md-3>
+                            <img src="~/Content/HangHoa/AUTONICS.png" style="width: 90%;height: 90%;" />
+                        </div>
+                        <div class=col-md-9>
+                            <p>Tên hàng:</p>
+                            <p>Tên hàng:</p>
+                        </div>
+                    </div>
+                    <div>
+                        <div class=col-md-3>
+                            <img src="~/Content/HangHoa/LS.png" style="width: 90%;height: 90%;" />
+                        </div>
+                        <div class=col-md-9>
+                            <p>Tên hàng:</p>
+                            <p>Tên hàng:</p>
+                        </div>
+                    </div>
+                    <div>
+                        <div class=col-md-3>
+                            <img src="~/Content/HangHoa/SCHNEIDER.png" style="width: 90%;height: 90%;" />
+                        </div>
+                        <div class=col-md-9>
+                            <p>Tên hàng:</p>
+                            <p>Tên hàng:</p>
+                        </div>
+                    </div>
+                    <div>
+                        <div class=col-md-3>
+                            <img src="~/Content/HangHoa/MAX.png" style="width: 90%;height: 90%;" />
+                        </div>
+                        <div class=col-md-9>
+                            <p>Tên hàng:</p>
+                            <p>Tên hàng:</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading title">Hàng bán chạy</div>
+                <div class="panel-body">
+                    <div>
+                        <div class=col-md-3>
+                            <img src="~/Content/HangHoa/AUTONICS.png" style="width: 90%;height: 90%;" />
+                        </div>
+                        <div class=col-md-9>
+                            <p>Tên hàng:</p>
+                            <p>Tên hàng:</p>
+                        </div>
+                    </div>
+                    <div>
+                        <div class=col-md-3>
+                            <img src="~/Content/HangHoa/FUJI.png" style="width: 90%;height: 90%;" />
+                        </div>
+                        <div class=col-md-9>
+                            <p>Tên hàng:</p>
+                            <p>Tên hàng:</p>
+                        </div>
+                    </div>
+                    <div>
+                        <div class=col-md-3>
+                            <img src="~/Content/HangHoa/OMRON.png" style="width: 90%;height: 90%;" />
+                        </div>
+                        <div class=col-md-9>
+                            <p>Tên hàng:</p>
+                            <p>Tên hàng:</p>
+                        </div>
+                    </div>
+                    <div>
+                        <div class=col-md-3>
+                            <img src="~/Content/HangHoa/LS.png" style="width: 90%;height: 90%;" />
+                        </div>
+                        <div class=col-md-9>
+                            <p>Tên hàng:</p>
+                            <p>Tên hàng:</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading title">Hàng được quan tâm</div>
+                <div class="panel-body">
+                    <div ng-repeat="item in danhsachquantam" ng-click="edit(item);get_tonkho(item.MA_HANG)" data-toggle="modal" data-target="#chitiethanghoa">
+                        <div class=col-md-3>
+                            <img ng-src="~/Content/Images/HangHoa/{{item.HINH_ANH}}" style="width: 90%;height: 90%;" />
+                        </div>
+                        <div class=col-md-9>
+                            <p>Mã hàng:{{item.MA_HANG}}</p>
+                            <p>Tên hàng:{{item.TEN_HANG}}</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+            -->
+    </div>
+
+        
+
+     
+    <script>
+    (function () {
+
+        var bar = $('.progress-bar');
+        var percent = $('.progress-bar');
+        var status = $('#status');
+
+        $('form').ajaxForm({
+            beforeSend: function () {
+                status.empty();
+                var percentVal = '0%';
+                bar.width(percentVal)
+                percent.html(percentVal);
+            },
+            uploadProgress: function (event, position, total, percentComplete) {
+                var percentVal = percentComplete + '%';
+                bar.width(percentVal)
+                percent.html(percentVal);
+            },
+            success: function () {
+                var percentVal = '100%';
+                bar.width(percentVal)
+                percent.html(percentVal);
+            },
+            complete: function (xhr) {
+                status.html(xhr.responseText);
+            }
+        });
+
+
+    })();
+    </script>
+
+</div>
+
+<script src="~/Content/download/angularjs/angular-ui-router.js"></script>

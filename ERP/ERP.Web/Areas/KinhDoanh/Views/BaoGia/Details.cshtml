@@ -1,0 +1,426 @@
+﻿
+@{
+    ViewBag.Title = "Details";
+}
+<script src="~/Content/self-writing/js/Services/BaoGiaService.js"></script>
+<script src="~/Content/self-writing/js/Controllers/DuyetBaoGiaCtrl.js"></script>
+<script src="~/Content/self-writing/js/Services/DuyetBaoGiaService.js"></script>
+
+<div ng-app="myApp" ng-controller="DuyetBaoGiaCtrl">
+    <input type="hidden" id="username" name="salehienthoi" value="@Session["USERNAME"]" />
+    <input type="hidden" id="macongty" name="macongty" value="@Session["MA_CONG_TY"]" />
+    <!-- Dashboard content -->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-white">
+                <div class="panel-heading color-heading">
+                    <h6 class="panel-title">Giữ Hàng</h6>
+                </div>
+
+                <div class="panel-body">
+                    <!--Thông tin chung-->
+                    <div class="col-md-12">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h6 class="panel-title">Thông tin chung<a class="heading-elements-toggle"><i class="icon-more"></i></a></h6>
+                            </div>
+                            <div class="panel-body">
+                                <div class="form-horizontal savethongtin" ng-repeat="item in BangBaoGia">
+                                    <!--Chi tiết báo giá của sửa-->
+                                    <div class="col-md-12 content-group" style="padding-left: 5px; padding-right: 5px;">
+                                        <div class="table-responsive">
+
+                                            <table border='1'>
+                                                <thead>
+                                                    <tr class="bg-primary-300" style="background:#64B5F6; color: white">
+                                                        <td></td>
+                                                        <td class="text-left" width="15%">Descriptions</td>
+                                                        <td class="text-left" width="4%">Qty</td>
+                                                        <td class="text-left" width="4%">Uom</td>
+                                                        <td class="text-left" width="8%">U.Price</td>
+                                                        <td class="text-left" width="8%">Total Amount(VND)</td>
+                                                        <td class="text-left" width="8%">Dilivery Time</td>
+                                                        <td class="text-left" width="10%">Đơn giá tính theo Price List</td>
+                                                        <td class="text-left" width="10%">Đơn giá tính theo Giá Nhập</td>
+                                                        <td class="text-left" width="9%">Giá báo đi net</td>
+                                                        <td class="text-left" width="20%" ng-show="editCM">Tính CM cho khách</td>
+                                                        <td>Xóa</td>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr ng-repeat="(index,item) in Detail.ListAdd">
+                                                        <td>
+                                                            <div style="text-align:center;">
+                                                                <input type="checkbox" ng-model="tachbg">
+                                                                <div ng-if="tachbg">
+                                                                    <label ng-init="tachbaogia(item)"></label>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <table border='1' style="width:100%; height: 100%; border:none;">
+                                                                <tr>
+                                                                    <td>
+                                                                        <input type="text" class="form-control" ng-model="item.MA_CHUAN" ng-change="onHHEditFind(item.MA_CHUAN)" placeholder="Nhập mã hàng" ng-focus="item.showtable_hanghoa_edit = true" style="display:inline-block;width:80%;height:20px; font-size:13px; padding-left: 14px;">
+                                                                        <input type="text" class="form-control" ng-model="item.MA_HANG" style="display:none">
+                                                                        <div class="input-group-btn">
+                                                                            <div class="dropdown-menu dropdown-menu-center borderRadius0 padding0 menuhh" style="display:block" ng-show="item.showtable_hanghoa_edit">
+                                                                                <div class="table-responsive">
+                                                                                    <table class="table table-striped table-hover" st-table="arrayHHEdit" st-safe-src="arrayHHEditFinded">
+                                                                                        <thead class="bg-blue text-white">
+                                                                                            <tr>
+                                                                                                <th>Mã hàng</th>
+                                                                                                <th>Tên hàng</th>
+                                                                                                <th>Mã nhóm hàng</th>
+                                                                                                <th>Đơn vị tính</th>
+                                                                                                <th>Giá list</th>
+                                                                                                <th>Mã kho còn</th>
+                                                                                                <th>Số lượng</th>
+                                                                                                <th>Tên kho</th>
+                                                                                            </tr>
+                                                                                        </thead>
+                                                                                        <tbody ng-repeat="kh in arrayHHEditFinded">
+                                                                                            <tr style="cursor:pointer" ng-click="inputstaff_edit(kh,index,item)">
+                                                                                                <td>{{kh.MA_CHUAN}}</td>
+                                                                                                <td>{{kh.TEN_HANG}}</td>
+                                                                                                <td>{{kh.MA_NHOM_HANG}}</td>
+                                                                                                <td>{{kh.DVT}}</td>
+                                                                                                <td>{{kh.GIA_LIST | currency : '' : 0}}</td>
+                                                                                                <td>{{kh.MA_KHO_CON}}</td>
+                                                                                                <td>{{kh.SO_LUONG}}</td>
+                                                                                                <td>{{kh.TEN_KHO}}</td>
+                                                                                            </tr>
+                                                                                        </tbody>
+                                                                                    </table>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>
+                                                                        <input type="text" ng-model="item.TEN_HANG" class="col-md-12 style-inline" style="border:0px">
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>
+                                                                        <input type="text" ng-model="item.HANG_SP" class="col-md-12 style-inline" style="border:0px">
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>
+                                                                        <input type="text" ng-model="item.MA_DIEU_CHINH" class="col-md-12 style-inline" style="border:0px">
+                                                                    </td>
+                                                                </tr>
+
+                                                            </table>
+
+                                                        </td>
+                                                        <td>
+                                                            <input type="number" ng-model="item.SO_LUONG" class="style-inline" ng-change="kiemtra(item)">
+                                                        </td>
+                                                        <td class="text-left">
+                                                            <input type="text" ng-model="item.DVT" class="style-inline" />
+                                                        </td>
+                                                        <td class="text-left">
+                                                            <input type="number" style="text-align:right;display:none" ng-model="item.DON_GIA_MOI" ng-pattern="/^[0-9]+(\.[0-9]{1,10})?$/" step="0.01" class="style-inline" ng-change="kiemtra(item)">
+                                                            <p ng-model="item.DON_GIA_MOI">{{item.DON_GIA_MOI | currency: '' : 0}}</p>
+                                                        </td>
+                                                        <td class="text-left">
+                                                            <input type="number" style="text-align:right;display:none" ng-model="item.THANH_TIEN" ng-pattern="/^[0-9]+(\.[0-9]{1,10})?$/" step="0.01" class="style-inline" readonly>
+                                                            <p ng-model="item.THANH_TIEN">{{item.THANH_TIEN | currency: '' : 0}}</p>
+                                                        </td>
+                                                        <td class="text-left">
+                                                            <input type="text" ng-model="item.THOI_GIAN_GIAO_HANG" class="style-inline">
+                                                        </td>
+                                                        <td class="text-left">
+                                                            <table style="width:100%; height: 100%">
+                                                                <tr>
+                                                                    <td class="style-inline">
+                                                                        Giá:
+                                                                    </td>
+                                                                    <td>
+                                                                        <input type="text" ng-model="item.GIA_LIST" format="number" class="col-md-12 style-inline" ng-change="kiemtra(item)">
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td class="style-inline">
+                                                                        CK:
+                                                                    </td>
+                                                                    <td>
+                                                                        <input type="number" ng-model="item.CHIET_KHAU" class="col-md-12 style-inline" ng-change="kiemtra(item)">
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                        <td class="text-left">
+                                                            <table style="width:100%; height: 100%; border:none;">
+                                                                <tr>
+                                                                    <td class="style-inline">
+                                                                        Giá:
+                                                                    </td>
+                                                                    <td>
+                                                                        <input type="text" ng-model="item.DON_GIA_NHAP" format="number" class="col-md-12 style-inline" ng-change="kiemtra(item)">
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td class="style-inline">
+                                                                        LN:
+                                                                    </td>
+                                                                    <td>
+                                                                        <input type="number" ng-model="item.HE_SO_LOI_NHUAN" class="col-md-12 style-inline" ng-change="kiemtra(item)">
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+
+                                                        <td class="text-left"><input type="number" style="text-align:right;" ng-model="item.DON_GIA_BAO_DI_NET" class="style-inline" ng-change="kiemtra(item)"></td>
+
+
+
+                                                        <td ng-show="editCM">
+                                                            <table border='1' style="width:100%; height: 100%; border:none;">
+                                                                <tr>
+                                                                    <td class="style-inline">
+                                                                        %CM:
+                                                                    </td>
+                                                                    <td class="style-inline">
+                                                                        <input type="number" ng-model="item.CM" class="col-md-12 style-inline" ng-change="kiemtra(item)">
+                                                                    </td>
+                                                                    <td class="style-inline">
+                                                                        %Thuế:
+                                                                    </td>
+                                                                    <td class="style-inline">
+                                                                        <input type="number" ng-model="item.THUE_TNDN" ng-init="item.THUE_TNDN=20.00" class="col-md-12 style-inline" ng-change="kiemtra(item)">
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td colspan='2'>
+                                                                        Đơn giá mới:
+                                                                    </td>
+                                                                    <td colspan='2'>
+                                                                        <input type="number" ng-model="item.DON_GIA_MOI" ng-pattern="/^[0-9]+(\.[0-9]{1,10})?$/" step="0.01" class="col-md-12 style-inline" ng-change="kiemtra(item)" style="display:none">
+                                                                        <p ng-model="item.DON_GIA_MOI">{{item.DON_GIA_MOI | currency : '' : 0}}</p>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td colspan='2'>
+                                                                        Tiền thuế TNDN:
+                                                                    </td>
+                                                                    <td colspan='2'>
+                                                                        <input type="number" ng-model="item.TIEN_THUE_TNDN" ng-pattern="/^[0-9]+(\.[0-9]{1,10})?$/" step="0.01" class="col-md-12 style-inline" ng-change="kiemtra(item)" style="display:none">
+                                                                        <p ng-model="item.DON_GIA_MOI">{{item.TIEN_THUE_TNDN  | currency : '' : 0}}</p>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td colspan='2'>
+                                                                        Khách nhận:
+                                                                    </td>
+                                                                    <td colspan='2'>
+                                                                        <input type="number" ng-model="item.KHACH_NHAN_DUOC" ng-pattern="/^[0-9]+(\.[0-9]{1,10})?$/" step="0.01" class="col-md-12 style-inline" ng-change="kiemtra(item)" style="display:none">
+                                                                        <p ng-model="item.DON_GIA_MOI">{{item.KHACH_NHAN_DUOC  | currency : '' : 0}}</p>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                        <td>
+                                                            <div class="text-left">
+                                                                <center><i class="fa fa-minus-circle" style="color:red;" ng-click="Remove($index,item)" aria-hidden="true"></i></center>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="12" style="text-align:center; cursor:pointer; height:30px; font-size:14px; font-weight:bold;" ng-click="NewEditProduct()">Bấm vào đây để thêm mới</td>
+                                                    </tr>
+                                                    @*<tr>
+                                <td>
+                                    <button ng-click="NewEditProduct()" class="btn btn-default">Thêm hàng hóa</button>
+                                </td>
+                            </tr>*@
+                                                </tbody>
+                                                <tfoot>
+                                                    @*<tr>
+                                <td colspan='13' style="height:20px;"></td>
+                            </tr>*@
+                                                    <tr>
+                                                        <td colspan="13">
+                                                            <table border='1' style="width:100%; height: 100%; border:none;">
+                                                                <tr>
+                                                                    <td>
+                                                                        <label class="control-label">Phương thức thanh toán </label>
+                                                                    </td>
+                                                                    <td>
+                                                                        <select class="form-control select" ng-model="item.PHUONG_THUC_THANH_TOAN" id="adddieukhoanthanhtoan"
+                                                                                data-ng-options="item as item for item in phuongthucttnew"></select>
+                                                                    </td>
+                                                                    <td>
+                                                                        <label class="control-label">Phí vận chuyển </label>
+                                                                    </td>
+                                                                    <td>
+                                                                        <input type="number" class="form-control" ng-model="item.PHI_VAN_CHUYEN" id="tienvanchuyen" ng-init="phivanchuyen=0.00" ng-change="kiemtra(item)" />
+                                                                    </td>
+                                                                    <td>
+                                                                        <label class="control-label">Thuế suất GTGT (%) </label>
+                                                                    </td>
+                                                                    <td>
+                                                                        <input type="number" class="form-control" ng-model="item.THUE_SUAT_GTGT" id="thue_suat_gtgt" ng-change="kiemtra(item)" />
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td><label class="control-label">Hạn thanh toán </label></td>
+                                                                    <td><input type="text" class="form-control" ng-model="item.HAN_THANH_TOAN" /></td>
+                                                                    <td><label class="control-label">Hiệu lực báo giá </label></td>
+                                                                    <td><input type="number" class="form-control" ng-model="item.HIEU_LUC_BAO_GIA" /></td>
+                                                                    <td><label class="control-label">Điều khoản thanh toán </label></td>
+                                                                    <td>
+                                                                        <select class="form-control select" ng-model="item.DIEU_KHOAN_THANH_TOAN" id="adddieukhoanthanhtoan"
+                                                                                data-ng-options="item as item for item in dieukhoanttnew"></select>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td><label class="control-label">Tổng giá trị chênh lệch: </label></td>
+                                                                    <td colspan='2'><span ng-model="gia_tri_chenh_lech_edit">{{gia_tri_chenh_lech_edit | currency: ''}} vnd</span></td>
+                                                                    <td><label class="control-label">Tổng giá trị đơn hàng thực tế: </label></td>
+                                                                    <td colspan='2'><span ng-model="tong_gia_tri_thuc_te_edit">{{tong_gia_tri_thuc_te_edit | currency: ''}} vnd</span></td>
+
+
+                                                                </tr>
+                                                                <tr>
+                                                                    <td><label class="control-label">Tổng chi phí hóa đơn: </label></td>
+                                                                    <td colspan='2'><span ng-model="tong_chi_phi_hoa_don_edit">{{tong_chi_phi_hoa_don_edit | currency: ''}}</span> vnd</td>
+                                                                    <td><label class="control-label">Tổng giá trị đơn hàng theo phiếu xuất/hợp đồng : </label></td>
+                                                                    <td colspan='2'><span ng-model="tong_gia_tri_theo_hop_dong_edit">{{tong_gia_tri_theo_hop_dong_edit | currency: ''}} vnd</span></td>
+
+
+                                                                </tr>
+                                                                <tr>
+                                                                    <td><label class="control-label">Thực nhận của khách: </label></td>
+                                                                    <td colspan='2'><span ng-model="tong_khach_nhan_edit">{{tong_khach_nhan_edit | currency: ''}} vnd</span></td>
+                                                                    <td><label class="control-label">Thuế VAT : </label></td>
+                                                                    <td colspan='2'><span ng-model="thue_vat_edit">{{thue_vat_edit | currency: ''}} vnd</span></td>
+
+                                                                </tr>
+                                                                <tr>
+                                                                    <td></td>
+                                                                    <td colspan='2'></td>
+                                                                    <td><label class="control-label">Tổng giá trị thu của khách: </label></td>
+                                                                    <td colspan='2'><span ng-model="tong_gia_tri_thu_cua_khach_edit">{{tong_gia_tri_thu_cua_khach_edit | currency: ''}} vnd</span></td>
+
+                                                                </tr>
+                                                            </table>
+
+                                                        </td>
+                                                    </tr>
+
+                                                </tfoot>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--End Thông tin chung-->
+                    <!--Chi tiết giữ hàng-->
+                    <div class="col-md-12 content-group" style="">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped table-hover ">
+                                <thead>
+                                    <tr class="bg-primary-300">
+                                        <th class="text-center">Mã hàng</th>
+                                        <th class="text-center">Số lượng</th>
+                                        <th class="text-center !important">Đơn giá</th>
+                                        <th class="text-center !important">Chiết khấu</th>
+                                        <th class="text-center">Thành tiền</th>
+                                        <th class="text-center !important">Tình trạng hàng</th>
+                                        <th class="text-center">Thời gian giao hàng</th>
+                                        <th class="text-center !important">Ngày giao hàng</th>
+                                        <th class="text-center !important">Địa điểm giao hàng</th>
+                                        <th class="text-center">Ghi chú</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="detail in Detail.ListAdd">
+                                        <td>
+                                            <div>
+                                                <input type="text" ng-model="detail.MA_HANG" readonly class="form-control">
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <input type="number" ng-model="detail.SO_LUONG" readonly class="form-control" ng-change="kiemtra(item)">
+                                        </td>
+                                        <td class="text-center">
+                                            <input type="number" ng-model="detail.DON_GIA" readonly class="form-control" ng-change="kiemtra(item)">
+                                        </td>
+                                        <td class="text-center">
+                                            <input type="number" ng-model="detail.CHIET_KHAU" readonly class="form-control" ng-change="kiemtra(item)">
+                                        </td>
+                                        <td class="text-center">
+                                            {{detail.THANH_TIEN | currency: '':0}}
+                                            <input ng-model="detail.THANH_TIEN" class="form-control" readonly type="hidden" ng-disabled="true" />
+                                        </td>
+                                        <td class="text-center">
+                                            <input type="text" ng-model="detail.TINH_TRANG_HANG" readonly class="form-control">
+                                        </td>
+                                        <td class="text-center">
+                                            <input type="text" ng-model="detail.THOI_GIAN_GIAO_HANG" readonly class="form-control">
+                                        </td>
+                                        <td class="text-center">
+                                            <input type="text" mask="39/39/9999" ng-model="detail.NGAY_GIAO_HANG" readonly class="form-control">
+                                        </td>
+                                        <td class="text-center">
+                                            <input type="text" ng-model="detail.DIA_DIEM_GIAO_HANG" readonly class="form-control">
+                                        </td>
+                                        <td class="text-center">
+                                            <input type="text" ng-model="detail.GHI_CHU" readonly class="form-control">
+                                        </td>
+                                    </tr>
+
+                                    @*<tr >
+                                            <td colspan="10" style="text-align:center; cursor:pointer" ng-click="AddNew()">Bấm vào đây để thêm mới</td>
+                                        </tr>*@
+
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="6">
+                                            <div class="col-md-12">
+                                                <label class="col-md-3">Tổng thành tiền: </label>
+                                                <p class="col-md-6" style="text-align:right">{{tong_thanh_tien | currency: '':0}} vnd</p>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <label class="col-md-3">VAT 10% : </label>
+                                                <p class="col-md-6" style="text-align:right">{{tong_tien_VAT | currency: '':0}} vnd</p>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <hr />
+                                            </div>
+                                            <div class="col-md-12">
+                                                <label class="col-md-3">Tổng tiền(đã tính phí vận chuyển): </label>
+                                                <p class="col-md-6" style="text-align:right" id="tong_tien">{{BangBaoGia.tong_tien | currency: '':0}} vnd</p>
+                                            </div>
+                                        </td>
+                                        <td colspan="9">
+                                            
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-md-12 text-center">
+                        <button type="button" class="btn btn-primary" ng-click="onSave(item.SO_BAO_GIA)"><i class="icon-floppy-disk"></i> Lưu</button>
+                        <a href="/" class="btn bg-orange-400"><i class="icon-blocked"></i> Bỏ qua</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- /dashboard content -->
+</div>
+
+
+

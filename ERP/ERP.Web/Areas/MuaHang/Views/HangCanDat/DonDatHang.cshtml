@@ -1,0 +1,60 @@
+﻿
+
+<script src="~/Content/self-writing/js/Controllers/HangCanDatPurcCtrl.js"></script>
+
+<style>
+    .border-td {
+        border: 1px solid black;
+    }
+
+    .table > tbody > tr > td {
+        border-top: 1px solid black;
+    }
+
+    .table > thead > tr > th {
+        border-bottom: 1px solid black;
+    }
+
+    h4 {
+        color: lightskyblue;
+    }
+</style>
+<div ng-app="myApp" ng-controller="HangCanDatPurcCtrl" class="content">
+    <input type="hidden" value="@Session["USERNAME"]" id="username" />
+    <input type="hidden" value="@Session["IS_AMIN"]" id="isadmin" />
+
+    <div class="col-md-12">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Mã số PO</th>
+                    <th>Ngày lên PO</th>
+                    <th>Nhà cung cấp</th>
+                    <th>Người liên hệ</th>
+                    <th>Tổng tiền thanh toán(đã bao gồm VAT)</th>
+                    <th>Hình thức thanh toán</th>
+                    <th>Địa điểm giao hàng</th>
+                    <th>Nhân viên tạo</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="item in list_donPOMUaHang" ng-click="chitietPOmuahang(item.MA_SO_PO)">
+                    <td>{{item.MA_SO_PO}}</td>
+                    <td>{{item.NGAY_PO | date: 'dd/MM/yyyy'}}</td>
+                    <td>{{item.TEN_NHA_CUNG_CAP}}</td>
+                    <td>{{item.TEN_CUA_NGUOI_LIEN_HE}}</td>
+                    <td>{{item.TONG_TIEN_DA_BAO_GOM_VAT | currency: '' : 0}}</td>
+                    <td>{{item.HINH_THUC_THANH_TOAN}}</td>
+                    <td>{{item.DIA_DIEM_GIAO_HANG}}</td>
+                    <td>{{item.TEN_NGUOI_TAO}}</td>
+                    <td>
+                        <a href="/MuaHang/HangCanDat/DeNghiNhapKho/{{item.MA_SO_PO}}">Tạo đề nghị nhập kho</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+

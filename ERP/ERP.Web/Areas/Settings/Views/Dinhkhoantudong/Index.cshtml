@@ -1,0 +1,227 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Settings/Views/Shared/Layout.cshtml";
+}
+
+
+<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+<link href="https://cdn.datatables.net/1.10.13/css/dataTables.bootstrap.min.css" rel="stylesheet" />
+<link href="~/Content/self-writing/css/Dinhkhoantudong.css" rel="stylesheet" />
+<div class="panel-heading title">Bạn đang xem danh mục định khoản tự động</div>
+<br />
+<div ng-app="myApp" ng-controller="taikhoanCtrl">
+    <div class="content" ng-controller="DinhkhoantudongCtrl" >
+        <div id="quick-access">
+            <form class="form-inline quick-search-form" role="form" action="#">
+                <div class="form-group" style="width: 100%">
+                    <input type="text" style="width: 60%" class="form-control" placeholder="Search Here" ng-model="search_text">
+                </div>
+            </form>
+        </div>
+        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">Add New</button>
+
+        <!-- Modal Add New -->
+        <div class="modal fade" id="myModal" role="dialog"DM_LOAI_CHUNG_TU>
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+
+                    <div class="modal-body">
+                        <form class="form-horizontal" name="myForm" novalidate>
+                            <fieldset>
+                                <!-- Form Name -->
+                                <legend>Add New</legend>
+                                <!-- Text input-->
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="name">Mã loại chứng từ: </label>
+                                    <div class="col-md-4">
+                                        <input type="text" placeholder="Mã loại chứng từ:" class="form-control input-md" ng-model="maloaichungtu">
+                                    </div>
+                                </div>
+                                <!-- Text input-->
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="name">Mã lý do: </label>
+                                    <div class="col-md-4">
+                                        <input type="text" placeholder="Mã lý do:" class="form-control input-md" ng-model="malydo">
+                                    </div>
+                                </div>
+                                <!-- Text input-->
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="name">Tên lý do: </label>
+                                    <div class="col-md-4">
+                                        <input type="text" placeholder="Tên lý do:" class="form-control input-md" ng-model="tenlydo">
+                                    </div>
+                                </div>
+                                <!-- Text input-->
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="name">TK nợ </label>
+                                    <div class="col-md-4">
+                                        <select ng-model="tkno" class="form-control input-md">
+                                            <option ng-repeat="abc in danhsachtk" value="{{abc.SO_TK}}">{{abc.TEN_TK}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <!-- Text input-->
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="name">TK có </label>
+                                    <div class="col-md-4">
+                                        <select ng-model="tkco" class="form-control input-md">
+                                            <option ng-repeat="abc in danhsachtk" value="{{abc.SO_TK}}">{{abc.TEN_TK}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                               
+                                <!-- Button (Double) -->
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="anmelden"></label>
+                                    <div class="col-md-8 addnew">
+                                        <button id="addnew" name="addnew" class="btn" ng-click="add()" data-dismiss="modal">Add New</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <button id="exit" name="exit" class="btn" data-dismiss="modal">Exit</button>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--end modal-->
+        <!-- Modal Update -->
+        <div class="modal fade" id="myEdit" role="dialog">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+
+                    <div class="modal-body">
+                        <form class="form-horizontal" name="myForm" novalidate>
+                            <fieldset>
+                                <!-- Form Name -->
+                                <legend>Upadate</legend>
+                                <!-- Text input-->
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="name">Mã loại chứng từ: </label>
+                                    <div class="col-md-4">
+                                        <input type="text" placeholder="Mã loại chứng từ" class="form-control input-md" ng-model="item.MA_LOAI_CHUNG_TU">
+                                    </div>
+                                </div>
+                                <!-- Text input-->
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="name">Mã lý do: </label>
+                                    <div class="col-md-4">
+                                        <input type="text" placeholder="Mã lý do" class="form-control input-md" ng-model="item.MA_LY_DO">
+                                    </div>
+                                </div>
+                                <!-- Text input-->
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="name">Tên lý do: </label>
+                                    <div class="col-md-4">
+                                        <input type="text" placeholder="Tên lý do" class="form-control input-md" ng-model="item.TEN_LY_DO">
+                                    </div>
+                                </div>
+                                <!-- Text input-->
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="name">TK nợ: </label>
+                                    <div class="col-md-4">
+                                        <input type="text" placeholder="TK nợ" class="form-control input-md" ng-model="item.TK_NO">
+                                    </div>
+                                </div>
+                                <!-- Text input-->
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="name">TK có: </label>
+                                    <div class="col-md-4">
+                                        <input type="text" placeholder="TK có" class="form-control input-md" ng-model="item.TK_CO">
+                                    </div>
+                                </div>
+                                <!-- Button (Double) -->
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="anmelden"></label>
+                                    <div class="col-md-11 edit">
+                                        <button class="btn" ng-click="save(item.ID)" data-dismiss="modal">Save</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <button class="btn" data-dismiss="modal">Exit</button>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br />
+        <!--end modal-->
+        <!-- Modal delete -->
+        <div class="modal fade" id="delete_item" role="dialog">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+
+                    <div class="modal-body">
+                        <form class="form-horizontal" name="myForm" novalidate>
+                            <fieldset>
+                                <!-- Form Name -->
+                                <legend>Delete Maker</legend>
+                                <center>Are you sure you want to delete <b>{{item.ID}}</b></center>
+                                <p></p>
+
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="delete"></label>
+                                    <div class="col-md-8">
+                                        <button id="delete" name="delete" class="btn" ng-click="delete(item.ID)" data-dismiss="modal">Delete</button>
+                                        <button id="exit" name="exit" class="btn" data-dismiss="modal">Exit</button>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br />
+        <!--end modal-->
+
+        <table id="example" class="table table-bordered" cellspacing="0" name="tblhanghoa">
+            <thead>
+                <tr>
+                    <th>Mã loại chứng từ</th>
+                    <th>Mã lý do </th>
+                    <th>Tên lý do</th>
+                    <th>TK nợ</th>
+                    <th>TK có</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr dir-paginate="item in filtered = (dinhkhoantudong | filter: {MA_LOAI_CHUNG_TU:search_text}) | itemsPerPage:15 | orderBy: 'item.MA_LOAI_CHUNG_TU'" class="hover" ng-class-odd="'odd'" ng-class-even="'even'">
+                    <td class="text-left">{{ item.MA_LOAI_CHUNG_TU }}</td>
+                    <td class="text-left">{{item.MA_LY_DO}}</td>
+                    <td class="text-left">{{item.TEN_LY_DO}}</td>
+                    <td class="text-left">{{item.TK_NO}}</td>
+                    <td class="text-left">{{item.TK_CO}}</td>
+                    
+                    <td>
+                        <button class="btn btn-circle" ng-click="edit(item)" type="button" data-toggle="modal" data-target="#myEdit"><i class="glyphicon glyphicon-edit"></i></button>
+                    </td>
+                    <td>
+                        <button class="btn btn-circle" ng-click="edit(item)" type="button" data-toggle="modal" data-target="#delete_item"><i class="glyphicon glyphicon-remove"></i></button>
+                    </td>
+
+                </tr>
+
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="9" style="border: none !important">
+                        <dir-pagination-controls max-size="12" style="float:right;"
+                                                 direction-links="true"
+                                                 boundary-links="true">
+                        </dir-pagination-controls>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+<script src="~/Content/download/angularjs/angular-ui-router.js"></script>
+
+
+
+

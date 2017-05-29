@@ -1,0 +1,201 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Settings/Views/Shared/Layout.cshtml";
+}
+
+@model IEnumerable<ERP.Web.Models.Database.XL_DANG_KY_PHE_DUYET>
+
+
+<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+<link href="~/Content/self-writing/css/Dangkypheduyet.css" rel="stylesheet" />
+
+<div class="panel-heading title">Bạn đang xem danh mục đăng ký phê duyệt</div>
+<br />
+<div ng-app="myApp" ng-controller="userCtrl">
+    <div class="content" ng-controller="DangkypheduyetCtrl">
+
+
+        <div id="quick-access">
+            <form class="form-inline quick-search-form" role="form" action="#">
+                <div class="form-group" style="width: 100%">
+                    <input type="text" style="width: 60%" class="form-control" placeholder="Search Here" ng-model="search_text">
+                </div>
+            </form>
+        </div>
+        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">Add New</button>
+
+        <!-- Modal Add New -->
+        <div class="modal fade" id="myModal" role="dialog">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+
+                    <div class="modal-body">
+                        <form class="form-horizontal" name="myForm" novalidate>
+                            <fieldset>
+                                <!-- Form Name -->
+                                <legend>Add New</legend>
+                                <!-- Text input-->
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="name">Mã phê duyệt: </label>
+                                    <div class="col-md-4">
+                                        <input type="text" placeholder="Mã phê duyệt" class="form-control input-md" ng-model="mapheduyet">
+                                    </div>
+                                </div>
+                                <!-- Text input-->
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="name">Người phê duyệt </label>
+                                    <div class="col-md-4">
+                                        <select ng-model="nguoipheduyet" class="form-control input-md">
+                                            <option ng-repeat="abc in danhsachuser" value="{{abc.USERNAME}}">{{abc.HO_VA_TEN}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- Text input-->
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="name">Ghi chú: </label>
+                                    <div class="col-md-4">
+                                        <input type="text" placeholder="Ghi chú " class="form-control input-md" ng-model="ghichu">
+                                    </div>
+                                </div>
+                                <!-- Button (Double) -->
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="anmelden"></label>
+                                    <div class="col-md-8 addnew">
+                                        <button id="addnew" name="addnew" class="btn" ng-click="add()" data-dismiss="modal">Add New</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <button id="exit" name="exit" class="btn" data-dismiss="modal">Exit</button>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--end modal-->
+        <!-- Modal Update -->
+        <div class="modal fade" id="myEdit" role="dialog">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+
+                    <div class="modal-body">
+                        <form class="form-horizontal" name="myForm" novalidate>
+                            <fieldset>
+                                <!-- Form Name -->
+                                <legend>Upadate</legend>
+                                <!-- Text input-->
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="name">Mã phê duyệt: </label>
+                                    <div class="col-md-4">
+                                        <input type="text" placeholder="Mã phê duyệt" class="form-control input-md" ng-model="item.MA_PHE_DUYET">
+                                    </div>
+                                </div>
+                                <!-- Text input-->
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="name">Người phê duyệt : </label>
+                                    <div class="col-md-4">
+                                        <input type="text" placeholder="Người phê duyệt " class="form-control input-md" ng-model="item.NGUOI_PHE_DUYET">
+                                    </div>
+                                </div>
+                                <!-- Text input-->
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="name">Trực thuộc: </label>
+                                    <div class="col-md-4">
+                                        <input type="text" placeholder="Trực thuộc" class="form-control input-md" ng-model="item.TRUC_THUOC">
+                                    </div>
+                                </div>
+                                <!-- Text input-->
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="name">Ghi chú: </label>
+                                    <div class="col-md-4">
+                                        <input type="text" placeholder="Ghi chú" class="form-control input-md" ng-model="item.GHI_CHU">
+                                    </div>
+                                </div>
+                                <!-- Button (Double) -->
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="anmelden"></label>
+                                    <div class="col-md-11 edit">
+                                        <button class="btn" ng-click="save(item.ID)" data-dismiss="modal">Save</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <button class="btn" data-dismiss="modal">Exit</button>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br />
+        <!--end modal-->
+        <!-- Modal delete -->
+        <div class="modal fade" id="delete_item" role="dialog">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+
+                    <div class="modal-body">
+                        <form class="form-horizontal" name="myForm" novalidate>
+                            <fieldset>
+                                <!-- Form Name -->
+                                <legend>Delete Maker</legend>
+                                <center>Are you sure you want to delete <b>{{item.ID}}</b></center>
+                                <p></p>
+
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="delete"></label>
+                                    <div class="col-md-8">
+                                        <button id="delete" name="delete" class="btn" ng-click="delete(item.ID)" data-dismiss="modal">Delete</button>
+                                        <button id="exit" name="exit" class="btn" data-dismiss="modal">Exit</button>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br />
+        <!--end modal-->
+
+        <table id="example" class="table table-bordered" cellspacing="0" name="tblhanghoa">
+            <thead>
+                <tr>
+                    <th>Mã phê duyệt</th>
+                    <th>Người phê duyệt </th>
+                    <th>Trực thuộc</th>
+                    <th>Ghi chú</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr dir-paginate="item in filtered = (dangkypheduyet | filter: {MA_PHE_DUYET:search_text}) | itemsPerPage:15 | orderBy: 'item.NGUOI_PHE_DUYET'" class="hover" ng-class-odd="'odd'" ng-class-even="'even'">
+                    <td class="text-left">{{ item.MA_PHE_DUYET }}</td>
+                    <td class="text-left">{{item.NGUOI_PHE_DUYET}}</td>
+                    <td class="text-left">{{item.TRUC_THUOC}}</td>
+                    <td>{{item.GHI_CHU}}</td>
+                    <td>
+                        <button class="btn btn-circle" ng-click="edit(item)" type="button" data-toggle="modal" data-target="#myEdit"><i class="glyphicon glyphicon-edit"></i></button>
+                    </td>
+                    <td>
+                        <button class="btn btn-circle" ng-click="edit(item)" type="button" data-toggle="modal" data-target="#delete_item"><i class="glyphicon glyphicon-remove"></i></button>
+                    </td>
+
+                </tr>
+
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="9" style="border: none !important">
+                        <dir-pagination-controls max-size="1" style="float:right;"
+                                                 direction-links="true"
+                                                 boundary-links="true">
+                        </dir-pagination-controls>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+<script src="~/Content/download/angularjs/angular-ui-router.js"></script>
+

@@ -1,0 +1,111 @@
+﻿@model IEnumerable<ERP.Web.Models.Database.CN_CHI_TIET_NGHIEP_VU>
+
+@{
+    ViewBag.Title = "Index";
+}
+<style>
+    .panel-heading {
+        margin: auto;
+        width: 40%;
+        text-align: center;
+        color: #333;
+        background-color: #f5f5f5;
+        border-color: #ddd;
+    }
+
+td,tr,th{
+    border: 1px solid #ddd !important;
+    border-collapse: collapse;
+    vertical-align: middle !important;
+    text-align: center;
+    font-family: Lora;
+    color: #777777;
+}
+
+th{
+    font-size: 16px;
+    background: white;
+}
+
+.top{
+    display: inline-block;
+    float:left;
+}
+
+
+
+.hover:hover{
+     background: #E6F5D6;
+}
+
+
+.even{
+    background-color: #fff;
+}
+.odd{
+    background: #ECF0F5;
+}
+
+
+</style>
+<div class="panel-heading title">Bạn đang xem DS nghiệp vụ trong hệ thống</div>
+<div ng-controller="dsnghiepvuCtrl" ng-app="myApp">
+    <div class="content">
+        <div class="modal fade" id="myEdit" role="dialog">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <form class="form-horizontal" name="myForm" novalidate>
+                            <fieldset>
+                                <!-- Form Name -->
+                                <legend>Edit</legend>
+                                <!-- Text input-->
+                                <div class="form-group">
+                                    <input type="hidden" ng-model="item.ID" />
+                                    <label class="col-md-4 control-label" for="name">Tên chi tiết:</label>
+                                    <div class="col-md-4">
+                                        <input type="text" placeholder="Tên chi tiết" class="form-control input-md" ng-model="item.TEN_CHI_TIET" ng-disabled="true">
+                                    </div>
+                                </div>
+                                <!-- Text input-->
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="name">Mô tả: </label>
+                                    <div class="col-md-4">
+                                        <input type="text" placeholder="Mô tả" class="form-control input-md" ng-model="item.MO_TA">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="anmelden"></label>
+                                    <div class="col-md-5 edit" style="margin-left:43px;">
+                                        <button class="btn" ng-click="save(item.ID)" data-dismiss="modal">Save</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <button class="btn" data-dismiss="modal">Exit</button>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br />
+        <table id="example" class="table table-bordered" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>Tên chi tiết</th>
+                    <th>Mô tả</th>
+                    <th>Sửa</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr tr ng-repeat="item in dsnghiepvu" class="hover" ng-class-odd="'odd'" ng-class-even="'even'">
+                    
+                    <td class="text-left">{{item.TEN_CHI_TIET}}</td>
+                    <td class="text-left">{{item.MO_TA}}</td>
+                    <td>
+                        <button class="btn btn-circle" ng-click="edit(item)" type="button" data-toggle="modal" data-target="#myEdit"><i class="glyphicon glyphicon-edit"></i></button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

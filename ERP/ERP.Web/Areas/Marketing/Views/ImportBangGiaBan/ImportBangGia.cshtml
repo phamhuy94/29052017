@@ -1,0 +1,120 @@
+﻿
+@{
+    ViewBag.Title = "Import_Bangluong";
+    Layout = "~/Areas/Settings/Views/Shared/Layout.cshtml";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>HOPLONG | Trang chủ</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Bootstrap 3.3.6 -->
+    <link href="~/Content/download/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href='http://fonts.googleapis.com/css?family=Roboto:100,400,300,500,700' rel='stylesheet' type='text/css'>
+    <link href="~/Content/download/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href='http://fonts.googleapis.com/css?family=Shadows+Into+Light' rel='stylesheet' type='text/css'>
+    <link href="~/Content/self-writing/Layout-CSS.css" rel="stylesheet" />
+    <link href="~/Content/self-writing/css/ImportFile.css" rel="stylesheet" />
+
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+
+    <div class="content">
+
+
+        <table>
+            <tr>
+                <td>
+                    @using (Html.BeginForm("ImportBangGia", "ImportBangGiaBan", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    {
+
+                            <!-- Form Name -->
+                        <table>
+                            <tr>
+                                <th><h1>Import Bảng giá bán</h1></th>
+                                <th><a href="~/Content/Files/BangGiaThamKhao_05052017.xlsx" >Lấy mẫu import</a></th>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <hr />
+                                    <input type="file" name="UploadedFile" class="file" value="Choose File From Your Computer">
+                                    <br />
+                                    <input type="submit" class="btn btn-success" value="Add" />
+
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <td colspan="2">Dữ liệu trên tệp mà chưa có trong hệ thống thì sẽ được thêm vào, các dữ liệu khác sẽ giữ nguyên</td>
+
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <p style="color:blue">@ViewBag.Message</p>
+                                    <p style="color:blue">@ViewBag.Information</p>
+                                    <p style="color:red">@ViewBag.Error</p>
+                                </td>
+
+                            </tr>
+                        </table>
+                    }
+                <td>
+                <td>
+                    @using (Html.BeginForm("UpdateBangGia", "ImportBangGiaBan", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    {
+
+                            <!-- Form Name -->
+                        <table>
+                            <tr>
+                                <th><h1>Update Bảng Giá Bán</h1></th>
+                                <th><a href="~/Content/Files/BangGiaThamKhao_05052017.xlsx">Lấy mẫu import</a></th>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <hr />
+                                    <input type="file" name="UploadedFile" class="file" value="Choose File From Your Computer">
+                                    <br />
+                                    <input type="submit" class="btn btn-success" value="Add" />
+
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <td colspan="2">Dữ liệu trên tệp mà chưa có trong hệ thống thì sẽ được thêm vào, các dữ liệu khác sẽ giữ nguyên</td>
+
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <p style="color:blue">@ViewBag.Message</p>
+                                    <p style="color:blue">@ViewBag.Information</p>
+                                    <p style="color:red">@ViewBag.Error</p>
+                                </td>
+
+                            </tr>
+                        </table>
+                    }
+                <td>
+            </tr>
+        </table>
+
+    </div>
+
+    <!-- jQuery 2.2.3 -->
+    <script src="~/Content/download/plugins/jQuery/jquery-2.2.3.min.js"></script>
+    <!-- jQuery UI 1.11.4 -->
+    <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+
+</body>
+
+</html>
+@{
+    ViewBag.Title = "ImportBangGia";
+}
+
+<h2>ImportBangGia</h2>
+

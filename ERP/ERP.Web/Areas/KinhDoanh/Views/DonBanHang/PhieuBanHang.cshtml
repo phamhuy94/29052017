@@ -1,0 +1,146 @@
+﻿
+
+<script src="~/Content/self-writing/js/Controllers/PrintPhieuBanHangCtrl.js"></script>
+
+<style>
+</style>
+<div ng-controller="PrintPhieuBanHangCtrl" ng-app="myApp">
+    <div id="printSectionId">
+        <table cellpadding="0" cellspacing="0" style="width:100%;">
+
+            <tbody>
+                <tr height="22">
+
+                    <td align="left" rowspan="5" colspan="3" style="border:1px solid black;">
+                        <img alt="logo" height="100" src="~/logo_hoplong.png" width="200" style="margin-right: 50px;float:right" />
+                    </td>
+                    <td colspan="6" style="border:1px solid black;font-weight:bold; padding:3.5px">CÔNG TY CỔ PHẦN CÔNG NGHỆ HỢP LONG</td>
+                </tr>
+                <tr height="21">
+                    <td colspan="6" style="border:1px solid black;border-bottom:0px !important; padding:3.5px">VP: 96 Kim Ngưu, Phường Thanh Nhàn, Quận Hai Bà Trưng, Hà Nội</td>
+                </tr>
+                <tr height="21">
+                    <td colspan="6" style="border:1px solid black;border-bottom:0px !important; padding:3.5px">
+                        Tel: 04 3661 7545&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ***&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Tel/Fax: 04 3661 7560&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    </td>
+                </tr>
+                <tr height="21"><td colspan="6" style="border:1px solid black;border-bottom:0px !important; padding:3.5px">Email: info@hoplongtech.com.vn</td></tr>
+                <tr height="21">
+                    <td colspan="6" style="border:1px solid black; padding:3.5px">TK: 0651117889999 - Tại Ngân Hàng TMCP quân đội- CN Hai Bà Trưng</td>
+                </tr>
+                <tr height="30">
+                    <td style="border:1px solid black; font-weight:bold; text-align:center; font-size:18px" colspan="9" height="30">PHIẾU ĐỀ NGHỊ XUẤT HÀNG</td>
+                </tr>
+                <tr height="33">
+                    <td colspan="6" style="border:1px solid black; padding:3.5px"><b>Người đề nghị :</b> {{thongtinchung.HO_VA_TEN}}</td>
+
+                    <td style="border:1px solid black;padding:3.5px"><b>Ngày ĐN</b></td>
+                    <td colspan="2" style="border:1px solid black;padding:3.5px">{{thongtinchung.NGAY_BH | date: 'dd/MM/yyyy'}}</td>
+                </tr>
+                <tr height="33">
+                    <td colspan="6" style="border:1px solid black;padding:3.5px"><b>Mục đích sử dụng : </b>{{thongtinchung.TEN_LOAI_KHACH}}</td>
+                    <td style="border:1px solid black;padding:3.5px"><b>Ngày xuất </b></td>
+                    <td colspan="2" style="border:1px solid black;padding:3.5px">{{thongtinchung.NGAY_GIAO_HANG | date: 'dd/MM/yyyy'}}</td>
+                </tr>
+                <tr height="33">
+                    <td colspan="6" style="border:1px solid black;padding:3.5px"><b>Khách hàng:</b> {{thongtinchung.TEN_CONG_TY}}</td>
+                    <td style="border:1px solid black;padding:3.5px"><b>Ngày TT:</b></td>
+                    <td colspan="2" style="border:1px solid black;padding:3.5px"></td>
+                </tr>
+                <tr height="33">
+                    <td colspan="6" style="border:1px solid black;padding:3.5px"><b>CM:</b></td>
+                    <td style="border:1px solid black;padding:3.5px"><b>Hoá đơn </b></td>
+                    <td colspan="2" style="border:1px solid black;padding:3.5px">{{thongtinchung.MA_SO_BH}}</td>
+                </tr>
+                <tr height="33">
+                    <td align="left" style="border:1px solid black;padding:3.5px" colspan="6"><b>Hình thức giao hàng:</b>  </td>
+                    <td style="border:1px solid black;padding:3.5px"><b>Phí giao hàng:</b></td>
+                    <td colspan="2" style="border:1px solid black;padding:3.5px"></td>
+                </tr>
+                <tr height="33">
+                    <td colspan="9" style="border:1px solid black;padding:3.5px"><b>Thông tin xuất hóa đơn : </b>{{thongtinchung.DIA_CHI_XUAT_HOA_DON}}</td>
+                </tr>
+                <tr height="33">
+                    <td colspan="9" style="border:1px solid black;padding:3.5px"><b>Thông tin nhận hàng:</b> {{thongtinchung.DIA_DIEM_GIAO_HANG}} </td>
+                </tr>
+                <tr height="45">
+                    <th style="border:1px solid black; font-weight:bold;padding:3.5px" width="40">STT</th>
+                    <th style="border:1px solid black; font-weight:bold;padding:3.5px">Mã hàng</th>
+                    <th style="border:1px solid black; font-weight:bold;padding:3.5px">Xuất xứ</th>
+                    <th style="border:1px solid black; font-weight:bold;padding:3.5px">SL</th>
+                    <th style="border:1px solid black; font-weight:bold;padding:3.5px">ĐVT</th>
+                    <th style="border:1px solid black; font-weight:bold;padding:3.5px">Đơn giá <br />(vnđ)</th>
+                    <th style="border:1px solid black; font-weight:bold;padding:3.5px">Thành Tiền <br />(vnđ)</th>
+                    <th style="border:1px solid black; font-weight:bold;padding:3.5px">Ghi chú </th>
+                    <th style="border:1px solid black; font-weight:bold;padding:3.5px">Tình trạng xuất hàng</th>
+                </tr>
+                <tr height="21" ng-repeat="item in thongtinchitiet">
+                    <td style="height:21px;border:1px solid black;padding:3.5px">{{$index + 1}}</td>
+                    <td style="width:203px;border:1px solid black;padding:3.5px">{{item.MA_CHUAN}}</td>
+                    <td style="width:116px;border:1px solid black;padding:3.5px">{{item.XUAT_XU}}</td>
+                    <td style="width:79px;border:1px solid black;padding:3.5px">{{item.SO_LUONG}}</td>
+                    <td style="width:63px;border:1px solid black;padding:3.5px">{{item.DVT}}</td>
+                    <td style="width:176px;border:1px solid black;padding:3.5px; text-align:right;">{{item.DON_GIA | number:0}}</td>
+                    <td style="width:179px;border:1px solid black;padding:3.5px;text-align:right;">{{item.THANH_TIEN_HANG| number:0}}</td>
+                    <td style="width:107px;border:1px solid black;padding:3.5px"></td>
+                    <td style="width:84px;border:1px solid black;padding:3.5px"></td>
+
+                </tr>
+
+                <tr height="21">
+                    <td colspan="4" style="border-left:1px solid black"></td>
+
+                    <td colspan="2" style="border:1px solid black;font-weight:bold;padding:3.5px"><i>Tổng tiền hàng</i></td>
+                    <td colspan="3" style="border:1px solid black;font-weight:bold;padding:3.5px;text-align:right;padding-right: 20px"><i>{{thongtinchung.TONG_TIEN_HANG | number:0}}đ </i></td>
+
+                </tr>
+                <tr height="21">
+                    <td colspan="4" style="border-left:1px solid black"></td>
+                    <td colspan="2" style="border:1px solid black;font-weight:bold;padding:3.5px"><i>Thuế GTGT 10%</i></td>
+                    <td colspan="3" style="border:1px solid black;font-weight:bold;padding:3.5px;text-align:right;padding-right: 20px"><i>{{thongtinchung.TONG_TIEN_THUE_GTGT | number:0}}đ</i></td>
+                </tr>
+                <tr>
+                    <td colspan="4" style="border-left:1px solid black;border-bottom: 1px solid black"></td>
+                    <td colspan="2" style="border:1px solid black;font-weight:bold;padding:3.5px"><i>Tổng tiền thanh toán<i></td>
+                    <td colspan="3" style="border:1px solid black;font-weight:bold;padding:3.5px;text-align:right;padding-right: 20px"><i>{{thongtinchung.TONG_TIEN_THANH_TOAN | number:0}}đ</i></td>
+
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr height="21"><td colspan="9"></td></tr>
+                <tr height="22">
+                    <td></td>
+                    <td></td>
+
+                    <td style="font-weight:bold;">Người đề nghị </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td style="font-weight:bold;">Người duyệt </td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr height="21"><td colspan="9"></td></tr>
+                <tr height="21"><td colspan="9"></td></tr>
+                <tr height="22">
+                    <td></td>
+                    <td></td>
+                    <td style="font-weight:bold;">{{thongtinchung.HO_VA_TEN}}</td>
+
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr height="50"><td colspan="9"></td></tr>
+            </tfoot>
+        </table>
+    </div>
+
+
+    <button ng-click="printToCart('printSectionId')" class="btn btn-default">In PDF</button>
+    <button ng-click="backToList()" class="btn btn-default">Trở về danh sách</button>
+</div>
+

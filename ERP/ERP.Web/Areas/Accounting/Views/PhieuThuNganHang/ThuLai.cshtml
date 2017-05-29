@@ -1,0 +1,572 @@
+﻿<link href="~/Content/assets/css/colors.css" rel="stylesheet" />
+<link href="~/Content/assets/css/components.css" rel="stylesheet" />
+<link href="~/Content/assets/css/core.css" rel="stylesheet" />
+<script src="~/Content/self-writing/js/Controllers/NganhangCtrl/PhieuThuNganHang/ctrlPhieuThuLai.js"></script>
+<script src="~/Content/self-writing/js/date_directive.js"></script>
+<script src="~/Content/download/number_directive.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-animate.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-route.js"></script>
+<div class="container body-content" ng-app="myApp" ng-controller="ctrlPhieuThuThuLai">
+    <br>
+    <br>
+    <br>
+    <div class="alert alert-info alert-dismissible" role="alert">
+        
+        <strong>Ngân hàng</strong>
+    </div>
+    <div class="table-kt">
+        <div class="table-head bg-blue borderRadius3 clearfix">
+            <h1 style="color:black;" class="table-head-title margin0 font16 borderRadius3 bg-white pull-left bold">Thu tiền gửi</h1>
+        </div>
+        <div class="border padding10 borderTopNone">
+            <div class="row">
+                <div class="col-md-8">
+                    <form class="form-kt">
+                        <fieldset>
+                            <legend class="bold">Thông tin chung</legend>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div>Đối tượng</div>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <div class="input-group">
+                                                    <input type="text" ng-model="arrayTongHop.ma_doi_tuong" class="form-control" ng-change="onDoiTuongFind()" ng-focus="showtable_ma_doi_tuong = true" ng-blur="onBlurInput_MDT()">
+                                                    <div class="input-group-btn">
+                                                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" ng-click="showtable_ma_doi_tuong = !showtable_ma_doi_tuong" ng-mouseenter="hoverbtn_MDT = true" ng-mouseleave="hoverbtn_MDT = false" aria-haspopup="true" aria-expanded="false">
+                                                            <span class="caret"></span>
+                                                        </button>
+                                                        <div class="dropdown-menu dropdown-menu-center borderRadius0 padding0" style="display: block" ng-show="showtable_ma_doi_tuong">
+                                                            <div class="table-responsive" style="max-height:280px; ">
+                                                                <table class="table table-striped table-condensed table-hover" st-pagination-scroll st-table="dtCollection" st-safe-src="arrayDTFinded" ng-mouseenter="hovertable_MDT = true" ng-mouseleave="hovertable_MDT = false">
+                                                                    <thead class="bg-blue text-white">
+                                                                        <tr>
+                                                                            <th>Mã đối tượng</th>
+                                                                            <th>Tên đối tượng</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <tr style="cursor:pointer" ng-click="showInfoDT(dt)" ng-repeat="dt in dtCollection">
+                                                                            <td>{{dt.MA_DOI_TUONG}}</td>
+                                                                            <td>{{dt.TEN_DOI_TUONG}}</td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="text" ng-model="arrayTongHop.ten_doi_tuong" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <div>Địa chỉ</div>
+                                    </div>
+                                    <div class="col-md-10">
+                                        <input type="text" ng-model="arrayTongHop.dia_chi" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div>Nộp vào TK</div>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <div class="input-group">
+                                                    <input type="text" ng-model="arrayTongHop.so_tk_nop" class="form-control">
+                                                    <div class="input-group-btn">
+                                                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                            <span class="caret"></span>
+                                                        </button>
+                                                        <div class="dropdown-menu dropdown-menu-center borderRadius0 padding0">
+                                                            <div class="table-responsive">
+                                                                <table class="table table-striped table-hover table-condensed" st-table="banksCollection" st-safe-src="arrayBanks">
+                                                                    <thead class="bg-blue text-white">
+                                                                        <tr>
+                                                                            <th>Số tài khoản</th>
+                                                                            <th>Tên ngân hàng</th>
+                                                                            <th>Chi nhánh</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <tr style="cursor:pointer" ng-click="showInfoTK(bank)" ng-repeat="bank in banksCollection">
+                                                                            <td>{{bank.SO_TAI_KHOAN}}</td>
+                                                                            <td>{{bank.TEN_NGAN_HANG}}</td>
+                                                                            <td>{{bank.CHI_NHANH}}</td>
+                                                                        </tr>
+
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="text" ng-model="arrayTongHop.ten_ngan_hang" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div>Lý do thu</div>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <select ng-model="reasonmoney" ng-change="changeType($event)" class="form-control">
+                                                    <option value="Thu lãi đầu tư tài chính">Thu lãi đầu tư tài chính</option>
+
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="text" class="form-control" ng-model="arrayTongHop.dien_giai_ly_do_thu" placeholder="Thu lãi đầu tư tài chính ..." id="lydothu" ng-change="checklydo()">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div>Nhân viên thu</div>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" ng-model="arrayTongHop.ho_va_ten" ng-change="onNhanVienFind()" ng-focus="showtable_ho_va_ten = true">
+                                                    <div class="input-group-btn">
+                                                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" ng-click="showtable_ho_va_ten = !showtable_ho_va_ten" aria-haspopup="true" aria-expanded="false">
+                                                            <span class="caret"></span>
+                                                        </button>
+                                                        <div class="dropdown-menu dropdown-menu-center borderRadius0 padding0" style="display: block" ng-show="showtable_ho_va_ten">
+                                                            <div class="table-responsive" style="max-height: 280px">
+                                                                <table class="table table-striped table-hover" st-pagination-scroll st-table="staffsCollection" st-safe-src="arrayNVFinded">
+                                                                    <thead class="bg-blue text-white">
+                                                                        <tr>
+                                                                            <th>Mã nhân viên</th>
+                                                                            <th>Tên nhân viên</th>
+                                                                            <th>Phòng ban</th>
+                                                                            <th>Điện thoại di động</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <tr ng-repeat="staff in staffsCollection" style="cursor:pointer" ng-click="showInfoStaff(staff)">
+                                                                            <td>{{staff.USERNAME}}</td>
+                                                                            <td>{{staff.HO_VA_TEN}}</td>
+                                                                            <td>{{staff.TEN_PHONG_BAN}}</td>
+                                                                            <td>{{staff.SDT}}</td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <div>Tham chiếu</div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <input type="hidden" value="@Session["USERNAME"]" id="username" />
+                                        <input type="hidden" value="@Session["MA_CONG_TY"]" id="macongty" />
+                                        <div class="form-control bootstrap-tagsinput" style="border: 1px solid #00BFFF !important;"><span class="tag label label-info" ng-repeat="item in ThamChieu.ListSelect">{{item.SO_CHUNG_TU}}<span data-role="remove" ng-click="RemoveThamChieu($index)"></span></span> <input style="border: none !important" type="text" placeholder=""></div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <a data-toggle="modal" data-target="#modal_theme_primary"><i class="fa fa-search" aria-hidden="true"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+                <div class="col-md-4">
+                    <form class="form-kt">
+                        <fieldset>
+                            <legend class="bold">Chứng từ</legend>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-5">
+                                        <div>Ngày hạch toán</div>
+                                    </div>
+                                    <div class="col-md-7">
+                                        <input type="text" id="ngay_hach_toan" class="form-control datetimepickerKT" ng-model="arrayTongHop.ngay_hach_toan">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-5">
+                                        <div>Ngày chứng từ</div>
+                                    </div>
+                                    <div class="col-md-7">
+                                        <input type="text" id="ngay_chung_tu" class="form-control datetimepickerKT" ng-model="arrayTongHop.ngay_chung_tu">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-5">
+                                        <div>Số chứng từ</div>
+                                    </div>
+                                    <div class="col-md-7">
+                                        <input type="text" ng-model="arrayTongHop.SoChungTu" class="form-control" disabled="disabled">
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+                            <br>
+                            <br>
+                            <br>
+                            <br>
+                            <br>
+                            <br>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-md-7 col-md-offset-5">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="text-right">
+                                <form class="form-inline">
+                                    <div class="form-group">
+                                        <label class="marginR15">Loại tiền</label>
+                                        <select name="" class="form-control" ng-model="arraydiengiai[indexcurrent].LOAI_TIEN">
+                                            <option value="USD">USD</option>
+                                            <option value="VND">VND</option>
+                                            <option value="EURO">EURO</option>
+                                        </select>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="text-right">
+                                <form class="form-inline">
+                                    <div class="form-group" ng-show="arraydiengiai[indexcurrent].LOAI_TIEN != 'VND'">
+                                        <label class="marginR15">Tỷ giá</label>
+                                        <input type="text" format='number' class="form-control" ng-model="arraydiengiai[indexcurrent].TY_GIA">
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+
+            <div class="table-responsive">
+                <table class="table table-striped table-hover table-bordered" st-table="tonghopCollection" st-safe-src="arraydiengiai">
+                    <thead class="bg-blue text-white">
+                        <tr>
+                            <th>Diễn giải</th>
+                            <th>TK nợ</th>
+                            <th>TK có</th>
+                            <th>Số tiền</th>
+                            <th ng-show="arraydiengiai[indexcurrent].LOAI_TIEN != 'VND'">Quy đổi</th>
+                            <th>Đơn vị</th>
+                            <th>Mã đối tượng</th>
+                            <th>Tên đối tượng</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><a href="" ng-click="addTongHop()">Bấm vào đây để thêm mới</a></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td ng-show="arraydiengiai[indexcurrent].LOAI_TIEN != 'VND'">&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr ng-repeat="valueTongHop in tonghopCollection" ng-click="onChangeIndex($index)">
+                            @*<td><div contenteditable="true">{{valueTongHop.diengiai}}</div></td>*@
+                            <td><input type="text" class="form-control" style="max-width: 170px;" ng-model="arraydiengiai[$index].DIEN_GIAI" ng-disabled="indexcurrent != $index" id="diengiai"></td>
+                            <td>
+                                <div class="input-group maxWidth150">
+                                    <input type="text" class="form-control" ng-model="arraydiengiai[$index].TK_NO" ng-disabled="indexcurrent != $index">
+                                    <div class="input-group-btn">
+                                        <button type="button" class="btn btn-default dropdown-toggle height_hachtoan" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ng-disabled="indexcurrent != $index">
+                                            <span class="caret"></span>
+                                        </button>
+                                        <div class="dropdown-menu dropdown-menu-center borderRadius0 padding0">
+                                            <div class="table-responsive" style="max-width:500px; max-height:200px;">
+                                                <table class="table table-striped table-hover " st-pagination-scroll st-table="tknoCollections" st-safe-src="arrayBankHackToan">
+                                                    <thead class="bg-blue text-white">
+                                                        <tr>
+                                                            <th>Số tài khoản</th>
+                                                            <th>Tên Tài khoản</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr ng-repeat="valuetkno in tknoCollections | filter:arraydiengiai[$index].TK_NO" ng-click="showInfoTKNo(valuetkno)" style="cursor:pointer">
+                                                            <td>{{valuetkno.SO_TK}}</td>
+                                                            <td>{{valuetkno.TEN_TK}}</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="input-group maxWidth150">
+                                    <input type="text" class="form-control" ng-model="arraydiengiai[$index].TK_CO" ng-disabled="indexcurrent != $index">
+                                    <div class="input-group-btn">
+                                        <button type="button" class="btn btn-default dropdown-toggle height_hachtoan" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ng-disabled="indexcurrent != $index">
+                                            <span class="caret"></span>
+                                        </button>
+                                        <div class="dropdown-menu dropdown-menu-center borderRadius0 padding0">
+                                            <div class="table-responsive" style="max-width:500px; max-height:200px;">
+                                                <table class="table table-striped table-hover " st-pagination-scroll st-table="tknoCollections" st-safe-src="arrayBankHackToan">
+                                                    <thead class="bg-blue text-white">
+                                                        <tr>
+                                                            <th>Số tài khoản</th>
+                                                            <th>Tên Tài khoản</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr ng-repeat="valuetkco in tknoCollections | filter:arraydiengiai[$index].TK_CO" ng-click="showInfoTKCo(valuetkco)" style="cursor:pointer">
+                                                            <td>{{valuetkco.SO_TK}}</td>
+                                                            <td>{{valuetkco.TEN_TK}}</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td><input type="text" format='number' class="form-control maxWidth120" ng-model="valueTongHop.SO_TIEN" ng-disabled="indexcurrent != $index"> </td>
+                            <td ng-show="arraydiengiai[indexcurrent].LOAI_TIEN != 'VND'">{{valueTongHop.SO_TIEN * valueTongHop.TY_GIA | currency: ''}}</td>
+                            <td>{{valueTongHop.LOAI_TIEN}}</td>
+                            <td> {{arrayTongHop.ma_doi_tuong}}</td>
+                            <td>{{arrayTongHop.ten_doi_tuong}}</td>
+                            <td class="text-center"><button ng-click="RemoveRow($index)" style="background: none !important; border: none !important;"><span class="glyphicon glyphicon-remove" style="color:red;"></span></button></td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td ng-show="arraydiengiai[indexcurrent].LOAI_TIEN != 'VND'">&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td ng-show="arraydiengiai[indexcurrent].LOAI_TIEN != 'VND'">&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td ng-show="arraydiengiai[indexcurrent].LOAI_TIEN != 'VND'">&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td ng-show="arraydiengiai[indexcurrent].LOAI_TIEN != 'VND'">&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td ng-show="arraydiengiai[indexcurrent].LOAI_TIEN != 'VND'">&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <br>
+            <div class="text-center">
+                <button class="btn btn-primary" ng-click="onSave()"><span class="glyphicon glyphicon-floppy-disk"></span> Lưu</button>
+                <button class="btn btn-danger" ng-click="onHuy()"><span class="glyphicon glyphicon-ban-circle"></span> Bỏ qua</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal_theme_primary" class="modal fade" style="display: none;" data-backdrop="static">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-primary-300">
+                    <h5 class="modal-title" style="font-weight:700">Chọn chứng từ tham chiếu</h5>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label class="control-label col-lg-2">Tìm theo</label>
+                            <div class="col-lg-3">
+                                <select name="select" class="form-control" ng-change="ChangeLoaiChungTu()" ng-model="LoaiChungTu">
+                                    <option value="1">Loại chứng từ</option>
+                                    <option value="2">Đối tượng</option>
+                                    <option value="3">Số hóa đơn/chứng từ</option>
+                                </select>
+                                <label id="basic-error" class="validation-error-label" ng-if="Validate.LoaiChungTu == false" for="basic">Trường này không được để trống</label>
+                            </div>
+                            <label class="control-label col-lg-2">Giá trị</label>
+                            <div class="col-lg-5" style="position:relative;z-index:100">
+                                <div class="has-feedback" id="Input_DataGiaTriChungTu" style="display:none" ng-click="ShowDataGiaTriChungTu()">
+                                    <input type="text" ng-model="GiaTriChungTu.Search" class="form-control showtableselect" ng-change="DoiTuongFind()">
+                                    <div class="form-control-feedback">
+                                        <i class="icon-arrow-down5"></i>
+                                    </div>
+                                </div>
+                                <select name="select" class="form-control" id="Select_DataGiaTriChungTu" ng-model="GiaTriLoaiChungTu">
+                                    <option ng-repeat="item in GiaTriThamChieu" value="{{item.value}}">{{item.show}}</option>
+                                </select>
+
+                                <table class="table-hover tableselect" id="DataGiaTriChungTu" style="display:none">
+                                    <thead>
+                                        <tr>
+                                            <th style="width:35%">Mã đối tượng</th>
+                                            <th style="width:35%">Tên đối tượng</th>
+                                            <th style="width:30%">Địa chỉ</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="item in GiaTriThamChieu | filter:GiaTriChungTu.Search" ng-click="SelectDataGiaTriChungTu(item)">
+                                            <td>{{item.madoituong}}</td>
+                                            <td>{{item.tendoituong}}</td>
+                                            <td>{{item.diachi}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="has-feedback" id="Input_MaChungTu" style="display:none">
+                                    <input type="text" ng-model="MaChungTu.Search" class="form-control showtableselect">
+                                </div>
+                            </div>
+                            <label id="basic-error" class="validation-error-label" ng-if="Validate.GiaTriChungTu == false" for="basic">Trường này không được để trống</label>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-lg-2">Từ ngày</label>
+                            <div class="col-lg-3">
+                                <div class="form-group has-feedback">
+                                    <input type="text" datepicker ng-model="ThamChieu.From" id="ThamChieuFrom" class="form-control datetimepickerKT">
+                                    <div class="form-control-feedback">
+                                        <i class="icon-calendar"></i>
+                                    </div>
+                                    <label id="basic-error" class="validation-error-label" ng-if="Validate.FromDateThamChieu == false" for="basic">Trường này không được để trống</label>
+                                </div>
+                            </div>
+                            <label class="control-label col-lg-2">Đến ngày</label>
+                            <div class="col-lg-3">
+                                <div class="form-group has-feedback">
+                                    <input type="text" datepicker ng-model="ThamChieu.To" id="ThamChieuTo" class="form-control datetimepickerKT">
+                                    <div class="form-control-feedback">
+                                        <i class="icon-calendar"></i>
+                                    </div>
+                                    <label id="basic-error" class="validation-error-label" ng-if="Validate.ToDateThamChieu == false" for="basic">Trường này không được để trống</label>
+                                    <label id="basic-error" class="validation-error-label" ng-if="Validate.ToDateThamChieuLess == false" for="basic">Ngày kết thúc phải lớn hơn ngày bắt đầu</label>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 text-right">
+                                <button class="btn bg-primary-300" type="button" ng-disabled="CheckSearchThamChieu()" ng-click="SearchThamChieu()">Lấy dữ liệu</button>
+                            </div>
+                        </div>
+                        <div class="col-md-12 content-group" style="">
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-striped table-hover ">
+                                    <thead>
+                                        <tr class="bg-primary-300">
+                                            <th style="width:10px;"></th>
+                                            <th>Ngày hạch toán</th>
+                                            <th>Ngày chứng từ</th>
+                                            <th>Số chứng từ</th>
+                                            <th>Diễn giải</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-cloak dir-paginate="item in ThamChieu.ListResult | itemsPerPage: numPerPage"
+                                            pagination-id="ThamChieu" current-page="currentPage">
+                                            <td><div class="checker border-primary-600 text-primary-800" ng-click="SelectThamChieu(item,$index)"><span ng-class="item.Action?'uncheck':''"><input type="checkbox" class="control-primary" uncheck="checked"></span></div></td>
+                                            <td>
+                                                {{item.NGAY_HACH_TOAN}}
+                                            </td>
+                                            <td>{{item.NGAY_CHUNG_TU}}</td>
+                                            <td>{{item.SO_CHUNG_TU}}</td>
+                                            <td>{{item.DIEN_GIAI}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <dir-pagination-controls pagination-id="ThamChieu"
+                                                         class="pull-right"></dir-pagination-controls>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer text-center">
+                    <button type="button" class="btn btn-primary" ng-click="SetThamChieu()"><i class="icon-checkbox-checked"></i> Đồng ý</button>
+                    <button type="button" class="btn bg-orange-400" data-dismiss="modal"><i class="icon-blocked"></i> Bỏ qua</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <br>
+    <br>
+</div>
+
+<style>
+    .bg-blue {
+        background-color: #5BC0DE !important;
+    }
+</style>

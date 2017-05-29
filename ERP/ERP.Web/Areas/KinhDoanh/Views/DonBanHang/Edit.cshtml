@@ -1,0 +1,201 @@
+﻿
+@{
+    ViewBag.Title = "Edit";
+}
+
+@model ERP.Web.Models.Database.BH_DON_BAN_HANG
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+
+<script src="~/Content/self-writing/js/Services/BanHangService.js"></script>
+<script src="~/Content/self-writing/js/Controllers/BanHangCtrl.js"></script>
+
+
+<input type="hidden" value="@Session["USERNAME"]" id="username" />
+<input type="hidden" id="macongty" name="macongty" value="@Session["MA_CONG_TY"]" />
+<div ng-app="myApp" ng-controller="BanHangCtrl">
+
+    <div class="content">
+        <div class="col-md-12" ng-repeat="item in thongtinchung">
+            <div class="col-md-12">
+                <div class="col-md-6">
+                    <div class="form-group col-md-12">
+                        <label class="col-md-4">Khách hàng</label>
+                        <div class="col-md-8">
+                            <md-input-container>
+                                <md-select ng-model="item.MA_KHACH_HANG">
+                                    <md-option><em>None</em></md-option>
+                                    <md-option ng-repeat="state in list_khachhang" ng-value="state.MA_KHACH_HANG">
+                                        {{state.TEN_CONG_TY}}
+                                    </md-option>
+                                </md-select>
+                            </md-input-container>
+                        </div>
+                    </div>
+                    <div class="col-md-12 form-group">
+                        <div class="form-group">
+                            <label class="col-md-4">Ngày bán hàng</label>
+                            <div class="col-md-4"><input type="text" date='dd/MM/yyyy' datepicker placeholder="Ngày lên PO" class="form-control datepicker" ng-model="item.NGAY_BH" /></div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 form-group">
+                        <div class="form-group">
+                            <label class="col-md-4">Người liên hệ</label>
+                            <div class="col-md-8"><input type="text" placeholder="Tên liên hệ" class="form-control" ng-model="item.TEN_LIEN_HE" /></div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 form-group">
+                        <div class="form-group">
+                            <label class="col-md-4">Đã xuất kho</label>
+                            <div class="col-md-1"><input type="checkbox" ng-model="item.DA_XUAT_KHO" /></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="col-md-12 form-group">
+                        <div class="form-group">
+                            <label class="col-md-4">Phương thức thanh toán </label>
+                            <div class="col-md-8">
+                                <select class="form-control" ng-model="item.HINH_THUC_THANH_TOAN" id="hinhthuctt"
+                                        data-ng-options="item as item for item in hinhthuctt"></select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 form-group">
+                        <div class="form-group">
+                            <label class="col-md-4">Ngày giao hàng</label>
+                            <div class="col-md-4"><input type="text" date='dd-MM-yyyy' datepicker placeholder="Ngày giao hàng" class="form-control datepicker" ng-model="item.NGAY_GIAO_HANG" /></div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 form-group">
+                        <div class="form-group">
+                            <label class="col-md-4">Địa điểm giao hàng </label>
+                            <div class="col-md-8">
+                                <input class="form-control" ng-model="item.DIA_DIEM_GIAO_HANG" type="text" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 form-group">
+                        <div class="form-group">
+                            <label class="col-md-4">Đã lập hóa đơn</label>
+                            <div class="col-md-1"><input type="checkbox" ng-model="item.DA_LAP_HOA_DON" /></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12 content-group" style="padding-left: 5px; padding-right: 5px;">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr class="bg-primary-300" style="background:#64B5F6; color: white">
+                                <td></td>
+                                <td class="text-center">Mã hàng</td>
+                                <td class="text-center">Mã điều chỉnh</td>
+                                <td class="text-center !important">Đơn vị tính</td>
+                                <td class="text-center !important">Số lượng</td>
+                                <td class="text-center !important">Đơn giá</td>
+                                <td class="text-center !important">Thành tiền hàng</td>
+                                <td class="text-center !important">% thuế GTGT</td>
+                                <td class="text-center !important">Tiền thuế GTGT</td>
+                                <td class="text-center !important">Diễn giải thuế</td>
+                                <td class="text-center !important">TK Thuế</td>
+                                <td class="text-center !important">TK Nợ</td>
+                                <td class="text-center !important">TK Có</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="item in Detail.ListAdd">
+                                <td>
+                                    <div>
+                                        <input type="checkbox" ng-model="checkBH">
+                                        <div ng-if="checkBH">
+                                            <label ng-init="CreateNhatKy(item)"></label>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div>
+                                        <input type="text" style="height: 27px;" ng-model="item.MA_HANG" class="form-control">
+                                    </div>
+                                </td>
+                                <td>
+                                    <div>
+                                        <input type="text" style="height: 27px;" ng-model="item.MA_DIEU_CHINH" class="form-control">
+                                    </div>
+                                </td>
+                                <td>
+                                    <div>
+                                        <input type="text" style="height: 27px;" ng-model="item.DVT" class="form-control">
+                                    </div>
+                                </td>
+                                <td>
+                                    <input type="number" style="height: 27px;" ng-model="item.SO_LUONG" class="form-control" ng-change="kiemtra(item)">
+                                </td>
+                                <td class="text-center">
+                                    <input type="number" style="height: 27px;" ng-model="item.DON_GIA" class="form-control" ng-change="kiemtra(item)">
+                                </td>
+                                <td class="text-center">
+                                    {{item.THANH_TIEN_HANG | currency: '':0}}
+                                    <input ng-model="item.THANH_TIEN_HANG" style="height: 27px;" class="form-control" type="hidden" ng-disabled="true" />
+                                </td>
+                                <td class="text-center">
+                                    <input type="number" style="height: 27px;" ng-model="item.THUE_GTGT" class="form-control" ng-change="kiemtra(item)">
+                                </td>
+                                <td class="text-center">
+                                    {{item.TIEN_THUE_GTGT | currency: '':0}}
+                                    <input ng-model="item.TIEN_THUE_GTGT" style="height: 27px;" class="form-control" type="hidden" ng-disabled="true" />
+                                </td>
+                                <td class="text-center">
+                                    <input type="text" style="height: 27px;" ng-model="item.DIEN_GIAI_THUE" class="form-control">
+                                </td>
+                                <td class="text-center">
+                                    <input type="text" style="height: 27px;" ng-model="item.TK_THUE" class="form-control">
+                                </td>
+                                <td class="text-center">
+                                    <input type="text" style="height: 27px;" ng-model="item.TK_NO" class="form-control">
+                                </td>
+                                <td class="text-center">
+                                    <input type="text" style="height: 27px;" ng-model="item.TK_CO" class="form-control">
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="6">
+                                    <div class="col-md-12">
+                                        <label class="col-md-3">Tổng tiền hàng: </label>
+                                        <p class="col-md-6" style="text-align:left" ng-model="tong_tien_hang">{{tong_tien_hang | currency: '':0}} vnd</p>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <label class="col-md-3">Thuế VAT : </label>
+                                        <p class="col-md-6" style="text-align:left" ng-model="tong_tien_thue_GTGT">{{tong_tien_thue_GTGT | currency: '':0 }} vnd</p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <hr />
+                                    </div>
+                                    <div class="col-md-12">
+                                        <label class="col-md-3">Tổng tiền thanh toán </label>
+                                        <p class="col-md-6" style="text-align:left"><span id="tong_tien_thuc_te " ng-model="tong_tien_thanh_toan">{{tong_tien_thanh_toan | currency: '':0}}</span> vnd</p>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <label class="col-md-3">Số tiền viết bằng chữ </label>
+                                        <p class="col-md-6" style="text-align:left"><span id="tong_tien_thuc_te " ng-model="so_tien_viet_bang_chu">{{so_tien_viet_bang_chu}}</span></p>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12" style="text-align:center">
+            <button type="button" class="btn btn-default" ng-click="saveBH()">Lưu</button>
+            <button type="button" class="btn btn-default" ng-click="AddNew_NhatKy()">Lưu vào sổ nhật ký chung</button>
+        </div>
+    </div>
+
+</div>
+

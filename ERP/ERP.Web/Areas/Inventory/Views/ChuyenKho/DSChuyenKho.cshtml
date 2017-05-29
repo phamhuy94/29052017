@@ -1,0 +1,270 @@
+﻿
+<link href="~/Content/assets/css/components.css" rel="stylesheet" />
+<link href="~/Content/assets/css/core.css" rel="stylesheet" />
+<link href="~/Content/assets/css/colors.css" rel="stylesheet" />
+<link href="~/Content/download/pnotify.custom.min.css" rel="stylesheet" />
+<link href="~/Content/assets/css/icons/icomoon/styles.css" rel="stylesheet" />
+
+<script src="~/Content/download/plugins/jQuery/jquery.min.js"></script>
+<script src="~/Content/assets/js/plugins/loaders/pace.min.js"></script>
+<script src="~/Content/assets/js/plugins/loaders/blockui.min.js"></script>
+<script src="~/Content/assets/js/plugins/visualization/d3/d3.min.js"></script>
+<script src="~/Content/assets/js/plugins/visualization/d3/d3_tooltip.js"></script>
+<script src="~/Content/assets/js/plugins/forms/styling/switchery.min.js"></script>
+<script src="~/Content/assets/js/plugins/forms/styling/uniform.min.js"></script>
+<script src="~/Content/assets/js/plugins/forms/selects/bootstrap_multiselect.js"></script>
+<script src="~/Content/assets/js/plugins/ui/moment/moment.min.js"></script>
+<script src="~/Content/assets/js/plugins/pickers/datepicker.js"></script>
+<script src="~/Content/assets/js/plugins/pickers/daterangepicker.js"></script>
+<script src="~/Content/assets/js/plugins/notifications/pnotify.min.js"></script>
+<script src="~/Content/Scripts/angularjs/angular.js"></script>
+<script src="~/Content/Scripts/angularjs/angular-route.min.js"></script>
+<script src="~/Content/Scripts/angularjs/dirPagination.js"></script>
+<script src="~/Content/Scripts/angularjs/app.js"></script>
+<script src="~/Content/Scripts/daterangepicker.js"></script>
+<script src="~/Content/Scripts/moment.min.js"></script>
+<script src="~/Content/download/date_directive.js"></script>
+<script src="~/Content/download/bootstrap-datetimepicker.js"></script>
+<script type="text/javascript" src="~/Content/assets/js/plugins/forms/selects/bootstrap_select.min.js"></script>
+<script type="text/javascript" src="~/Content/assets/js/pages/form_bootstrap_select.js"></script>
+<script src="~/Content/Scripts/angularjs/controller/DSChuyenKhoController.js"></script>
+
+
+<div ng-app="app" ng-controller="DSPhieuChuyenKhoController">
+    <div class="content">
+        <div class="phieuthu padding10 borderRadius3 border">
+            <div class="head clearfix paddingTB10">
+                <div class="pull-left marginR45">
+                    <h1 style="color:black;" class="margin0 font20 bold text-blue marginT5">DANH SÁCH PHIẾU CHUYỂN KHO</h1>
+                </div>
+                <div class="pull-left marginR30">
+                    <div class="pull-left marginR15 marginT5">Từ ngày</div>
+                    <div class="pull-left width100 relative">
+                        <input type="text" datepicker ng-model="DSChuyenKho.From" class="form-control datetimepickerKT">
+                    </div>
+                </div>
+                <div class="pull-left marginR30">
+                    <div class="pull-left marginR15 marginT5">Đến ngày</div>
+                    <div class="pull-left width100 relative">
+                        <input type="text" datepicker ng-model="DSChuyenKho.To" class="form-control datetimepickerKT">
+                    </div>
+                </div>
+                <div class="pull-left">
+                    <button class="btn btn-primary" ng-click="SearchPhieuChuyenKho(DSChuyenKho.From, DSChuyenKho.To)">Lấy dữ liệu</button>
+                </div>
+            </div>
+            <br>
+            <div class="table-responsive">
+                <table class="table table-striped table-hover table-bordered">
+                    <thead class="bg-blue text-white">
+                        <tr>
+                            <th>Ngày hạch toán</th>
+                            <th>Ngày chứng từ</th>
+                            <th>Xuất tại kho </th>
+                            <th>Nhập tại kho </th>
+                            <th>Diễn giải</th>
+                        </tr>
+                    </thead>
+                    <tbody ng-repeat="item in DSChuyenKho.ListResult">
+                        <tr ng-click="transfer(item)">
+                            <td class="text-left" data-toggle="modal" data-target="#updatephieuchuyenkho">{{item.NGAY_HACH_TOAN}}</td>
+                            <td class="text-left" data-toggle="modal" data-target="#updatephieuchuyenkho">{{item.NGAY_CHUNG_TU}}</td>
+                            <td class="text-left" data-toggle="modal" data-target="#updatephieuchuyenkho">{{item.TEN_KHO_XUAT}}</td>
+                            <td class="text-left" data-toggle="modal" data-target="#updatephieuchuyenkho">{{item.TEN_KHO_NHAP}}</td>
+                            <td class="text-left" data-toggle="modal" data-target="#updatephieuchuyenkho">{{item.DIEN_GIAI}}</td>
+
+
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+    <div class="modal fade" id="updatephieuchuyenkho" role="dialog" tabindex="-1">
+        <div class="modal-dialog modal-lg" style="width:80%;">
+            <div class="modal-content" style="height: 800px;">
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="panel panel-white">
+                            <div class="panel-heading color-heading">
+                                <h6 class="panel-title">{{TitleChuyenKho}}</h6>
+                            </div>
+                            <input type="hidden" value="@Session["USERNAME"]" id="username" />
+                            <input type="hidden" value="@Session["MA_CONG_TY"]" id="macongty" />
+                            <div class="panel-body">
+                                
+                                <div class="col-md-8">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h6 class="panel-title">Thông tin chung<a class="heading-elements-toggle"><i class="icon-more"></i></a></h6>
+                                        </div>
+                                        <div class="panel-body">
+                                            <form class="form-horizontal">
+                                                <div class="form-group">
+                                                    <label class="control-label col-lg-2">Diễn giải</label>
+                                                    <div class="col-lg-10">
+                                                        <textarea rows="7" ng-model="item.DIEN_GIAI" cols="7" class="form-control" placeholder=""></textarea>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h6 class="panel-title">Chứng từ<a class="heading-elements-toggle"><i class="icon-more"></i></a></h6>
+                                        </div>
+                                        <div class="panel-body">
+                                            <form class="form-horizontal">
+                                                <div class="form-group">
+                                                    <label class="control-label col-lg-4">Ngày hạch toán</label>
+                                                    <div class="col-lg-8">
+                                                        <div class="form-group has-feedback">
+                                                            <input type="text" ng-model="item.NGAY_HACH_TOAN" class="form-control datetimepicker" readonly>
+                                                            <div class="form-control-feedback">
+                                                                <i class="icon-calendar"></i>
+                                                            </div>
+                                                            <label id="basic-error" class="validation-error-label" ng-if="ValidateGeneral.NgayHachToan == false" for="basic">Trường này không được để trống</label>
+                                                            <label id="basic-error" class="validation-error-label" ng-if="ValidateGeneral.NgayHachToanLess == false" for="basic">Ngày hạch toán phải lớn hơn hoặc bằng ngày chứng từ</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-lg-4">Ngày chứng từ</label>
+                                                    <div class="col-lg-8">
+                                                        <div class="form-group has-feedback">
+                                                            <input type="text" ng-model="item.NGAY_CHUNG_TU" class="form-control datetimepicker" readonly>
+                                                            <div class="form-control-feedback">
+                                                                <i class="icon-calendar"></i>
+                                                            </div>
+                                                        </div>
+                                                        <label id="basic-error" class="validation-error-label" ng-if="ValidateGeneral.NgayChungTu == false" for="basic">Trường này không được để trống</label>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-lg-4">Số chứng từ</label>
+                                                    <div class="col-lg-8">
+                                                        <input type="text" ng-model="item.SO_CHUNG_TU" class="form-control" readonly>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 content-group" style="">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered table-striped table-hover ">
+                                            <thead>
+                                                <tr class="bg-primary-300">
+                                                    <th style="width:20%" class="text-center">Mã hàng</th>
+                                                    <th style="width:20%" class="text-center">Tên hàng</th>
+                                                    <th style="width:20%" class="text-center">Xuất kho tại</th>
+                                                    <th style="width:20%" class="text-center">Nhập kho tại</th>
+                                                    <th style="width:10%" class="text-center">ĐVT</th>
+                                                    <th style="width:10%" class="text-center">Số lượng</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr ng-repeat="(index,item) in Detail.ListAdd" id="DetailHang{{index}}">
+                                                    <td>
+                                                        <div class="has-feedback showtableselect" ng-click="ShowHangHoa(index)">
+                                                            <input type="text" ng-model="item.MA_CHUAN" class="input showtableselect" ng-change="SearchHH(item.MA_CHUAN)">
+
+                                                            <div class="form-control-feedback">
+                                                                <i class="icon-arrow-down5"></i>
+                                                            </div>
+                                                        </div>
+                                                        <div class="tableselect" id="DataHangHoa{{index}}" style="display: none; max-width: 750px; padding-left: 0px; margin-left: -9px;">
+                                                            <table class="table-hover ">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Mã hàng</th>
+                                                                        <th>Tên hàng</th>
+                                                                        <th>Mã nhóm hàng</th>
+                                                                        <th>Xuất xứ</th>
+                                                                        <th>DVT</th>
+                                                                        <th>Tên Kho</th>
+                                                                        <th>Số lượng tồn</th>
+
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr ng-repeat="(hindex,itemHangHoa) in Detail.ListHangHoa" ng-click="SelectHangHoa(index,item,itemHangHoa)">
+                                                                        <td>{{itemHangHoa.MA_CHUAN}}</td>
+                                                                        <td>{{itemHangHoa.TEN_HANG}}</td>
+                                                                        <td>{{itemHangHoa.MA_NHOM_HANG}}</td>
+                                                                        <td>{{itemHangHoa.XUAT_XU}}</td>
+                                                                        <td>{{itemHangHoa.DVT}}</td>
+                                                                        <td>{{itemHangHoa.TEN_KHO}}</td>
+                                                                        <td class="text-center">{{itemHangHoa.SO_LUONG}}</td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <input type="text" ng-model="item.TEN_HANG" class="input">
+                                                    </td>
+                                                    <td>
+                                                        <input type="text" ng-model="item.TEN_KHO_XUAT" class="input">
+                                                    </td>
+                                                    <td>
+                                                        <div class="has-feedback" ng-click="ShowKhoNhap(index)">
+                                                            <input type="text" ng-model="item.TEN_KHO_NHAP" class="input showtableselect">
+                                                            <div class="form-control-feedback">
+                                                                <i class="icon-arrow-down5"></i>
+                                                            </div>
+                                                        </div>
+                                                        <div class="tableselect" id="DataKhoNhap{{index}}" style="display:none;max-width: 300px;top:90px;">
+                                                            <table class="table-hover ">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th style="width:30%">Mã kho</th>
+                                                                        <th style="width:30%">Tên kho</th>
+                                                                        <th style="width:40%">Địa chỉ</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr ng-repeat="(hindex,itemKho) in Detail.ListKho| filter:item.NHAP_KHO_TAI" ng-click="SelectKhoNhap(index,item,itemKho)">
+                                                                        <td>{{itemKho.MA_KHO}}</td>
+                                                                        <td>{{itemKho.TEN_KHO}}</td>
+                                                                        <td>{{itemKho.DIA_CHI}}</td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <input type="text" ng-model="item.DVT" class="input">
+                                                    </td>
+                                                    <td>
+                                                        <input type="number" ng-model="item.SO_LUONG" class="input">
+                                                    </td>
+                                                    <td class="text-center"><button ng-click="RemoveRow($index)" style="background: none !important; border: none !important;"><span class="glyphicon glyphicon-remove" style="color:red;"></span></button></td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="7" style="text-align:center; cursor:pointer" ng-click="AddNew()">Bấm vào đây để thêm mới</td>
+                                                </tr>
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 text-center">
+                                    <button type="button" class="btn btn-primary" ng-click="SaveExchange();"><i class="icon-floppy-disk"></i> Lưu</button>
+                                    <a href="/" class="btn bg-orange-400" data-dismiss="modal"><i class="icon-blocked"></i> Bỏ qua</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>

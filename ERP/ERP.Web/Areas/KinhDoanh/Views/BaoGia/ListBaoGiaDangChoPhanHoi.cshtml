@@ -1,0 +1,110 @@
+﻿@{Layout = null;
+}
+
+<script src="~/Content/self-writing/js/Services/BaoGiaService.js"></script>
+<script src="~/Content/self-writing/js/Controllers/BaoGiaCtrl.js"></script>
+
+<div ng-app="myApp" ng-controller="baogiaCtrl" class="content">
+    <input type="hidden" value="@Session["USERNAME"]" id="username" />
+    <input type="hidden" value="@Session["IS_AMIN"]" id="isadmin" />
+    <input type="hidden" id="macongty" name="macongty" value="@Session["MA_CONG_TY"]" />
+    <div class="col-md-8">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Số báo giá</th>
+                    <th>Ngày báo giá</th>
+                    <th>Khách hàng</th>
+                    <th>Người liên hệ</th>
+                    <th>Tổng giá trị đơn hàng thực tế</th>
+                    <th>Sale báo giá</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="item in ds_baogia_kinhdoanh_dangchophanhoi"  ng-click="xemchitietbaogia(item.SO_BAO_GIA)">
+                    <td>{{item.SO_BAO_GIA}}</td>
+                    <td>{{item.NGAY_BAO_GIA | date: 'dd/MM/yyyy'}}</td>
+                    <td>{{item.TEN_KHACH_HANG}}</td>
+                    <td>{{item.NGUOI_LIEN_HE}}</td>
+                    <td>{{item.TONG_GIA_TRI_DON_HANG_THUC_TE | currency: '' : 0}}</td>
+                    <td>{{item.TEN_NGUOI_BAO_GIA}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-4">
+        <table class="table">
+            <tr>
+                <th colspan="2" class="border-td"><h4>Báo giá chờ phản hồi</h4></th>
+            </tr>
+            <tr>
+                <td class="border-td">
+                    <div style="height: 400px;overflow:auto">
+                        <table class="table right-table">
+                            <thead>
+                                <tr>
+                                    <th>Số báo giá</th>
+                                    <th>Ngày báo giá</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="item in ds_baogia_kinhdoanh_dangchophanhoi"  ng-click="xemchitietbaogia(item.SO_BAO_GIA)">
+                                    <td>{{item.SO_BAO_GIA}}</td>
+                                    <td>{{item.NGAY_BAO_GIA | date: 'dd/MM/yyyy'}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th class="border-td" colspan="2"><h4>Báo giá thành công</h4></th>
+            </tr>
+            <tr>
+                <td class="border-td">
+                    <div style="height: 400px;overflow:auto">
+                        <table class="table right-table">
+                            <thead>
+                                <tr>
+                                    <th>Số báo giá</th>
+                                    <th>Ngày báo giá</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="item in ds_baogia_kinhdoanh_thanhcong"  ng-click="xemchitietbaogia(item.SO_BAO_GIA)">
+                                    <td>{{item.SO_BAO_GIA}}</td>
+                                    <td>{{item.NGAY_BAO_GIA | date: 'dd/MM/yyyy'}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th class="border-td" colspan="2"><h4>Báo giá đã hủy</h4></th>
+            </tr>
+            <tr>
+                <td class="border-td">
+                    <div style="height: 400px;overflow:auto">
+                        <table class="table right-table">
+                            <thead>
+                                <tr>
+                                    <th>Số báo giá</th>
+                                    <th>Ngày báo giá</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="item in ds_baogia_kinhdoanh_dahuy">
+                                    <td>{{item.SO_BAO_GIA}}</td>
+                                    <td>{{item.NGAY_BAO_GIA | date: 'dd/MM/yyyy'}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+    </div>
+</div>
+
